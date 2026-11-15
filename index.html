@@ -38,7 +38,6 @@
 <li><strong>HLS 原子检测</strong><p>设计 4-bank 行分片 DATAFLOW 流水线，通过三副本行缓存和冲突仲裁解决多读口冲突，实现窗口提取与乘加流水化。用二分法预计算判决边界，将实时浮点比较替换为整数判决。在 300 MHz 下，单帧延迟为 0.268 ms。</p></li>
 <li><strong>HLS 原子重排</strong><p>将行列扫描的确定性分通道策略实现为 HLS 流水线，依次执行分类、清空通道、批量停靠和缺失补偿。重排受 AOD 双轴各 16 音调上限约束，按波控接口输出每条 5 拍、每拍 512 bit 的 AXI-Stream 指令。</p></li>
 <li><strong>AOD 多音调控制</strong><p>在 ZCU216 上实现 X/Y 双轴多音调 RF 波形合成。每轴支持 16 音调，通过四路并行 CORDIC 生成连续 I/Q 样本，经多音调求和、包络整形后打包送入 RF-DAC，支持频率配置、扫频与包络控制。</p></li>
-<li><strong>链路联调与平台迁移</strong><p>参与 Spark 集群与 VCU118 之间的 100G RDMA 通信联调，以及两块 ZCU216 之间的 4 × 12.5G 板间通信联调。参与向 VCU118 迁移，主机通过 PCIe 与 FPGA 交互。</p></li>
 </ul>
 </section>
 </div>
