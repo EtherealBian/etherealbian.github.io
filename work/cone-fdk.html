@@ -7,6 +7,6 @@
 <section class="analysis"><div class="section-label">01 <i>/</i> READING NOTES</div><h2>三项数字，回答三个不同的问题</h2><ol><li><b>能否复现？</b><p>发行包附真实投影小样、命令行程序与校验和，可以先运行小样再下载全量数据。</p></li><li><b>和谁比较？</b><p>ASTRA 用于数值对照；速度对照用本工程旧版。两次比较不能互相替代。</p></li><li><b>显存不足怎么办？</b><p>另一次 1296³ 实验在 512 MiB 引擎设备缓冲预算下写出 8.71 GB 体数据。该预算不等于进程总显存。</p></li></ol><div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/releases/tag/v0.1.0">下载重建器、示例与离线阅片器 ↗</a></div></section>
 <section class="analysis" id="pore-lab"><div class="section-label">02 <i>/</i> MEASUREMENT LAB</div><h2>金属里的每一个孔，都能回到原始切片复核吗？</h2>
 <ol><li><b>先检查测量器</b><p>给定 NIST 发布的孔隙掩膜，CUDA 与独立 CPU 程序在三个钴铬试件的指定区域共核对 602 个连通体，孔隙体素计数差为零。这只验证计量，不验证自动找孔。</p></li>
-<li><b>再检查自动找孔</b><p>候选算法 A 在试件 2 上的孔隙率低估 0.017 个百分点，但匹配孔的体积相对误差第 95 百分位为 17.68%，超过 15% 上限。试件 3 的总体素重叠度更高，逐孔体积仍未达标。</p></li>
-<li><b>什么时候才算通过？</b><p>两个预留试件必须各自达到全部指标：孔隙率绝对偏差不超过 0.05 个百分点、相对偏差不超过 5%，还要通过重叠度、漏检、体积、等效直径与质心检查。当前为实验分支。</p></li></ol>
-<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/tree/measurement-lab/pores/evidence">逐试件 JSON 与逐孔对照表 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-lab/pores/FINAL-GATE.md">完整验收与停止标准 ↗</a></div></section></main></body></html>
+<li><b>再检查自动找孔</b><p>候选 C 在试件 2 的评估区域里匹配到 73 个参考孔中的 71 个。孔隙率只高出 0.00023 个百分点，但匹配孔的体积相对误差中位数为 2.94%，第 95 百分位为 22.05%，超过 15% 上限。可下载逐孔对照，点选孔编号查看原始切片。</p></li>
+<li><b>什么时候才算通过？</b><p>与 NIST 数字参考掩膜比较，预留试件 4、6 必须分别达到全部指标：孔隙率绝对偏差不超过 0.05 个百分点、相对偏差不超过 5%，还要通过重叠度、漏检、体积、等效直径与质心检查。目前三个开发试件都未通过；两个预留试件尚未评分。</p></li></ol>
+<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-lab/pores/RESULTS.md">三个开发试件的完整结果 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/download/measurement-evidence-1/candidate-C-sample2.zip">下载试件 2 逐孔复核包（ZIP，8 MB） ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-lab/pores/FINAL-GATE.md">完整验收与停止标准 ↗</a></div></section></main></body></html>
