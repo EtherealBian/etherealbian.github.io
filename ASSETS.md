@@ -26,3 +26,5 @@
 `tools/draw_vitis.py` 输出五幅独立 SVG。主图是一张可独立保存的五面板图：a–c 为算法原理、数据通路、固定用例总周期与验证条件；d 为独立的决赛整机数据流；e 内嵌竞赛应用截图的幅度谱区域，保留原始曲线和标记。e 的采样率 1 kHz、1,024 点与 d 的 48 kHz、4,096 点演示配置分开标注。`vitis-sha.svg`、`vitis-lz4.svg`、`vitis-cholesky.svg` 及 `vitis-zynq-system.svg` 按[项目归档](https://github.com/EtherealBian/vitis-hls-kernel-optimization/tree/177cd62badb31cd49874cee63ad8f9e81079a383)的算子说明、协同仿真记录与决赛 PL/PS 接口重绘，详细出处位于各图旁边。
 
 制图参考：[Nature Research Figure Guide](https://research-figure-guide.nature.com/) 的可读性原则，以及 [FINN（ACM FPGA 2017）](https://arxiv.org/abs/1612.07119) 图 5、6 分开表达并行单元和内部数据流的方法。仅参考图版组织，不使用论文图片、实验数据或商标。
+
+- `assets/conefdk-walnut.png`: three orthogonal slices reconstructed by ConeFDK from Alexander Meaney's University of Helsinki walnut projections (https://doi.org/10.5281/zenodo.6986012), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Binned, normalized and reconstructed; no endorsement.
