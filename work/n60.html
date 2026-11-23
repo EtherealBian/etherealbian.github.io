@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>基于 FPGA 的 60 阵元超声定向传声系统 — Etherealbian 工程图志</title>
+    <meta
+      name="description"
+      content="上位机把目标方向与距离转换为阵元参数，FPGA 用 60 路 PWM 驱动五个子阵。"
+    />
+    <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../dossier.css" />
+    <script src="../viewer.js" defer></script>
+  </head>
+  <body class="dossier">
+    <a class="skip" href="#sheet">跳至图志</a>
+    <header class="sheet-nav">
+      <div class="sheet-wrap">
+        <a class="brand" href="../index.html">
+          <img src="../assets/orbit.svg" alt="" width="32" height="32" />
+          Etherealbian
+        </a>
+        <a href="../index.html#n60">← 返回工程图集</a>
+      </div>
+    </header>
+    <main id="sheet" class="sheet-wrap">
+      <header class="sheet-title">
+        <div class="issue">
+          <span>
+            ENGINEERING RECORD
+            <i>/</i>
+            05
+          </span>
+          <span>Beamforming</span>
+        </div>
+        <h1 lang="en">N60 Array<b>.</b></h1>
+        <h2>五组阵元的定向传声原型</h2>
+        <p>上位机把目标方向与距离转换为阵元参数，FPGA 用 60 路 PWM 驱动五个子阵。</p>
+        <div class="honor-line"><strong>信号赛道第一名</strong><span>2026 · 利利普杯</span></div>
+      </header>
+      <div class="exhibit-grid">
+        <figure class="evidence" id="fig-1">
+          <div class="plate-head">
+            <span>FIG. 05A</span>
+            <b>阵列与控制硬件</b>
+          </div>
+          <a class="exhibit" data-plate href="../assets/n60-hardware.jpg" aria-label="查看阵列与控制硬件原图">
+            <img
+              fetchpriority="high"
+              decoding="async"
+              src="../assets/plates/array.webp"
+              alt="阵列与控制硬件：先在实物上辨认五组阵元，再与阵元分布图的分组对照。"
+            />
+          </a>
+          <figcaption>
+            <span>先在实物上辨认五组阵元，再与阵元分布图的分组对照。</span>
+            <a href="../assets/n60-hardware.jpg" data-plate>放大图版 ↗</a>
+          </figcaption>
+        </figure>
+        <aside class="readout">
+          <div class="rail-kicker">
+            项目摘记
+            <i>/</i>
+            FIELD NOTE
+          </div>
+          <strong>5 × 12</strong>
+          <p>子阵数量 × 每组换能器数量</p>
+          <dl>
+            <dt>技术</dt>
+            <dd>FPGA / PWM / Python</dd>
+          </dl>
+          <a href="https://github.com/EtherealBian/n60-ultrasonic-phased-array">项目仓库 ↗</a>
+        </aside>
+      </div>
+      <section class="analysis">
+        <div class="section-label">
+          01
+          <i>/</i>
+          READING NOTES
+        </div>
+        <h2>一个目标方向如何变成 60 路输出？</h2>
+        <ol>
+          <li>
+            <b>从几何得到相位</b>
+            <p>上位机根据阵元与目标点之间的路径差计算相对相位，并得到各阵元的幅度权重。</p>
+          </li>
+          <li>
+            <b>下发各通道参数</b>
+            <p>在线计算或离线查表均由上位机完成；相位、幅度经串口送至 FPGA。</p>
+          </li>
+          <li>
+            <b>在板上合成驱动</b>
+            <p>FPGA 把音频与各通道的相位、幅度结合，PWM 输出接外部驱动级。</p>
+          </li>
+        </ol>
+      </section>
+      <section class="record-table">
+        <div>
+          <div class="section-label">
+            02
+            <i>/</i>
+            REFERENCE
+          </div>
+          <h2>原型参数</h2>
+          <p>阵元数量、信号通道数和载波频率描述的是不同层级，不能当作声场性能指标。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">环节</th>
+                <th scope="col">数量或频率</th>
+                <th scope="col">对应对象</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">阵列</th>
+                <td>5 组</td>
+                <td>每组 12 阵元</td>
+              </tr>
+              <tr>
+                <th scope="row">板端输出</th>
+                <td>60 路</td>
+                <td>逐通道 PWM</td>
+              </tr>
+              <tr>
+                <th scope="row">载波</th>
+                <td>40 kHz</td>
+                <td>超声驱动</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="appendix">
+        <div class="section-label">
+          03
+          <i>/</i>
+          ORIGINAL MATERIAL
+        </div>
+        <h2>原始材料</h2>
+        <div class="supplements">
+          <figure class="evidence" id="fig-2">
+            <div class="plate-head">
+              <span>FIG. 05B</span>
+              <b>阵元分布</b>
+            </div>
+            <a
+              class="exhibit"
+              data-plate
+              href="../assets/plates/fig_array_top.png"
+              aria-label="查看阵元分布原图"
+            >
+              <img
+                loading="lazy"
+                decoding="async"
+                src="../assets/plates/geometry.webp"
+                alt="阵元分布：位置和分组用于计算逐通道参数。此图是阵列几何，不是声场测量结果。"
+              />
+            </a>
+            <figcaption>
+              <span>位置和分组用于计算逐通道参数。此图是阵列几何，不是声场测量结果。</span>
+              <a href="../assets/plates/fig_array_top.png" data-plate>放大图版 ↗</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+      <nav class="sheet-end" aria-label="相邻项目">
+        <a href="vision.html">
+          <small>← 上一份</small>
+          eLinex Vision
+        </a>
+        <a href="uavcount.html">
+          <small>下一份 →</small>
+          UAVCount
+        </a>
+      </nav>
+    </main>
+    <dialog id="viewer" aria-labelledby="viewer-title">
+      <div class="viewer-bar">
+        <h2 id="viewer-title">工程图版</h2>
+        <form method="dialog">
+          <button autofocus aria-label="关闭图版">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </div>
+      <div
+        class="viewer-canvas"
+        id="viewer-canvas"
+        role="region"
+        aria-label="工程图版，可在原始尺寸下滚动查看"
+      >
+        <img alt="" />
+      </div>
+      <div class="viewer-foot">
+        <button type="button" class="zoom" aria-pressed="false" aria-controls="viewer-canvas">
+          原始尺寸 <span aria-hidden="true">1:1</span>
+        </button>
+        <a>在浏览器打开原图 ↗</a>
+      </div>
+    </dialog>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="286" viewBox="0 0 820 286" role="img" aria-labelledby="title desc">
+<title id="title">HMAC-SHA256 消息级并行</title><desc id="desc">完整消息轮询分给两核，每核融合补位与调度；单独的顺序 FIFO 控制摘要合并。</desc>
+<defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
+<rect x="0" y="0" width="820" height="286" rx="0" fill="#ffffff" stroke="none"/>
+<rect x="25" y="23" width="34" height="34" rx="4" fill="#203e46" stroke="none"/>
+<text x="42" y="47" font-size="23" font-weight="600" fill="#ffffff" text-anchor="middle" class="serif">a</text>
+<text x="72" y="50" font-size="28" font-weight="600" fill="#203e46" text-anchor="start" class="">HMAC-SHA256</text>
+<text x="794" y="47" font-size="14" font-weight="500" fill="#516877" text-anchor="end" class="mono">消息级并行</text>
+<path d="M25 70H795" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
+<rect x="24" y="143" width="119" height="60" rx="4" fill="#ffffff" stroke="#aebec2"/>
+<text x="83.5" y="170.0" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">消息分发</text>
+<text x="83.5" y="191.0" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">轮询 · 整条消息</text>
+<rect x="655" y="143" width="135" height="60" rx="4" fill="#e6f2ed" stroke="#9cbfb1"/>
+<text x="722.5" y="170.0" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">有序合并</text>
+<text x="722.5" y="191.0" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">按记录取摘要</text>
+<path d="M84 143V99H718V138" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)" stroke-dasharray="5 4"/>
+<rect x="292" y="85" width="222" height="24" rx="0" fill="#ffffff" stroke="none"/>
+<text x="403" y="103" font-size="14" font-weight="450" fill="#516877" text-anchor="middle" class="mono">order_core_strm · 顺序 FIFO</text>
+<rect x="218" y="119" width="339" height="57" rx="4" fill="#eaf0f6" stroke="#a9bcc9"/>
+<text x="233" y="154" font-size="19" font-weight="650" fill="#496987" text-anchor="start" class="">SHA 0</text>
+<path d="M301 128v39" fill="none" stroke="#c0cdd7" stroke-width="1" stroke-linejoin="round"/>
+<text x="315" y="144" font-size="17" font-weight="600" fill="#203e46" text-anchor="start" class="">补位 + 调度字</text>
+<text x="315" y="164" font-size="13" font-weight="400" fill="#516877" text-anchor="start" class="">融合生成</text>
+<path d="M438 148h23" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<text x="472" y="153" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">64 轮压缩</text>
+<path d="M143 174H176V148H213" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<path d="M557 148H604V174" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<rect x="218" y="192" width="339" height="57" rx="4" fill="#eaf0f6" stroke="#a9bcc9"/>
+<text x="233" y="227" font-size="19" font-weight="650" fill="#496987" text-anchor="start" class="">SHA 1</text>
+<path d="M301 201v39" fill="none" stroke="#c0cdd7" stroke-width="1" stroke-linejoin="round"/>
+<text x="315" y="217" font-size="17" font-weight="600" fill="#203e46" text-anchor="start" class="">补位 + 调度字</text>
+<text x="315" y="237" font-size="13" font-weight="400" fill="#516877" text-anchor="start" class="">融合生成</text>
+<path d="M438 221h23" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<text x="472" y="226" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">64 轮压缩</text>
+<path d="M143 174H176V221H213" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<path d="M557 221H604V174" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M604 174H650" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<text x="24" y="271" font-size="15" font-weight="400" fill="#516877" text-anchor="start" class="">两个核心处理不同消息；同一核心内保留 64 轮的链式依赖。</text>
+</svg>

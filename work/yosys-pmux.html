@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yosys PMUX 结构优化 — Etherealbian 工程图志</title>
+    <meta name="description" content="在门级映射前找出各通道重复的译码和运算，让同一组逻辑服务多个输出。" />
+    <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../dossier.css" />
+    <script src="../viewer.js" defer></script>
+  </head>
+  <body class="dossier">
+    <a class="skip" href="#sheet">跳至图志</a>
+    <header class="sheet-nav">
+      <div class="sheet-wrap">
+        <a class="brand" href="../index.html">
+          <img src="../assets/orbit.svg" alt="" width="32" height="32" />
+          Etherealbian
+        </a>
+        <a href="../index.html#yosys-pmux">← 返回工程图集</a>
+      </div>
+    </header>
+    <main id="sheet" class="sheet-wrap">
+      <header class="sheet-title">
+        <div class="issue">
+          <span>
+            ENGINEERING RECORD
+            <i>/</i>
+            01
+          </span>
+          <span>Logic synthesis</span>
+        </div>
+        <h1 lang="en">Yosys PMUX<b>.</b></h1>
+        <h2>选择逻辑的结构共享</h2>
+        <p>在门级映射前找出各通道重复的译码和运算，让同一组逻辑服务多个输出。</p>
+        <div class="honor-line">
+          <strong>全国一等奖</strong><span>2026 · FPGA 创新设计竞赛 · 中科亿海微赛道</span>
+        </div>
+      </header>
+      <div class="exhibit-grid">
+        <figure class="evidence" id="fig-1">
+          <div class="plate-head">
+            <span>FIG. 01A</span>
+            <b>综合流程与验证全图</b>
+          </div>
+          <a
+            class="exhibit"
+            data-plate
+            href="../assets/pmux-overview-zh.png"
+            aria-label="查看综合流程与验证全图原图"
+          >
+            <img
+              fetchpriority="high"
+              decoding="async"
+              src="../assets/pmux-overview-zh.webp"
+              alt="综合流程与验证全图：从上方的综合流程进入中间的六项机制，最后读底部的资源对照与等价验证。保留项目原始中文图。"
+            />
+          </a>
+          <figcaption>
+            <span>
+              从上方的综合流程进入中间的六项机制，最后读底部的资源对照与等价验证。保留项目原始中文图。
+            </span>
+            <a href="../assets/pmux-overview-zh.png" data-plate>放大图版 ↗</a>
+          </figcaption>
+        </figure>
+        <aside class="readout">
+          <div class="rail-kicker">
+            项目摘记
+            <i>/</i>
+            FIELD NOTE
+          </div>
+          <strong>60.55%</strong>
+          <p>官方九例 · 逐例平均逻辑单元缩减</p>
+          <dl>
+            <dt>技术</dt>
+            <dd>Yosys / RTLIL / EQY</dd>
+          </dl>
+          <a href="https://github.com/EtherealBian/yosys-pmux-opt">项目仓库 ↗</a>
+        </aside>
+      </div>
+      <section class="analysis">
+        <div class="section-label">
+          01
+          <i>/</i>
+          READING NOTES
+        </div>
+        <h2>逻辑变少之后，怎样确认功能没变？</h2>
+        <ol>
+          <li>
+            <b>先识别结构</b>
+            <p>在 RTLIL 层处理选择网络；译码条件、代数关系和共享运算仍然可见。</p>
+          </li>
+          <li>
+            <b>再判定收益</b>
+            <p>检查循环依赖并估算候选成本。候选没有收益时回退，不为共享而共享。</p>
+          </li>
+          <li>
+            <b>分开读两个结果</b>
+            <p>器件映射后统计逻辑单元；功能验证则比较原始 RTL 与 ABC9 后的网表。</p>
+          </li>
+        </ol>
+      </section>
+      <section class="record-table">
+        <div>
+          <div class="section-label">
+            02
+            <i>/</i>
+            REFERENCE
+          </div>
+          <h2>基线对照</h2>
+          <p>60.55% 是九个用例缩减率的平均值，不是两个合计数的降幅。每例 DFF 均未增加。</p>
+          <div class="bench-links">
+            <a href="https://github.com/EtherealBian/yosys-pmux-opt/blob/main/docs/contest-results.csv"
+              >逐例综合与验证结果（CSV） ↗</a
+            >
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">官方九例</th>
+                <th scope="col">基线</th>
+                <th scope="col">优化后</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">组合逻辑单元合计</th>
+                <td>2,427</td>
+                <td>921</td>
+              </tr>
+              <tr>
+                <th scope="row">DFF 合计</th>
+                <td>323</td>
+                <td>297</td>
+              </tr>
+              <tr>
+                <th scope="row">优化版 EQY</th>
+                <td>—</td>
+                <td>9 / 9 通过</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <nav class="sheet-end" aria-label="相邻项目">
+        <a href="uavcount.html">
+          <small>← 上一份</small>
+          UAVCount
+        </a>
+        <a href="spectrum.html">
+          <small>下一份 →</small>
+          Vitis HLS
+        </a>
+      </nav>
+    </main>
+    <dialog id="viewer" aria-labelledby="viewer-title">
+      <div class="viewer-bar">
+        <h2 id="viewer-title">工程图版</h2>
+        <form method="dialog">
+          <button autofocus aria-label="关闭图版">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </div>
+      <div
+        class="viewer-canvas"
+        id="viewer-canvas"
+        role="region"
+        aria-label="工程图版，可在原始尺寸下滚动查看"
+      >
+        <img alt="" />
+      </div>
+      <div class="viewer-foot">
+        <button type="button" class="zoom" aria-pressed="false" aria-controls="viewer-canvas">
+          原始尺寸 <span aria-hidden="true">1:1</span>
+        </button>
+        <a>在浏览器打开原图 ↗</a>
+      </div>
+    </dialog>
+  </body>
+</html>

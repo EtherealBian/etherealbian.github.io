@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="286" viewBox="0 0 820 286" role="img" aria-labelledby="title desc">
+<title id="title">LZ4 字典有效性与并行匹配</title><desc id="desc">哈希字典和批次标志分银行存入 BRAM。候选通路并行验证，归约后由编码端查表产生 Token。</desc>
+<defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
+<rect x="0" y="0" width="820" height="286" rx="0" fill="#ffffff" stroke="none"/>
+<rect x="25" y="23" width="34" height="34" rx="4" fill="#203e46" stroke="none"/>
+<text x="42" y="47" font-size="23" font-weight="600" fill="#ffffff" text-anchor="middle" class="serif">b</text>
+<text x="72" y="50" font-size="28" font-weight="600" fill="#203e46" text-anchor="start" class="">LZ4</text>
+<text x="794" y="47" font-size="14" font-weight="500" fill="#516877" text-anchor="end" class="mono">字典与候选匹配</text>
+<path d="M25 70H795" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
+<text x="29" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">分区双口 BRAM</text>
+<text x="275" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">并行匹配</text>
+<text x="506" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">归约与编码</text>
+<rect x="29" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="29" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M29 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="49" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="49" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M49 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="69" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="69" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M69 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="89" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="89" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M89 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="109" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="109" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M109 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="129" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="129" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M129 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="149" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="149" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M149 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<rect x="169" y="126" width="17" height="56" rx="0" fill="#eaf0f6" stroke="#a4bac8"/>
+<rect x="169" y="127" width="17" height="13" rx="0" fill="#becfdb" stroke="none"/>
+<path d="M169 158h17" fill="none" stroke="#b0c3d0" stroke-width="1" stroke-linejoin="round"/>
+<text x="29" y="206" font-size="14" font-weight="500" fill="#516877" text-anchor="start" class="">historyData / 批次标签</text>
+<path d="M186 153H230" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<path d="M230 125V195" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M230 125H263" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="268" y="111" width="142" height="28" rx="3" fill="#e6f2ed" stroke="#acc7bb"/>
+<text x="339" y="131" font-size="15" font-weight="550" fill="#203e46" text-anchor="middle" class="">候选 0 · 比较</text>
+<path d="M410 125H435V160" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M230 160H263" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="268" y="146" width="142" height="28" rx="3" fill="#e6f2ed" stroke="#acc7bb"/>
+<text x="339" y="166" font-size="15" font-weight="550" fill="#203e46" text-anchor="middle" class="">候选 1 · 比较</text>
+<path d="M410 160H435V160" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M230 195H263" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="268" y="181" width="142" height="28" rx="3" fill="#e6f2ed" stroke="#acc7bb"/>
+<text x="339" y="201" font-size="15" font-weight="550" fill="#203e46" text-anchor="middle" class="">其余候选 …</text>
+<path d="M410 195H435V160" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M435 160H480" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="484" y="131" width="125" height="58" rx="4" fill="#e6f2ed" stroke="#9cbfb1"/>
+<text x="546.5" y="157.0" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">最佳匹配</text>
+<text x="546.5" y="178.0" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">两两选长</text>
+<path d="M609 160h30" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="644" y="131" width="145" height="58" rx="4" fill="#f8f0e1" stroke="#cbbd9b"/>
+<text x="716.5" y="157.0" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">Token 查表</text>
+<text x="716.5" y="178.0" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">编码输出</text>
+<path d="M29 229H790" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
+<text x="29" y="260" font-size="15" font-weight="400" fill="#516877" text-anchor="start" class="">批次标签使上一批字典项失效，省去逐项清空。归档样例压缩比：2.09396。</text>
+</svg>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FPGA 实时图像处理与 UDP 图传 — Etherealbian 工程图志</title>
+    <meta
+      name="description"
+      content="摄像头送来 RGB565 像素，FPGA 在帧边界切换算法。处理后的图像既能本地显示，也能传回电脑。"
+    />
+    <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../dossier.css" />
+    <script src="../viewer.js" defer></script>
+  </head>
+  <body class="dossier">
+    <a class="skip" href="#sheet">跳至图志</a>
+    <header class="sheet-nav">
+      <div class="sheet-wrap">
+        <a class="brand" href="../index.html">
+          <img src="../assets/orbit.svg" alt="" width="32" height="32" />
+          Etherealbian
+        </a>
+        <a href="../index.html#vision">← 返回工程图集</a>
+      </div>
+    </header>
+    <main id="sheet" class="sheet-wrap">
+      <header class="sheet-title">
+        <div class="issue">
+          <span>
+            ENGINEERING RECORD
+            <i>/</i>
+            04
+          </span>
+          <span>FPGA vision</span>
+        </div>
+        <h1 lang="en">eLinex Vision<b>.</b></h1>
+        <h2>从像素流到上位机</h2>
+        <p>摄像头送来 RGB565 像素，FPGA 在帧边界切换算法。处理后的图像既能本地显示，也能传回电脑。</p>
+        <div class="honor-line">
+          <strong>全国三等奖</strong><span>2026 · 全国大学生集成电路创新创业大赛 · 中科亿海微赛道</span>
+        </div>
+      </header>
+      <div class="exhibit-grid">
+        <figure class="evidence" id="fig-1">
+          <div class="plate-head">
+            <span>FIG. 04A</span>
+            <b>竞赛实拍</b>
+          </div>
+          <a
+            class="exhibit"
+            data-plate
+            href="../assets/elinx-competition-demo.png"
+            aria-label="查看竞赛实拍原图"
+          >
+            <img
+              fetchpriority="high"
+              decoding="async"
+              src="../assets/plates/vision.webp"
+              alt="竞赛实拍：同一张照片里可以对照开发板、本地显示器和上位机控制界面。"
+            />
+          </a>
+          <figcaption>
+            <span>同一张照片里可以对照开发板、本地显示器和上位机控制界面。</span>
+            <a href="../assets/elinx-competition-demo.png" data-plate>放大图版 ↗</a>
+          </figcaption>
+        </figure>
+        <aside class="readout">
+          <div class="rail-kicker">
+            项目摘记
+            <i>/</i>
+            FIELD NOTE
+          </div>
+          <strong>1024 × 600</strong>
+          <p>基础版 · UDP 回传图像尺寸</p>
+          <dl>
+            <dt>技术</dt>
+            <dd>FPGA / UDP / PyQt6</dd>
+          </dl>
+          <a href="https://github.com/EtherealBian/elinx-vision-stream">项目仓库 ↗</a>
+        </aside>
+      </div>
+      <section class="analysis">
+        <div class="section-label">
+          01
+          <i>/</i>
+          READING NOTES
+        </div>
+        <h2>为什么要等到帧边界才切换算法？</h2>
+        <ol>
+          <li>
+            <b>按像素处理</b>
+            <p>OV5640 采集 RGB565 图像，经过 SDRAM 缓存，在显示时钟域中读取和处理。</p>
+          </li>
+          <li>
+            <b>让切换对齐整帧</b>
+            <p>串口命令通过跨时钟域握手送达；在帧同步边界应用控制字，避免同一帧混用两种处理模式。</p>
+          </li>
+          <li>
+            <b>上位机重新组帧</b>
+            <p>切换时清掉旧帧，等下一个帧首重新同步。PyQt6 接收端负责预览、截图和录像。</p>
+          </li>
+        </ol>
+      </section>
+      <section class="record-table">
+        <div>
+          <div class="section-label">
+            02
+            <i>/</i>
+            REFERENCE
+          </div>
+          <h2>图像路径</h2>
+          <p>数字识别是单独的工程记录，未将它画进基础视频通路。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">路径</th>
+                <th scope="col">数据</th>
+                <th scope="col">终点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">采集</th>
+                <td>RGB565</td>
+                <td>FPGA</td>
+              </tr>
+              <tr>
+                <th scope="row">本地显示</th>
+                <td>处理后像素流</td>
+                <td>HDMI</td>
+              </tr>
+              <tr>
+                <th scope="row">基础版图传</th>
+                <td>UDP 组帧</td>
+                <td>PyQt6</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="appendix">
+        <div class="section-label">
+          03
+          <i>/</i>
+          ORIGINAL MATERIAL
+        </div>
+        <h2>原始材料</h2>
+        <div class="supplements">
+          <figure class="evidence" id="fig-2">
+            <div class="plate-head">
+              <span>FIG. 04B</span>
+              <b>独立的数字识别流水线</b>
+            </div>
+            <a
+              class="exhibit"
+              data-plate
+              href="../assets/plates/cnn-pipeline.png"
+              aria-label="查看独立的数字识别流水线原图"
+            >
+              <img
+                loading="lazy"
+                decoding="async"
+                src="../assets/plates/cnn.webp"
+                alt="独立的数字识别流水线：这张图说明 FPGA 数字识别工程。基础版 HDMI 显示与 UDP 图传不以 CNN 为前置步骤。"
+              />
+            </a>
+            <figcaption>
+              <span>这张图说明 FPGA 数字识别工程。基础版 HDMI 显示与 UDP 图传不以 CNN 为前置步骤。</span>
+              <a href="../assets/plates/cnn-pipeline.png" data-plate>放大图版 ↗</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+      <nav class="sheet-end" aria-label="相邻项目">
+        <a href="lissajous.html">
+          <small>← 上一份</small>
+          Lissajous
+        </a>
+        <a href="n60.html">
+          <small>下一份 →</small>
+          N60 Array
+        </a>
+      </nav>
+    </main>
+    <dialog id="viewer" aria-labelledby="viewer-title">
+      <div class="viewer-bar">
+        <h2 id="viewer-title">工程图版</h2>
+        <form method="dialog">
+          <button autofocus aria-label="关闭图版">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </div>
+      <div
+        class="viewer-canvas"
+        id="viewer-canvas"
+        role="region"
+        aria-label="工程图版，可在原始尺寸下滚动查看"
+      >
+        <img alt="" />
+      </div>
+      <div class="viewer-foot">
+        <button type="button" class="zoom" aria-pressed="false" aria-controls="viewer-canvas">
+          原始尺寸 <span aria-hidden="true">1:1</span>
+        </button>
+        <a>在浏览器打开原图 ↗</a>
+      </div>
+    </dialog>
+  </body>
+</html>

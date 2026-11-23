@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UAVCount · 水岸无人机检测与计数 — Etherealbian 工程图志</title>
+    <meta
+      name="description"
+      content="水面倒影和短时漏检会干扰逐帧检测。把候选放回连续帧与短轨迹中检查，再决定是否计数。"
+    />
+    <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../dossier.css" />
+    <script src="../viewer.js" defer></script>
+  </head>
+  <body class="dossier">
+    <a class="skip" href="#sheet">跳至图志</a>
+    <header class="sheet-nav">
+      <div class="sheet-wrap">
+        <a class="brand" href="../index.html">
+          <img src="../assets/orbit.svg" alt="" width="32" height="32" />
+          Etherealbian
+        </a>
+        <a href="../index.html#uavcount">← 返回工程图集</a>
+      </div>
+    </header>
+    <main id="sheet" class="sheet-wrap">
+      <header class="sheet-title">
+        <div class="issue">
+          <span>
+            ENGINEERING RECORD
+            <i>/</i>
+            06
+          </span>
+          <span>Computer vision</span>
+        </div>
+        <h1 lang="en">
+          UAVCount<b>.</b>
+        </h1>
+        <h2>在水岸倒影中数清目标</h2>
+        <p>水面倒影和短时漏检会干扰逐帧检测。把候选放回连续帧与短轨迹中检查，再决定是否计数。</p>
+      </header>
+      <div class="exhibit-grid">
+        <figure class="evidence" id="fig-1">
+          <div class="plate-head">
+            <span>FIG. 06A</span>
+            <b>水岸无人机计数流程</b>
+          </div>
+          <a
+            class="exhibit"
+            data-plate
+            href="../assets/uavcount-pipeline.svg"
+            aria-label="查看水岸无人机计数流程原图"
+          >
+            <img
+              fetchpriority="high"
+              decoding="async"
+              src="../assets/uavcount-pipeline.webp"
+              alt="水岸无人机计数流程：从帧对齐、候选验证读到短轨迹回补与计数。原图为矢量，可单独打开并放大。"
+            />
+          </a>
+          <figcaption>
+            <span>从帧对齐、候选验证读到短轨迹回补与计数。原图为矢量，可单独打开并放大。</span>
+            <a href="../assets/uavcount-pipeline.svg" data-plate>放大图版 ↗</a>
+          </figcaption>
+        </figure>
+        <aside class="readout">
+          <div class="rail-kicker">
+            项目摘记
+            <i>/</i>
+            FIELD NOTE
+          </div>
+          <strong>3 帧</strong>
+          <p>连续观测 · 新目标确认条件</p>
+          <dl>
+            <dt>项目记录</dt>
+            <dd>本科毕业设计 · 水岸场景目标检测与计数</dd>
+            <dt>技术</dt>
+            <dd>YOLO11n / Tracking</dd>
+          </dl>
+          <a href="../assets/uavcount-pipeline.svg">矢量原图 ↗</a>
+        </aside>
+      </div>
+      <section class="analysis">
+        <div class="section-label">
+          01
+          <i>/</i>
+          READING NOTES
+        </div>
+        <h2>怎样区分一次检测和一次计数？</h2>
+        <ol>
+          <li>
+            <b>先对齐帧</b>
+            <p>将相邻帧对齐，减轻相机运动对候选位置比较的影响。</p>
+          </li>
+          <li>
+            <b>维护短轨迹</b>
+            <p>对检测候选进行验证；短时漏检时用轨迹回补，避免把每帧结果孤立看待。</p>
+          </li>
+          <li>
+            <b>按目标首次出现计数</b>
+            <p>用连续三帧观测确认目标，区分新的目标与仍在观测的已有目标。</p>
+          </li>
+        </ol>
+      </section>
+      <section class="record-table">
+        <div>
+          <div class="section-label">
+            02
+            <i>/</i>
+            REFERENCE
+          </div>
+          <h2>计数判据</h2>
+          <p>前 10 帧用于预热，随后每隔三帧判读一次。连续三帧确认的是同一新目标，而不是三次计数。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">判读对象</th>
+                <th scope="col">判断依据</th>
+                <th scope="col">用途</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">单帧候选</th>
+                <td>检测与候选验证</td>
+                <td>保留待跟踪目标</td>
+              </tr>
+              <tr>
+                <th scope="row">短轨迹</th>
+                <td>跨帧关联与回补</td>
+                <td>维持目标身份</td>
+              </tr>
+              <tr>
+                <th scope="row">计数事件</th>
+                <td>连续观测、首次出现</td>
+                <td>同一目标只计一次</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <nav class="sheet-end" aria-label="相邻项目">
+        <a href="n60.html">
+          <small>← 上一份</small>
+          N60 Array
+        </a>
+        <a href="yosys-pmux.html">
+          <small>下一份 →</small>
+          Yosys PMUX
+        </a>
+      </nav>
+    </main>
+    <dialog id="viewer" aria-labelledby="viewer-title">
+      <div class="viewer-bar">
+        <h2 id="viewer-title">工程图版</h2>
+        <form method="dialog">
+          <button autofocus aria-label="关闭图版">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </div>
+      <div class="viewer-canvas" id="viewer-canvas" role="region" aria-label="工程图版，可在原始尺寸下滚动查看"><img alt="" /></div>
+      <div class="viewer-foot">
+        <button type="button" class="zoom" aria-pressed="false" aria-controls="viewer-canvas">原始尺寸 <span aria-hidden="true">1:1</span></button>
+        <a>在浏览器打开原图 ↗</a>
+      </div>
+    </dialog>
+  </body>
+</html>

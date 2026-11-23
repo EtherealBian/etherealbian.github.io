@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="286" viewBox="0 0 820 286" role="img" aria-labelledby="title desc">
+<title id="title">Cholesky 矩阵访问与行内归约</title><desc id="desc">分区矩阵向行内并行部分和供数，完成归约。定点对角倒数使用分段初值与 Newton 迭代。</desc>
+<defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
+<rect x="0" y="0" width="820" height="286" rx="0" fill="#ffffff" stroke="none"/>
+<rect x="25" y="23" width="34" height="34" rx="4" fill="#203e46" stroke="none"/>
+<text x="42" y="47" font-size="23" font-weight="600" fill="#ffffff" text-anchor="middle" class="serif">c</text>
+<text x="72" y="50" font-size="28" font-weight="600" fill="#203e46" text-anchor="start" class="">Cholesky</text>
+<text x="794" y="47" font-size="14" font-weight="500" fill="#516877" text-anchor="end" class="mono">行内并行 · 行间依赖</text>
+<path d="M25 70H795" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
+<text x="29" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">二维完全分区</text>
+<text x="242" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">独立部分和</text>
+<text x="544" y="102" font-size="16" font-weight="600" fill="#203e46" text-anchor="start" class="">定点对角倒数</text>
+<rect x="32" y="116" width="25" height="25" rx="0" fill="#b6cfc7" stroke="none"/>
+<rect x="61" y="116" width="25" height="25" rx="0" fill="#f1f4f2" stroke="none"/>
+<rect x="90" y="116" width="25" height="25" rx="0" fill="#f1f4f2" stroke="none"/>
+<rect x="32" y="145" width="25" height="25" rx="0" fill="#b6cfc7" stroke="none"/>
+<rect x="61" y="145" width="25" height="25" rx="0" fill="#b6cfc7" stroke="none"/>
+<rect x="90" y="145" width="25" height="25" rx="0" fill="#f1f4f2" stroke="none"/>
+<rect x="32" y="174" width="25" height="25" rx="0" fill="#347a79" stroke="none"/>
+<rect x="61" y="174" width="25" height="25" rx="0" fill="#347a79" stroke="none"/>
+<rect x="90" y="174" width="25" height="25" rx="0" fill="#b6cfc7" stroke="none"/>
+<text x="32" y="226" font-size="13" font-weight="400" fill="#516877" text-anchor="start" class="">3 × 3 · 末行示例</text>
+<path d="M116 186H176" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<path d="M176 132V194" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M176 130H215" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="220" y="116" width="105" height="27" rx="3" fill="#eaf0f6" stroke="#a8bbc9"/>
+<text x="272" y="135" font-size="14" font-weight="550" fill="#203e46" text-anchor="middle" class="">|L₂₀|²</text>
+<path d="M325 130H351V161" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M176 161H215" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="220" y="147" width="105" height="27" rx="3" fill="#eaf0f6" stroke="#a8bbc9"/>
+<text x="272" y="166" font-size="14" font-weight="550" fill="#203e46" text-anchor="middle" class="">|L₂₁|²</text>
+<path d="M325 161H351V161" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M176 192H215" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="220" y="178" width="105" height="27" rx="3" fill="#eaf0f6" stroke="#a8bbc9"/>
+<text x="272" y="197" font-size="14" font-weight="550" fill="#203e46" text-anchor="middle" class="">0（j ≥ i）</text>
+<path d="M325 192H351V161" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M351 161h27" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="399" cy="161" r="19" fill="#e6f2ed" stroke="#9bbcad"/>
+<text x="399" y="168" font-size="22" font-weight="600" fill="#236951" text-anchor="middle" class="serif">Σ</text>
+<path d="M418 161h12" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="442" cy="161" r="11" fill="#f8f0e1" stroke="#cbbd9b"/>
+<text x="442" y="167" font-size="18" font-weight="600" fill="#203e46" text-anchor="middle" class="">−</text>
+<text x="442" y="119" font-size="16" font-weight="500" fill="#516877" text-anchor="middle" class="">A₂₂</text>
+<path d="M442 125v21" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<path d="M453 161h17" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<text x="453" y="221" font-size="15" font-weight="500" fill="#516877" text-anchor="start" class="">x = A₂₂ − Σ |L₂ⱼ|²，j &lt; 2</text>
+<rect x="475" y="132" width="124" height="59" rx="4" fill="#eaf0f6" stroke="#a5b9c9"/>
+<text x="537.0" y="158.5" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">分段初值</text>
+<text x="537.0" y="179.5" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">区间选常数</text>
+<path d="M599 161h33" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="637" y="132" width="153" height="59" rx="4" fill="#e6f2ed" stroke="#9cbfb1"/>
+<text x="713.5" y="158.5" font-size="17" font-weight="600" fill="#203e46" text-anchor="middle" class="">Newton 迭代</text>
+<text x="713.5" y="179.5" font-size="13" font-weight="400" fill="#516877" text-anchor="middle" class="">逼近 1 / √x</text>
+<path d="M29 238H790" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
+<text x="29" y="265" font-size="15" font-weight="400" fill="#516877" text-anchor="start" class="">固定 3 × 3 复数矩阵。1,407 周期为测试总量；单次事务为 175 周期。</text>
+</svg>

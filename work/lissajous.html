@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FPGA 李萨如图形显示控制装置 — Etherealbian 工程图志</title>
+    <meta
+      name="description"
+      content="示波器 X 轴接原始信号，Y 轴接 FPGA 的 DDS 输出。调整两轴的相位和频率关系，就能改变屏上的图形。"
+    />
+    <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../dossier.css" />
+    <script src="../viewer.js" defer></script>
+  </head>
+  <body class="dossier">
+    <a class="skip" href="#sheet">跳至图志</a>
+    <header class="sheet-nav">
+      <div class="sheet-wrap">
+        <a class="brand" href="../index.html">
+          <img src="../assets/orbit.svg" alt="" width="32" height="32" />
+          Etherealbian
+        </a>
+        <a href="../index.html#lissajous">← 返回工程图集</a>
+      </div>
+    </header>
+    <main id="sheet" class="sheet-wrap">
+      <header class="sheet-title">
+        <div class="issue">
+          <span>
+            ENGINEERING RECORD
+            <i>/</i>
+            03
+          </span>
+          <span>Digital control</span>
+        </div>
+        <h1 lang="en">Lissajous<b>.</b></h1>
+        <h2>用相位在示波器上作图</h2>
+        <p>示波器 X 轴接原始信号，Y 轴接 FPGA 的 DDS 输出。调整两轴的相位和频率关系，就能改变屏上的图形。</p>
+        <div class="honor-line">
+          <strong>省一等奖</strong><span>2026 · 全国大学生电子设计竞赛 · 江苏赛区 F 题</span>
+        </div>
+      </header>
+      <div class="exhibit-grid">
+        <figure class="evidence" id="fig-1">
+          <div class="plate-head">
+            <span>FIG. 03A</span>
+            <b>竞赛工作台</b>
+          </div>
+          <a
+            class="exhibit"
+            data-plate
+            href="../assets/lissajous-hardware.jpg"
+            aria-label="查看竞赛工作台原图"
+          >
+            <img
+              fetchpriority="high"
+              decoding="async"
+              src="../assets/plates/scope.webp"
+              alt="竞赛工作台：示波器上的轨迹是两路电压的 X–Y 关系，不是单路信号随时间变化的波形。"
+            />
+          </a>
+          <figcaption>
+            <span>示波器上的轨迹是两路电压的 X–Y 关系，不是单路信号随时间变化的波形。</span>
+            <a href="../assets/lissajous-hardware.jpg" data-plate>放大图版 ↗</a>
+          </figcaption>
+        </figure>
+        <aside class="readout">
+          <div class="rail-kicker">
+            项目摘记
+            <i>/</i>
+            FIELD NOTE
+          </div>
+          <strong>48 bit</strong>
+          <p>DDS 位宽 · Mizar Z7 / XC7Z020</p>
+          <dl>
+            <dt>技术</dt>
+            <dd>DPLL / DDS / FPGA</dd>
+          </dl>
+          <a href="https://github.com/EtherealBian/fpga-lissajous-controller">项目仓库 ↗</a>
+        </aside>
+      </div>
+      <section class="analysis">
+        <div class="section-label">
+          01
+          <i>/</i>
+          READING NOTES
+        </div>
+        <h2>同一套硬件如何画出三种轨迹？</h2>
+        <ol>
+          <li>
+            <b>捕获频率</b>
+            <p>输入经预处理后进入 I/Q 相关器；数字锁相环先粗扫频率，再细扫并锁定。</p>
+          </li>
+          <li>
+            <b>校正相位</b>
+            <p>用相邻块的相角变化估计频偏，用绝对相位误差校正相位。</p>
+          </li>
+          <li>
+            <b>回到示波器</b>
+            <p>DDS 重建 Y 轴，X 轴仍接原始输入。两轴的频比和相位共同决定图形。</p>
+          </li>
+        </ol>
+      </section>
+      <section class="record-table">
+        <div>
+          <div class="section-label">
+            02
+            <i>/</i>
+            REFERENCE
+          </div>
+          <h2>显示模式</h2>
+          <p>正交模式下，两通道有效幅值相同时为圆，幅值不同时为椭圆。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">显示模式</th>
+                <th scope="col">两轴关系</th>
+                <th scope="col">轨迹</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">同相</th>
+                <td>同频、同相</td>
+                <td>斜线</td>
+              </tr>
+              <tr>
+                <th scope="row">正交</th>
+                <td>同频、相差 90°</td>
+                <td>圆或椭圆</td>
+              </tr>
+              <tr>
+                <th scope="row">二倍频</th>
+                <td>两轴频率比 1 : 2</td>
+                <td>横向 ∞</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="appendix">
+        <div class="section-label">
+          03
+          <i>/</i>
+          ORIGINAL MATERIAL
+        </div>
+        <h2>原始材料</h2>
+        <div class="supplements">
+          <figure class="evidence" id="fig-2">
+            <div class="plate-head">
+              <span>FIG. 03B</span>
+              <b>有线锁相架构</b>
+            </div>
+            <a
+              class="exhibit"
+              data-plate
+              href="../assets/plates/wired-dpll.png"
+              aria-label="查看有线锁相架构原图"
+            >
+              <img
+                loading="lazy"
+                decoding="async"
+                src="../assets/plates/dpll.webp"
+                alt="有线锁相架构：从输入相关器跟到 DPLL，再沿相位与频率校正支路找到 DDS 和 DAC 输出。"
+              />
+            </a>
+            <figcaption>
+              <span>从输入相关器跟到 DPLL，再沿相位与频率校正支路找到 DDS 和 DAC 输出。</span>
+              <a href="../assets/plates/wired-dpll.png" data-plate>放大图版 ↗</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+      <nav class="sheet-end" aria-label="相邻项目">
+        <a href="spectrum.html">
+          <small>← 上一份</small>
+          Vitis HLS
+        </a>
+        <a href="vision.html">
+          <small>下一份 →</small>
+          eLinex Vision
+        </a>
+      </nav>
+    </main>
+    <dialog id="viewer" aria-labelledby="viewer-title">
+      <div class="viewer-bar">
+        <h2 id="viewer-title">工程图版</h2>
+        <form method="dialog">
+          <button autofocus aria-label="关闭图版">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </div>
+      <div
+        class="viewer-canvas"
+        id="viewer-canvas"
+        role="region"
+        aria-label="工程图版，可在原始尺寸下滚动查看"
+      >
+        <img alt="" />
+      </div>
+      <div class="viewer-foot">
+        <button type="button" class="zoom" aria-pressed="false" aria-controls="viewer-canvas">
+          原始尺寸 <span aria-hidden="true">1:1</span>
+        </button>
+        <a>在浏览器打开原图 ↗</a>
+      </div>
+    </dialog>
+  </body>
+</html>

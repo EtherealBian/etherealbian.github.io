@@ -1,0 +1,447 @@
+/* 工程图志：白底图纸、窄栏读数、可逐项核对的表格。 */
+.dossier {
+  background: #f7f8f4;
+  color: #243d34;
+}
+.sheet-wrap {
+  width: min(calc(100% - 2 * var(--gutter)), 1190px);
+  margin-inline: auto;
+}
+.sheet-nav {
+  border-bottom: 1px solid #cdd5cd;
+  background: #fcfcf8;
+}
+.sheet-nav > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 70px;
+}
+.sheet-nav > div > a:last-child {
+  font-size: 14px;
+  color: #375b4e;
+  padding: 10px 0;
+}
+.sheet-title {
+  padding: 30px 0 31px;
+}
+.sheet-title h1 {
+  font: 400 clamp(58px, 7vw, 104px) / 1 var(--serif);
+  letter-spacing: -0.064em;
+  margin: 23px 0 13px;
+  color: #2c493f;
+}
+.sheet-title h2 {
+  font-size: clamp(21px, 2vw, 31px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.sheet-title > p {
+  max-width: 68ch;
+  color: #53655a;
+  font-size: 16px;
+  margin-top: 7px;
+  line-height: 1.8;
+}
+.exhibit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.25fr) minmax(225px, 0.78fr);
+  align-items: start;
+  gap: clamp(25px, 3.8vw, 60px);
+}
+.evidence {
+  min-width: 0;
+}
+.plate-head,
+.rail-kicker,
+.section-label {
+  font: 600 11px/1.5 var(--mono);
+  letter-spacing: 0.09em;
+  color: #456b5c;
+}
+.plate-head {
+  border-top: 2px solid #527363;
+  border-bottom: 1px solid #cfd8cf;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.plate-head b {
+  font: 550 13px var(--sans);
+  letter-spacing: 0.04em;
+}
+.exhibit {
+  display: grid;
+  place-items: center;
+  background: white;
+  border: 1px solid #d0d8d1;
+  border-top: 0;
+  padding: clamp(5px, 1.1vw, 17px);
+  cursor: zoom-in;
+}
+.exhibit img {
+  display: block;
+  max-height: 540px;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.evidence figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  padding: 10px 0 0;
+  color: #526459;
+  font: 13px/1.75 var(--sans);
+}
+.evidence figcaption a {
+  flex: none;
+  font-size: 12px;
+  color: var(--fern);
+  text-decoration: underline;
+  padding-block: 5px;
+}
+.readout {
+  border-top: 2px solid #527363;
+  padding: 14px 0 0;
+}
+.rail-kicker {
+  font-size: 10px;
+}
+.readout strong {
+  display: block;
+  font: 400 clamp(42px, 4.2vw, 66px) / 1.05 var(--serif);
+  letter-spacing: -0.055em;
+  color: #356854;
+  margin: 24px 0 7px;
+}
+.readout > p {
+  font-size: 14px;
+  color: #526458;
+}
+.readout dl {
+  margin: 23px 0 10px;
+  border-block: 1px solid #ccd5ce;
+  padding: 14px 0;
+}
+.readout dt {
+  font-size: 11px;
+  color: #50635b;
+  margin-bottom: 5px;
+}
+.readout dd {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.readout dd + dt {
+  margin-top: 12px;
+}
+.readout > a {
+  font-size: 13px;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: #28533e;
+  font-weight: 600;
+}
+.analysis,
+.record-table,
+.appendix {
+  margin-top: clamp(35px, 5vw, 74px);
+}
+.analysis h2,
+.record-table h2,
+.appendix h2 {
+  margin: 9px 0 20px;
+  font-size: clamp(21px, 2.2vw, 33px);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.035em;
+}
+.analysis ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+  counter-reset: note;
+}
+.analysis li {
+  counter-increment: note;
+  border-top: 1px solid #bac9bd;
+  padding-top: 13px;
+}
+.analysis li:before {
+  content: "0" counter(note);
+  display: block;
+  color: #697c70;
+  font: italic 25px/1 var(--serif);
+  margin-bottom: 14px;
+}
+.analysis b {
+  font-size: 17px;
+  font-weight: 620;
+}
+.analysis p,
+.record-table p {
+  font-size: 15px;
+  color: #53655b;
+  line-height: 1.85;
+  margin-top: 5px;
+}
+.record-table {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 1.55fr);
+  gap: clamp(20px, 5vw, 76px);
+  align-items: center;
+  background: #eaf0e9;
+  padding: clamp(17px, 3vw, 39px);
+  border-block: 1px solid #c9d5c9;
+}
+.record-table h2 {
+  margin-bottom: 8px;
+}
+.record-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font: 14px/1.55 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.record-table th,
+.record-table td {
+  border-bottom: 1px solid #c6d2c7;
+  padding: 11px 8px 11px 0;
+}
+.record-table thead th {
+  color: #496455;
+  font-size: 12px;
+  font-weight: 550;
+}
+.record-table tbody th {
+  font-weight: 600;
+}
+.record-table tbody td:last-child {
+  color: #28573f;
+  font-weight: 600;
+}
+.supplements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+  align-items: start;
+  gap: 30px;
+}
+.supplements:has(> .evidence:only-child) {
+  max-width: 900px;
+}
+.supplements .exhibit img {
+  max-height: 440px;
+}
+.sheet-end {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #afc0b2;
+  margin-top: 55px;
+  padding: 22px 0 38px;
+}
+.sheet-end a {
+  font: 400 clamp(21px, 2.25vw, 32px) / 1.25 var(--serif);
+  color: #345b47;
+}
+.sheet-end small {
+  display: block;
+  font: 12px/1.5 var(--sans);
+  margin-bottom: 5px;
+}
+.sheet-end a:last-child {
+  text-align: right;
+}
+.dossier .viewer-bar button {
+  font-size: 25px;
+}
+@media (max-width: 800px) {
+  .exhibit-grid {
+    grid-template-columns: minmax(0, 1.7fr) minmax(180px, 0.8fr);
+    gap: 22px;
+  }
+  .analysis ol {
+    gap: 16px;
+  }
+}
+@media (max-width: 680px) {
+  .sheet-nav > div {
+    min-height: 58px;
+  }
+  .sheet-nav .brand {
+    font-size: 20px;
+  }
+  .sheet-nav .brand img {
+    width: 30px;
+    height: 30px;
+  }
+  .sheet-title {
+    padding: 24px 0;
+  }
+  .sheet-title h1 {
+    margin-top: 25px;
+    font-size: clamp(52px, 12vw, 74px);
+  }
+  .sheet-title > p {
+    font-size: 15px;
+  }
+  .exhibit-grid,
+  .analysis ol,
+  .record-table {
+    grid-template-columns: 1fr;
+  }
+  .readout {
+    background: #edf2ea;
+    border-top: 0;
+    border-left: 3px solid #7e9c86;
+    padding: 14px 17px;
+  }
+  .readout strong {
+    margin: 10px 0 3px;
+  }
+  .readout dl {
+    margin: 11px 0 0;
+    padding: 9px 0;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 4px 8px;
+  }
+  .readout dd + dt {
+    margin: 0;
+  }
+  .readout > a {
+    min-height: 37px;
+  }
+  .analysis li {
+    padding-left: 42px;
+    position: relative;
+  }
+  .analysis li:before {
+    position: absolute;
+    left: 0;
+    top: 14px;
+  }
+  .evidence figcaption {
+    gap: 10px;
+  }
+  .record-table {
+    gap: 12px;
+  }
+  .record-table td,
+  .record-table th {
+    font-size: 13px;
+  }
+  .sheet-end {
+    margin-top: 36px;
+  }
+}
+.bench-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-top: 12px;
+}
+.bench-links a {
+  font-size: 13px;
+  color: #2b5944;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding-block: 8px;
+}
+
+/* A paper figure gets the wide column; its claim and source sit beside it. */
+.mechanism-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2.5fr) minmax(205px, 0.88fr);
+  align-items: center;
+  gap: clamp(22px, 4vw, 67px);
+  margin-top: 30px;
+}
+.circuit-atlas .exhibit,
+.system-plate .exhibit {
+  padding: 0;
+}
+.circuit-atlas .exhibit img,
+.system-plate .exhibit img {
+  width: 100%;
+  max-height: none;
+}
+.mechanism-note > span {
+  font: 12px/1.5 var(--sans);
+  color: #5a6c60;
+}
+.mechanism-note strong {
+  display: block;
+  margin: 6px 0 9px;
+  font: 500 clamp(22px, 2vw, 32px) / 1.2 var(--serif);
+  color: #285e50;
+  font-variant-numeric: tabular-nums;
+}
+.mechanism-note a,
+.system-notes a {
+  display: inline-block;
+  padding-block: 6px;
+  color: #2c5e52;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.system-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 4vw, 60px);
+  margin-top: 19px;
+}
+.system-notes b {
+  display: block;
+  color: #2a4439;
+}
+.system-notes a {
+  margin-left: 4px;
+}
+@media (max-width: 760px) {
+  .mechanism-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 23px;
+  }
+  .mechanism-note {
+    border-left: 2px solid #a7bcb1;
+    padding-left: 14px;
+  }
+  .mechanism-note strong {
+    display: inline;
+    margin-left: 10px;
+  }
+  .system-notes {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* The integrated Vitis plate is the exhibit; keep its whole page width. */
+.atlas-lead .exhibit {
+  padding: 0;
+}
+.atlas-lead .exhibit img {
+  width: 100%;
+  max-height: none;
+}
+.atlas-source {
+  color: #315c4c;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 13px;
+}
