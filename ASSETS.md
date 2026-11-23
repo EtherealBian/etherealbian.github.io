@@ -28,3 +28,4 @@
 制图参考：[Nature Research Figure Guide](https://research-figure-guide.nature.com/) 的可读性原则，以及 [FINN（ACM FPGA 2017）](https://arxiv.org/abs/1612.07119) 图 5、6 分开表达并行单元和内部数据流的方法。仅参考图版组织，不使用论文图片、实验数据或商标。
 
 - `assets/conefdk-walnut.png`: three orthogonal slices reconstructed by ConeFDK from Alexander Meaney's University of Helsinki walnut projections (https://doi.org/10.5281/zenodo.6986012), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Binned, normalized and reconstructed; no endorsement.
+- `assets/conefdk-sweep.gif`: animated axial slice sweep of the same reconstruction; same Meaney / Helsinki CC BY 4.0 source and attribution as the static three-plane image above.

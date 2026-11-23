@@ -62,3 +62,17 @@
     opener?.focus({ preventScroll: true });
   });
 })();
+
+// 核桃扫层：跟随系统动效偏好，并允许访客单独暂停本图版。
+for (const button of document.querySelectorAll('[data-sweep-toggle]')) {
+  const source = button.closest('article,figure').querySelector('.ct-sweep source');
+  const preference = matchMedia('(prefers-reduced-motion: no-preference)');
+  function setMotion(on) {
+    source.media = on ? 'all' : 'not all';
+    button.textContent = on ? '显示静态图' : '播放扫层动图';
+    button.hidden = false;
+  }
+  setMotion(preference.matches);
+  preference.addEventListener('change', () => setMotion(preference.matches));
+  button.addEventListener('click', () => setMotion(source.media !== 'all'));
+}
