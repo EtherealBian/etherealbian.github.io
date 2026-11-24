@@ -327,6 +327,18 @@ def volume_followup(root):
     if read("cross-depth/summary.json")["replicated"] or not all(q["origin_xyz"] == [360, 376, 608] and q["depth_comparison"]["profile"]["p95_abs_volume_error_pct"]["delta"] > 0 for q in cross):
         raise ValueError("Recheck fixed-weight cross-depth replication")
     cross_tails = "、".join(f'{q["arms"]["profile"]["objects"]["p95_abs_volume_error_pct"]:.2f}%' for q in cross)
+    byte = [read(f"byte-window/sample{i}.json") for i in (2, 3, 5)]
+    floors = "、".join(f'{d["bound"]["unavoidable_voxel_errors"]:,}' for d in byte)
+    if any(d["advance"] or d["bound"]["maximum_dice_decimal"] < .95 for d in byte):
+        raise ValueError("Recheck the byte-window bounds before publishing")
+    byte_report = "https://github.com/EtherealBian/cone-fdk/blob/7c93213b44841501a7f7c4baaa4a82ca9d81516e/pores/RESULTS-BYTE-WINDOW.md"
+    curve = [read(f"volume-curvature/sample{i}.json") for i in (2, 3, 5)]
+    measured = [d["arms"]["curvature"]["objects"] for d in curve]
+    if not all(len(d["comparisons"]["profile"]["gained"]) == 1 and not d["comparisons"]["profile"]["lost"] and not d["advance"] and min(o["matched_fraction_prediction"], o["matched_fraction_reference"]) >= .9 for d, o in zip(curve, measured)):
+        raise ValueError("Recheck 3D curvature coverage")
+    curve_hits = "、".join(f'{o["matches"]}/{o["eligible_reference"]}' for o in measured)
+    curve_tails = "、".join(f'{o["p95_abs_volume_error_pct"]:.2f}%' for o in measured)
+    curve_report = "https://github.com/EtherealBian/cone-fdk/blob/705e12fb435d1e891ea9f1044d04b9e45156c489/pores/RESULTS-VOLUME-CURVATURE.md"
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
     mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
@@ -343,6 +355,8 @@ def volume_followup(root):
 <p id="pore-region-review">只在七组预测中按区域选一种，5 号实际匹配 {regional["matches"]}/{limit["reference"]} 个孔；即使知道参考答案也最多 {limit["max_coverage_count"]}/{limit["reference"]}，低于所需的 {limit["needed"]}/{limit["reference"]}。回到原图，3 号有一个 90 体素的孔在七组预测里都连到了超过 113 万体素的触边结构。<a href="{region_base}/RESULTS-REGION-MEDOID.md">核对实测与理论上限 ↗</a> · <a href="{region_base}/RESULTS-PERSISTENT-MISS.md">定位三个漏配孔 ↗</a></p>
 <p id="pore-profile-review">直接从原图找孔后，5 号找回了此前十二项实验都漏掉的 #62：参考 {p5["reference_voxels"]} 体素，预测 {p5["voxels"]}。3 号匹配到 {p3["matches"]}/{p3["eligible_reference"]}，但全部匹配孔的体积误差 P95 为 {p3["p95_abs_volume_error_pct"]:.2f}%，仍高于 15%。尝试换用旧方法量边界，5 号的 P95 从 {swapped5[0]:.2f}% 降到 {swapped5[1]:.2f}%，3 号却变差。<a href="{profile_root}/RESULTS-LOCAL-PROFILE.md">查看新增匹配 ↗</a> · <a href="{recipro_root}/RESULTS-RECIPROCAL-OBJECT.md">核对边界交换 ↗</a></p>
 <p id="pore-depth-review">把同一组权重放到各试件另一段不重叠的 96 层，不重新训练：2、3、5 号的逐孔体积误差 P95 分别为 {cross_tails}，都比原区域高。分数能逐个重算，不代表换个深度仍能量准。<a href="{cross_root}/RESULTS-CROSS-DEPTH.md">核对两个深度的覆盖率与误差 ↗</a></p>
+<p id="pore-byte-review">如果只看去噪后的中心、最低、最高灰度和试件对比度，完全相同的输入有时会得到相反的参考标签。按这些数判定，在 2、3、5 号这三段扫描里分别至少会错 {floors} 个体素。这个下限不适用于保留完整邻域的算法。<a href="{byte_report}">查看灰度组合、误差下限和实际漏孔 ↗</a></p>
+<p id="pore-curvature-review">沿原始 CT 的 13 个方向比较灰度变化，2、3、5 号分别找到了 {curve_hits} 个参考孔：每件多找到一个，原有匹配全部保留，预测侧和参考侧的覆盖率也都达到 90%。但体积误差 P95 分别为 {curve_tails}，三件都比原模型高。<a href="{curve_report}">查看新增的三个孔和同孔体积对照 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
