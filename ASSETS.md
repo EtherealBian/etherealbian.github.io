@@ -31,3 +31,5 @@
 - `assets/conefdk-sweep.gif`: animated axial slice sweep of the same reconstruction; same Meaney / Helsinki CC BY 4.0 source and attribution as the static three-plane image above.
 
 - `assets/conefdk-pore-pair.png`: same 29 × 29 pixel crop of `set1sample3raw_0455.tif` in four panels, derived from Felix H. Kim et al., NIST, [10.18434/M32162](https://doi.org/10.18434/M32162). On 2026-11-24, contrast-windowed, enlarged and overlaid with the published labels or ConeFDK C/D predictions; no NIST endorsement. See the [rendering script](https://github.com/EtherealBian/cone-fdk/blob/measurement-lab/scripts/pore_example.py).
+
+- `work/cone-fdk.html#pore-errors`: D/E measurements are generated from [per-specimen development records and paired reference IDs](https://github.com/EtherealBian/cone-fdk/tree/measurement-evidence-3/pores/evidence) with `tools/update_conefdk_measurement.py`. The comparator is the NIST digital segmentation.
