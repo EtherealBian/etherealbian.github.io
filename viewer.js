@@ -69,7 +69,7 @@ for (const button of document.querySelectorAll('[data-sweep-toggle]')) {
   const preference = matchMedia('(prefers-reduced-motion: no-preference)');
   function setMotion(on) {
     source.media = on ? 'all' : 'not all';
-    button.textContent = on ? '显示静态图' : '播放扫层动图';
+    button.textContent = on ? (button.dataset.staticLabel || '显示静态图') : (button.dataset.playLabel || '播放扫层动图');
     button.hidden = false;
   }
   setMotion(preference.matches);

@@ -320,32 +320,26 @@ img {
   font-size: 14px;
   letter-spacing: 0.15em;
 }
-.filters {
-  display: none;
+#projects .section-head {
+  flex-wrap: wrap;
 }
+.filters { display: none; }
 .enhanced .filters {
-  margin-bottom: 22px;
   display: flex;
-  gap: 3px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 .filters button {
-  border: 0;
-  border-radius: 20px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  border-radius: 24px;
   background: transparent;
-  padding: 5px 13px;
-  min-height: 38px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
-.filters button:is(:hover, :focus-visible) {
-  background: #e7edf0;
-}
-.filters button[aria-pressed="true"] {
-  background: #dfe8ef;
-  color: #314e67;
-  font-weight: 650;
-}
+.filters button:is(:hover, :focus-visible) { background: #e8eeea; }
+.filters button[aria-pressed="true"] { background: #295553; color: white; }
 .project p,
 details p {
   color: var(--muted);
@@ -1053,9 +1047,6 @@ details[open] > summary .icon {
 #lissajous .plate.photo img {
   object-position: 50% 8%;
 }
-.filters button {
-  min-height: 44px;
-}
 .chapter-section {
   scroll-margin-top: -27px;
 }
@@ -1143,15 +1134,8 @@ details[open] > summary .icon {
   .venue-separator { display: none; }
 }
 @media (max-width: 550px) {
-  .enhanced .filters {
-    display: grid;
-    width: min(100%, 360px);
-    grid-template-columns: 1.12fr 1.16fr 0.85fr 0.85fr;
-    gap: 2px;
-  }
-  .filters button {
-    padding: 4px 6px;
-  }
+  #projects .section-head { align-items: flex-start; flex-direction: column; }
+  .filters button { padding: 4px 10px; }
   .paper-visual {
     display: grid;
     grid-template-columns: 82px minmax(0, 1fr);
@@ -1244,9 +1228,7 @@ details[open] > summary .icon {
 .hero-actions .btn.primary:hover {
   background: #35685b;
 }
-.cv-action,
-.entry-link,
-.source-link {
+.cv-action {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -1254,18 +1236,13 @@ details[open] > summary .icon {
   font-size: 14px;
   font-weight: 600;
 }
-.cv-action .icon,
-.entry-link .icon,
-.source-link .icon {
+.cv-action .icon {
   width: 16px;
   height: 16px;
 }
 .cv-action small {
   font: 11px var(--mono);
   color: #586b67;
-}
-.entry-link:hover .icon {
-  transform: translateX(3px);
 }
 .projects {
   display: grid;
@@ -1315,8 +1292,12 @@ details[open] > summary .icon {
   object-fit: cover;
   transition: transform 0.4s var(--ease);
 }
-.plate.diagram {
-  padding: 8px;
+/* Give both diagrams in the opening row the space of the native spectrum plate. */
+#yosys-pmux .plate.diagram, #spectrum .plate.diagram {
+  aspect-ratio: 1504 / 1040;
+}
+@media (max-width: 940px) {
+  .projects { grid-template-columns: 1fr; }
 }
 .plate.photo:hover img {
   transform: scale(1.018);
@@ -1329,20 +1310,42 @@ details[open] > summary .icon {
   flex-direction: column;
   flex: 1;
   padding: 17px 0 0;
+  container-type: inline-size;
+}
+.project-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 14px;
+  margin-bottom: 8px;
 }
 .project h3 {
   font-size: clamp(19px, 1.55vw, 25px);
   letter-spacing: -0.025em;
   line-height: 1.45;
-  margin-bottom: 8px;
   color: #273f37;
 }
 .project-body > p {
   font-size: 15px;
   line-height: 1.75;
 }
+.project-body > p strong {
+  color: var(--fern);
+  font-weight: 700;
+}
+/* Flow one paragraph across the card. Add context only when the column can hold it. */
+.project-summary {
+  text-align: start;
+}
+.project-summary [data-room] { display: none; }
+@container (min-width: 20.5em) { .project-summary [data-room="1"] { display: inline; } }
+@container (min-width: 26.5em) { .project-summary [data-room="2"] { display: inline; } }
+@container (min-width: 32.5em) { .project-summary [data-room="3"] { display: inline; } }
+@container (min-width: 38.125em) { .project-summary [data-room="4"] { display: inline; } }
+@container (min-width: 45.5em) { .project-summary [data-room="5"] { display: inline; } }
+@container (min-width: 50.25em) { .project-summary [data-room="6"] { display: inline; } }
 .project .tags {
-  margin: 14px 0;
+  margin: 14px 0 0;
 }
 .project .tags li {
   font-size: 11px;
@@ -1352,25 +1355,30 @@ details[open] > summary .icon {
   border-radius: 2px;
   padding: 3px 7px;
 }
-.project-foot {
+.project-links {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
-  border-top: 1px solid var(--rule);
-  margin-top: auto;
+  color: #375e51;
+  font: 600 12px/1.4 var(--sans);
 }
-.entry-link {
-  color: #2e5e50;
+.project-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  gap: 3px;
+  white-space: nowrap;
 }
-.source-link {
-  font-size: 12px;
-  font-weight: 500;
-  color: #556660;
+.project-links .source-link { color: #556660; }
+.project-links .icon { width: 13px; height: 13px; }
+.compact-arrow { display: none; }
+/* 窄卡片直接点标题读详情，旁边只留仓库或矢量图入口。 */
+@container (max-width: 480px) {
+  .project-links .entry-link { display: none; }
+  .compact-arrow { display: inline; color: #375e51; font-size: .75em; }
 }
-.source-link .icon {
-  width: 13px;
-  height: 13px;
+@media (pointer: coarse) {
+  .project-links a { min-height: 44px; }
 }
 @media (max-width: 850px) {
   .catalog-meta {
@@ -1392,19 +1400,11 @@ details[open] > summary .icon {
   .project-body {
     padding-top: 14px;
   }
-  .plate.diagram {
-    padding: 4px;
-  }
   .project h3 {
     font-size: 20px;
   }
   .wide-only {
     display: none;
-  }
-}
-@media (max-width: 520px) {
-  .entry-link {
-    font-size: 13px;
   }
 }
 /* 工程图中密集的信号标签可以按原图像素阅读。 */

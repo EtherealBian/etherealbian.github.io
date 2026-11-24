@@ -19,9 +19,9 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=footer-contact-1" />
+    <link rel="stylesheet" href="style.css?v=projects-natural-spacing-1" />
     <script src="portfolio.js" defer></script>
-    <script src="viewer.js" defer></script>
+    <script src="viewer.js?v=projects-1" defer></script>
   </head>
   <body id="top">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
@@ -289,7 +289,7 @@
             </div>
           </article>
         </section>
-        <section id="projects" class="chapter-section">
+        <section id="projects" class="chapter-section" aria-labelledby="projects-title">
           <header class="section-head">
             <div>
               <div class="chapter">
@@ -298,25 +298,24 @@
                 <b>/</b>
                 04
               </div>
-              <h2 lang="en">Projects<span class="period">.</span></h2>
+              <h2 lang="en" id="projects-title">Projects<span class="period">.</span></h2>
             </div>
-            <span class="chapter-cn">工程图集</span>
+            <div class="filters" role="group" aria-label="Filter projects" lang="en">
+              <button type="button" data-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-filter="hardware" aria-pressed="false">Hardware</button>
+              <button type="button" data-filter="logic" aria-pressed="false">Logic</button>
+              <button type="button" data-filter="vision" aria-pressed="false">Vision</button>
+            </div>
           </header>
-          <div class="filters" role="group" aria-label="筛选项目">
-            <button type="button" data-filter="all" aria-pressed="true">All works</button>
-            <button type="button" data-filter="hardware" aria-pressed="false">Hardware</button>
-            <button type="button" data-filter="logic" aria-pressed="false">Logic</button>
-            <button type="button" data-filter="vision" aria-pressed="false">Vision</button>
-          </div>
           <span id="filter-status" role="status" class="sr-only"></span>
           <div class="projects">
-            <article class="project logic" data-group="logic" id="yosys-pmux">
-              <div class="catalog-meta">
+            <article class="project logic" data-group="logic" id="yosys-pmux" aria-labelledby="yosys-pmux-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>01</b>
                   / Logic synthesis
                 </span>
-                <span>工程图版</span>
+                <span>Diagram</span>
               </div>
               <a
                 class="plate diagram"
@@ -332,35 +331,31 @@
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/yosys-pmux.html">Yosys PMUX 结构优化</a></h3>
+                <div class="project-heading">
+                  <h3 id="yosys-pmux-title" lang="en"><a href="work/yosys-pmux.html">Yosys PMUX Optimization<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/yosys-pmux.html" aria-label="Synthesis results: Yosys PMUX Optimization">Synthesis results <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/yosys-pmux-opt" aria-label="GitHub: Yosys PMUX Optimization">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
                 <div class="honor-line">
                   <strong>全国一等奖</strong><span>2026 · FPGA 创新设计竞赛 · 中科亿海微赛道</span>
                 </div>
-                <p>在门级映射前找出各通道重复的译码和运算，让同一组逻辑服务多个输出。</p>
-                <ul class="tags">
+                <p class="project-summary"><span data-room="2">在 RTLIL 层重写选择网络，</span>跨通道共享 PMUX 译码<span data-room="1">条件与算术运算</span><span data-room="5">，跳过没有资源收益的候选结构</span>。官方 9 个用例的组合逻辑单元数平均减少 <strong>60.55%</strong><span data-room="3">，触发器用量均未增加</span><span data-room="4">，网表均通过 EQY 等价验证</span><span data-room="6">，比较对象为原始 RTL 与 ABC9 网表</span>。</p>
+                <ul class="tags" lang="en">
                   <li>Yosys</li>
                   <li>RTLIL</li>
                   <li>EQY</li>
                 </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/yosys-pmux.html">
-                    读综合与验证记录
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="https://github.com/EtherealBian/yosys-pmux-opt">
-                    项目仓库
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
-                </div>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="spectrum">
-              <div class="catalog-meta">
+            <article class="project hardware" data-group="hardware" id="spectrum" aria-labelledby="spectrum-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>02</b>
                   / Signal processing
                 </span>
-                <span>工程图版</span>
+                <span>Diagram</span>
               </div>
               <a
                 class="plate diagram"
@@ -376,35 +371,31 @@
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/spectrum.html">Vitis HLS 算子优化与 Zynq 实时频谱仪</a></h3>
+                <div class="project-heading">
+                  <h3 id="spectrum-title" lang="en"><a href="work/spectrum.html">HLS Kernels &amp; Spectrum Analyzer<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/spectrum.html" aria-label="Kernels &amp; spectra: HLS Kernels &amp; Spectrum Analyzer">Kernels &amp; spectra <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/vitis-hls-kernel-optimization" aria-label="GitHub: HLS Kernels &amp; Spectrum Analyzer">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
                 <div class="honor-line">
                   <strong>全国二等奖</strong><span>2025 · FPGA 创新设计赛 · AMD 赛道</span>
                 </div>
-                <p>初赛分别优化消息认证、压缩和矩阵分解；决赛换到 Zynq，显示射频或音频输入的功率谱。</p>
-                <ul class="tags">
+                <p class="project-summary"><span data-room="3">HMAC-SHA256、LZ4 和 Cholesky </span>三个算子的<span data-room="2">赛题协同</span>仿真周期平均减少约 <strong>59.4%</strong>。<span data-room="1">决赛实现频谱仪，</span>在 Zynq 上用 FFT 显示功率谱<span data-room="4">，支持 1,024 至 16,384 点变换</span><span data-room="2">，接入 ADC</span><span data-room="5">或 UDP 音频，由 PS 换算分贝值</span><span data-room="6">并标注主峰</span>。</p>
+                <ul class="tags" lang="en">
                   <li>Vitis HLS</li>
                   <li>Zynq</li>
                   <li>FFT</li>
                 </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/spectrum.html">
-                    对照三项算子与频谱仪
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="https://github.com/EtherealBian/vitis-hls-kernel-optimization">
-                    项目仓库
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
-                </div>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="lissajous">
-              <div class="catalog-meta">
+            <article class="project hardware" data-group="hardware" id="lissajous" aria-labelledby="lissajous-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>03</b>
-                  / Digital control
+                  / Signal tracking
                 </span>
-                <span>现场实拍</span>
+                <span>Hardware photo</span>
               </div>
               <a
                 class="plate photo"
@@ -420,44 +411,37 @@
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/lissajous.html">FPGA 李萨如图形显示控制装置</a></h3>
+                <div class="project-heading">
+                  <h3 id="lissajous-title" lang="en"><a href="work/lissajous.html">FPGA Lissajous Controller<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/lissajous.html" aria-label="PLL design: FPGA Lissajous Controller">PLL design <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/fpga-lissajous-controller" aria-label="GitHub: FPGA Lissajous Controller">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
                 <div class="honor-line">
                   <strong>省一等奖</strong><span>2026 · 全国大学生电子设计竞赛 · 江苏赛区 F 题</span>
                 </div>
-                <p>
-                  示波器 X 轴接原始信号，Y 轴接 FPGA 的 DDS
-                  输出。调整两轴的相位和频率关系，就能改变屏上的图形。
-                </p>
-                <ul class="tags">
+                <p class="project-summary">有线<span data-room="1">模式以数字</span>锁相<span data-room="1">环跟踪输入<span data-room="3">频率与相位</span>，</span>驱动 <strong>48 位 DDS</strong><span data-room="2"> 合成 Y 轴波形</span><span data-room="5">，与 X 轴输入形成李萨如图形</span>。<span data-room="2">视觉模式下，</span>Jetson Nano 从<span data-room="4">摄像头记录的多帧</span>轨迹估计频率与相位<span data-room="3">，<span data-room="4">经 UART </span>更新 DDS 频率和相位</span>。</p>
+                <ul class="tags" lang="en">
                   <li>DPLL</li>
                   <li>DDS</li>
-                  <li>FPGA</li>
+                  <li>Jetson Nano</li>
                 </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/lissajous.html">
-                    查看锁相架构与实物
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="https://github.com/EtherealBian/fpga-lissajous-controller">
-                    项目仓库
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
-                </div>
               </div>
             </article>
-            <article class="project vision" data-group="vision" id="vision">
-              <div class="catalog-meta">
+            <article class="project vision" data-group="vision" id="vision" aria-labelledby="vision-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>04</b>
-                  / FPGA vision
+                  / Image processing
                 </span>
-                <span>现场实拍</span>
+                <span>Hardware photo</span>
               </div>
               <a
                 class="plate photo"
                 data-plate
                 href="assets/elinx-competition-demo.png"
-                aria-label="查看FPGA 实时图像处理与 UDP 图传：竞赛实拍"
+                aria-label="查看 FPGA 实时图像处理竞赛实拍"
               >
                 <img
                   loading="lazy"
@@ -467,36 +451,32 @@
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/vision.html">FPGA 实时图像处理与 UDP 图传</a></h3>
+                <div class="project-heading">
+                  <h3 id="vision-title" lang="en"><a href="work/vision.html">FPGA Vision Accelerator<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/vision.html" aria-label="Video pipeline: FPGA Vision Accelerator">Video pipeline <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/elinx-vision-stream" aria-label="GitHub: FPGA Vision Accelerator">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
                 <div class="honor-line">
                   <strong>全国三等奖</strong
                   ><span>2026 · 全国大学生集成电路创新创业大赛 · 中科亿海微赛道</span>
                 </div>
-                <p>摄像头送来 RGB565 像素，FPGA 在帧边界切换算法。处理后的图像既能本地显示，也能传回电脑。</p>
-                <ul class="tags">
-                  <li>FPGA</li>
-                  <li>UDP</li>
-                  <li>PyQt6</li>
+                <p class="project-summary">在 FPGA 上实现 <strong>Sobel</strong> 边缘检测、形态学操作、<strong>引导滤波、暗光增强、HDR<span data-room="1">、仿射变换</span><span data-room="2">、色域空间转换</span><span data-room="1">、缩放</span><span data-room="3">、旋转、直方图均衡化</span><span data-room="2">、双边滤波</span></strong>。</p>
+                <ul class="tags" lang="en">
+                  <li>Sobel</li>
+                  <li>Morphology</li>
+                  <li>Guided filtering</li>
                 </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/vision.html">
-                    读采集、切换与图传记录
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="https://github.com/EtherealBian/elinx-vision-stream">
-                    项目仓库
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
-                </div>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="n60">
-              <div class="catalog-meta">
+            <article class="project hardware" data-group="hardware" id="n60" aria-labelledby="n60-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>05</b>
-                  / Beamforming
+                  / Ultrasonic beamforming
                 </span>
-                <span>现场实拍</span>
+                <span>Hardware photo</span>
               </div>
               <a
                 class="plate photo"
@@ -512,74 +492,79 @@
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/n60.html">基于 FPGA 的 60 阵元超声定向传声系统</a></h3>
+                <div class="project-heading">
+                  <h3 id="n60-title" lang="en"><a href="work/n60.html">N60 Ultrasonic Array<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/n60.html" aria-label="Array geometry: N60 Ultrasonic Array">Array geometry <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/n60-ultrasonic-phased-array" aria-label="GitHub: N60 Ultrasonic Array">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
                 <div class="honor-line"><strong>信号赛道第一名</strong><span>2026 · 利利普杯</span></div>
-                <p>上位机把目标方向与距离转换为阵元参数，FPGA 用 60 路 PWM 驱动五个子阵。</p>
-                <ul class="tags">
+                <p class="project-summary">上位机<span data-room="2">根据阵元到目标的路径差</span>计算阵元相位与幅度<span data-room="3">，通过串口下发控制参数</span><span data-room="6">，支持在线计算或离线查表</span>。FPGA <span data-room="5">将音频与各通道的相位和幅度结合，</span>以 <strong>60 路<span data-room="1"> 40 kHz</span> PWM</strong> 驱动 5 个超声子阵<span data-room="1">定向传声</span><span data-room="4">，每个子阵由 12 个阵元组成</span>。</p>
+                <ul class="tags" lang="en">
+                  <li>Phased array</li>
                   <li>FPGA</li>
                   <li>PWM</li>
-                  <li>Python</li>
                 </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/n60.html">
-                    对照阵元分布与样机
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="https://github.com/EtherealBian/n60-ultrasonic-phased-array">
-                    项目仓库
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
-                </div>
               </div>
             </article>
-            <article class="project vision" data-group="vision" id="uavcount">
-              <div class="catalog-meta">
+            <article class="project vision" data-group="vision" id="uavcount" aria-labelledby="uavcount-title">
+              <div class="catalog-meta" lang="en">
                 <span>
                   <b>06</b>
-                  / Computer vision
+                  / Object tracking
                 </span>
-                <span>工程图版</span>
+                <span>Diagram</span>
               </div>
               <a
                 class="plate diagram"
                 data-plate
-                href="assets/uavcount-pipeline.svg"
-                aria-label="查看UAVCount · 水岸无人机检测与计数：水岸无人机计数流程"
+                href="assets/plates/uavcount-counting.svg"
+                aria-label="放大 UAVCount 三帧计数示意图"
               >
                 <img
                   loading="lazy"
                   decoding="async"
-                  src="assets/uavcount-pipeline.webp"
-                  alt="水岸无人机计数流程：从帧对齐、候选验证读到短轨迹回补与计数。原图为矢量，可单独打开并放大。"
+                  src="assets/plates/uavcount-counting.svg"
+                  alt="三帧计数示意：新目标连续出现三帧计一次，已计目标短时漏检后不重复计数，孤立候选不计数。"
                 />
               </a>
               <div class="project-body">
-                <h3><a href="work/uavcount.html">UAVCount · 水岸无人机检测与计数</a></h3>
-                <p>水面倒影和短时漏检会干扰逐帧检测。把候选放回连续帧与短轨迹中检查，再决定是否计数。</p>
-                <ul class="tags">
-                  <li>YOLO11n</li>
-                  <li>Tracking</li>
-                </ul>
-                <div class="project-foot">
-                  <a class="entry-link" href="work/uavcount.html">
-                    读连续观测与计数规则
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#east" /></svg>
-                  </a>
-                  <a class="source-link" href="assets/uavcount-pipeline.svg">
-                    矢量原图
-                    <svg class="icon" width="20" height="20" aria-hidden="true"><use href="#out" /></svg>
-                  </a>
+                <div class="project-heading">
+                  <h3 id="uavcount-title" lang="en"><a href="work/uavcount.html">UAVCount: Drone Counting<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/uavcount.html" aria-label="Counting rules: UAVCount: Drone Counting">Counting rules <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="assets/plates/uavcount-counting.svg" aria-label="View SVG: UAVCount: Drone Counting">View SVG <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
                 </div>
+                <div class="honor-line"><strong>本科毕设</strong></div>
+                <p class="project-summary"><span data-room="2">对齐相邻视频帧，</span><span data-room="5">用 YOLO11n 检测候选目标，</span><span data-room="3">用短轨迹抑制水面倒影误检，</span>新目标<strong>连续 3 帧</strong>确认后只计一次<span data-room="4">，短暂漏检后续接原轨迹</span>。测试集<span data-room="1">按三帧判读窗统计</span><span data-room="6">，每段视频先预热 10 帧</span>：<strong>167/184</strong> 个窗口计数正确<span data-room="2">（90.76%）</span>。</p>
+                <ul class="tags" lang="en">
+                  <li>YOLO11n</li>
+                  <li>TensorRT FP16</li>
+                  <li>Multi-object tracking</li>
+                </ul>
               </div>
             </article>
-            <article class="project vision" data-group="vision" id="cone-fdk">
-              <div class="catalog-meta"><span><b>07</b> / Computed tomography</span><span>实测切片</span></div>
+            <article class="project vision" data-group="vision" id="cone-fdk" aria-labelledby="cone-fdk-title">
+              <div class="catalog-meta" lang="en"><span><b>07</b> / Computed tomography</span><span>CT slices</span></div>
               <a class="plate ct-sweep" href="work/cone-fdk.html" aria-label="查看 ConeFDK 核桃 CT 重建记录"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif"><img loading="lazy" decoding="async" src="assets/conefdk-walnut.png" alt="CT 扫层展示核桃的壳、隔膜与核仁；静态替代图为三个正交断面。"></picture></a>
-              <div class="ct-controls"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle hidden>显示静态图</button></div>
-              <div class="project-body"><h3><a href="work/cone-fdk.html">ConeFDK · CUDA 锥束 CT</a></h3>
-                <p>用一台笔记本将核桃的 720 幅 X 射线投影重建为 512³ 体数据。重建器已发布；<a href="work/cone-fdk.html#pore-latent">三件金属试件的逐孔测量</a>可逐孔复算，三个试件均未通过全部门槛。</p>
-                <ul class="tags"><li>CUDA C++</li><li>cuFFT</li><li>FDK</li></ul>
-                <div class="project-foot"><a class="entry-link" href="work/cone-fdk.html">查看断面与重建记录 →</a><a class="source-link" href="https://github.com/EtherealBian/cone-fdk">项目仓库 ↗</a></div>
+              <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
+              <div class="project-body">
+                <div class="project-heading">
+                  <h3 id="cone-fdk-title" lang="en"><a href="work/cone-fdk.html">ConeFDK: CUDA CT Reconstruction<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/cone-fdk.html" aria-label="Reconstruction notes: ConeFDK: CUDA CT Reconstruction">Reconstruction notes <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/cone-fdk" aria-label="GitHub: ConeFDK: CUDA CT Reconstruction">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
+                <p class="project-summary"><span data-room="2">经 cuFFT 分批滤波</span><span data-room="3">与 GPU 并行反投影</span><span data-room="2">，</span>将 720 幅<span data-room="3">核桃 X 射线</span>投影重建为 <strong>512³</strong> 体数据<span data-room="4">，按块写回磁盘</span>。<span data-room="1">在 RTX 5060 Laptop 上，</span>预热后<span data-room="4">端到端</span>重建耗时中位数为 <strong>2.009 秒</strong><span data-room="5">；相对 ASTRA 的全体素 L2 差异为 0.02899%</span>。</p>
+                <ul class="tags" lang="en">
+                  <li>CUDA C++</li>
+                  <li>cuFFT</li>
+                  <li>FDK</li>
+                  <li><a href="work/cone-fdk.html#pore-latent" title="三件金属试件的逐孔测量可逐孔复算，均未通过全部门槛。">Per-pore validation · 0/3 met all criteria ↗</a></li>
+                </ul>
               </div>
             </article>
           </div>
