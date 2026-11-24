@@ -128,6 +128,38 @@ def latent_section(root):
 <p>把去噪权重拟合得更细，也没有解决误差。2 号在拟合区的 Dice 从 0.91177 升到 0.92562，换到隔开的检查区却从 0.94405 降到 0.93890。<a href="{repo}/blob/55e4d40d4a1b204aefef8876971dbcf27d43a046/pores/INVERSE-WEIGHT-PILOT.md">三件试件的对照记录 ↗</a></p><div class="bench-links"><a href="{repo}/blob/{tag}/pores/RESULTS-G.md">查看原图重放与全部失败项 ↗</a><a href="{repo}/releases/tag/{tag}">下载 G 的逐层阅片器、权重和结果 ↗</a></div></div>'''
 
 
+def shared_section(root):
+    repo = "https://github.com/EtherealBian/cone-fdk"
+    tag = "measurement-evidence-6"
+    folder = root / "candidate-h"
+    read = lambda name: json.loads((folder / name).read_text(encoding="utf8"))
+    manifest = read("predictions.json")
+    replay = read("raw-weight-replay.json")
+    if set(manifest["specimens"]) != {"2", "3", "5"} or len({v["weights"] for v in manifest["specimens"].values()}) != 1:
+        raise ValueError("H requires one set of weights for all development specimens")
+    rows = []
+    for i in (2, 3, 5):
+        h = read(f"sample{i}.json")
+        rr = replay["specimens"][str(i)]
+        if not (h["role"] == "development" and h["specimen"] == i and h["origin_xyz"] == [360, 376, 400] and h["evaluation_z"] == [400, 528] and h["seal"] == manifest["specimens"][str(i)] and h["pipeline_id"] == replay["pipeline_id"] == manifest["pipeline_id"] and rr["mask"] == h["seal"]["mask"] and rr["voxels"] == 8388608 and rr["decision_disagreements"] == 0 and len(h["final_gates"]) == 11):
+            raise ValueError("H report, raw replay and sealed predictions do not agree")
+        o = h["objects"]
+        rows.append(f'<tr><th scope="row">试件 {i}</th><td>{o["matches"]} / {o["eligible_reference"]}<small>通过 {sum(h["final_gates"].values())} / 11 项</small></td><td>{o["p95_abs_volume_error_pct"]:.2f}%</td></tr>')
+    with (folder / "sample5-paired-g-h.csv").open(encoding="utf8", newline="") as f:
+        pairs = list(csv.DictReader(f))
+    lost = {r["reference_id"]: r for r in pairs if r["status"] == "lost"}
+    shared = [r for r in pairs if r["status"] == "shared"]
+    if set(lost) != {"21", "92", "105"} or len(shared) != 7:
+        raise ValueError("Wrong paired reference population")
+    a,b = (quantiles([100*abs(int(r[f"{k}_signed_delta_vox"]))/int(r["reference_voxels"]) for r in shared], n=100, method="inclusive")[94] for k in ("g", "h"))
+    g5 = json.loads((root / "candidate-g/sample5.json").read_text(encoding="utf8"))["objects"]
+    hit = lost["21"]
+    return f'''<div id="pore-shared"><h3>三个试件共用一套权重，小孔量准了吗？</h3><p>候选 H 用每件原有的 24 张校准切片联合训练，增加了对完整小孔体积的监督。试件 5 只有一个符合训练条件的小孔；重复抽取它 150 次，仍然只有一个独立样本。</p>
+<table><caption>共享权重 H · 已匹配孔的体积误差 P95，目标 ≤15%</caption><thead><tr><th scope="col">开发试件</th><th scope="col">匹配 / 参考</th><th scope="col">体积误差 P95</th></tr></thead><tbody>{"".join(rows)}</tbody></table>
+<p><b>少找到三个孔，也能让误差看起来更小。</b>试件 5 的总体 P95 从 G 的 {g5["p95_abs_volume_error_pct"]:.2f}% 降至 H 的 {b:.2f}%；只比较都找到的七个孔，误差却从 {a:.2f}% 升至 {b:.2f}%。例如参考孔 21 有 {hit["reference_voxels"]} 个体素，G 找到 {hit["g_pred_voxels"]} 个，H 只找到 {hit["h_miss_best_iou_pred_vox"]} 个，没达到 64 体素的匹配门槛。</p>
+<p>原始档和封存权重可以重放，但三件都没有通过全部精度指标。保留试件 4、6 尚未开启。</p><div class="bench-links"><a href="{repo}/blob/{tag}/pores/RESULTS-H.md">查看逐孔反例和独立重放 ↗</a><a href="{repo}/releases/tag/{tag}">下载 H 的三件离线复核包 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -206,6 +238,7 @@ def ledger(root):
 {transfer_section(root)}
 {spatial_section(root)}
 {latent_section(root)}
+{shared_section(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
