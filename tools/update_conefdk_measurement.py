@@ -309,6 +309,24 @@ def volume_followup(root):
     dist5 = read("distance-target/sample5.json")["comparisons"]["census"]["shared_p95"]
     if catalog["unmixed_passing"] or not b["possible"] or b["union"] != b["needed"] or read("orientation/summary.json")["advance"] or read("distance-target/summary.json")["advance"]:
         raise ValueError("Recheck selector headroom and transfer screens")
+    region_base = "https://github.com/EtherealBian/cone-fdk/blob/a39689ab0c0a7757a3344f0c1453c29b38a0312b/pores"
+    regional = read("region-medoid/sample5.json")["arms"]["medoid"]["objects"]
+    limit = read("region-headroom/summary.json")["specimens"]["5"]
+    misses = read("persistent-miss/summary.json")["cases"]
+    if read("region-medoid/summary.json")["advance"] or limit["possible"] or regional["eligible_reference"] != limit["reference"] or misses != {"2": [28], "3": [70], "5": [62]}:
+        raise ValueError("Recheck regional bounds or persistent miss population")
+    profile_root = "https://github.com/EtherealBian/cone-fdk/blob/46f1e7336b74f7f55e596e92038594a6c67b81d9/pores"
+    recipro_root = "https://github.com/EtherealBian/cone-fdk/blob/aa0cea0098d6cfd0a757ac7d89e5e02e3cf1bbce/pores"
+    p3 = read("local-profile/sample3.json")["arms"]["profile"]["objects"]
+    p5 = read("local-profile/sample5.json")["arms"]["profile"]["references"]["62"]
+    swapped5 = read("reciprocal-object/sample5.json")["comparisons"]["forward"]["profile"]["shared_p95"]
+    if read("reciprocal-object/summary.json")["specimens"] != {"2": False, "3": False, "5": True} or p5["pred"] is None:
+        raise ValueError("Recheck whole-object boundary exchange before publishing")
+    cross_root = "https://github.com/EtherealBian/cone-fdk/blob/011b95369e470a7334b9dc6f43418c9f47137b17/pores"
+    cross = [read(f"cross-depth/sample{i}.json") for i in (2, 3, 5)]
+    if read("cross-depth/summary.json")["replicated"] or not all(q["origin_xyz"] == [360, 376, 608] and q["depth_comparison"]["profile"]["p95_abs_volume_error_pct"]["delta"] > 0 for q in cross):
+        raise ValueError("Recheck fixed-weight cross-depth replication")
+    cross_tails = "、".join(f'{q["arms"]["profile"]["objects"]["p95_abs_volume_error_pct"]:.2f}%' for q in cross)
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
     mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
@@ -322,6 +340,9 @@ def volume_followup(root):
 <p id="pore-monotone-review">改为只在原边界上分组更新后，三个试件的灰度拟合目标都下降了，分别匹配到 {"、".join(map(str, groups))} 个孔，仍比不修改边界少。该方法不进入正式验收。<a href="{monotone_report}">核对同一批孔的体积误差 ↗</a></p>
 <p id="pore-interface-review">同一批孔换八个方向预测，试件 3 的体积误差 P95 从 {orient3[0]:.2f}% 降到 {orient3[1]:.2f}%，没有达到预定的 2 个百分点。改为学习边界距离，试件 5 从原基线的 {dist5[0]:.2f}% 升到 {dist5[1]:.2f}%。<a href="{interface}/RESULTS-ORIENTATION.md">核对八个方向 ↗</a> · <a href="{interface}/RESULTS-DISTANCE-TARGET.md">核对距离对照 ↗</a></p>
 <p id="pore-catalog-review">试件 5 的 {b["reference"]} 个参考孔，把十二项实验中曾经独立匹配的孔合起来只有 {b["union"]} 个，刚够 90% 覆盖线。即使知道正确答案、为每个孔挑最准确的已有预测，体积误差 P95 仍是 {b["best_p95"]:.2f}%。没有一种原方法同时达到这两项要求；理想值不是可用算法。<a href="{interface}/RESULTS-OBJECT-CATALOG.md">查看每个孔的候选体积 ↗</a></p>
+<p id="pore-region-review">只在七组预测中按区域选一种，5 号实际匹配 {regional["matches"]}/{limit["reference"]} 个孔；即使知道参考答案也最多 {limit["max_coverage_count"]}/{limit["reference"]}，低于所需的 {limit["needed"]}/{limit["reference"]}。回到原图，3 号有一个 90 体素的孔在七组预测里都连到了超过 113 万体素的触边结构。<a href="{region_base}/RESULTS-REGION-MEDOID.md">核对实测与理论上限 ↗</a> · <a href="{region_base}/RESULTS-PERSISTENT-MISS.md">定位三个漏配孔 ↗</a></p>
+<p id="pore-profile-review">直接从原图找孔后，5 号找回了此前十二项实验都漏掉的 #62：参考 {p5["reference_voxels"]} 体素，预测 {p5["voxels"]}。3 号匹配到 {p3["matches"]}/{p3["eligible_reference"]}，但全部匹配孔的体积误差 P95 为 {p3["p95_abs_volume_error_pct"]:.2f}%，仍高于 15%。尝试换用旧方法量边界，5 号的 P95 从 {swapped5[0]:.2f}% 降到 {swapped5[1]:.2f}%，3 号却变差。<a href="{profile_root}/RESULTS-LOCAL-PROFILE.md">查看新增匹配 ↗</a> · <a href="{recipro_root}/RESULTS-RECIPROCAL-OBJECT.md">核对边界交换 ↗</a></p>
+<p id="pore-depth-review">把同一组权重放到各试件另一段不重叠的 96 层，不重新训练：2、3、5 号的逐孔体积误差 P95 分别为 {cross_tails}，都比原区域高。分数能逐个重算，不代表换个深度仍能量准。<a href="{cross_root}/RESULTS-CROSS-DEPTH.md">核对两个深度的覆盖率与误差 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
