@@ -347,7 +347,6 @@ img {
   font-weight: 650;
 }
 .project p,
-.paper-copy > p:not(.venue),
 details p,
 .work-notes p,
 .contact p,
@@ -405,11 +404,13 @@ details[open] > summary .icon {
 /* 研究书目、教育与实验笔记 */
 .paper {
   display: grid;
-  grid-template-columns: minmax(190px, 0.6fr) minmax(0, 2fr);
+  grid-template-columns: minmax(170px, 0.46fr) minmax(0, 1.8fr);
   background: #fbfcfa;
   border: 1px solid #cbd5d8;
-  border-radius: 10px;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  cursor: default;
 }
 .paper-visual {
   display: flex;
@@ -417,65 +418,73 @@ details[open] > summary .icon {
   align-items: center;
   justify-content: center;
   gap: 14px;
-  background: #e4edf1;
   padding: 25px 14px;
-  color: #4e6b7c;
+  background: #e4edf1 radial-gradient(#9db4c350 0.75px, transparent 0.85px) 0 0 / 9px 9px;
+  color: #516878;
 }
-.paper-visual > span,
-.paper-visual small {
-  font-size: 11px;
-  letter-spacing: 0.08em;
+.paper-visual > span, .paper-visual small {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-align: center;
 }
-.paper-visual svg {
-  width: min(100%, 214px);
-  height: auto;
-}
-.paper-copy {
-  padding: clamp(24px, 3.5vw, 50px);
-}
+.paper-visual svg { width: min(100%, 180px); height: auto; }
+.paper-copy { min-width: 0; padding: clamp(24px, 3.5vw, 50px); }
 .paper-meta {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 6px 12px;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--blue);
 }
-.status {
+.paper .status {
   padding: 3px 9px;
   border-radius: 20px;
   background: #f2e4e6;
   color: #79525f;
   letter-spacing: 0;
+  white-space: nowrap;
 }
 .paper h3 {
-  font: 400 clamp(26px, 2.45vw, 39px) / 1.18 var(--display);
+  max-width: 36ch;
+  margin: clamp(24px, 2.4vw, 32px) 0 12px;
+  font: 400 clamp(26px, 2.45vw, 39px)/1.2 var(--display);
   letter-spacing: -0.03em;
-  margin: 16px 0;
+  text-wrap: balance;
 }
 .venue {
-  font-weight: 600;
-  color: var(--blue);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 9px;
   font-size: 14px;
+  color: var(--muted);
 }
-.venue span {
-  margin: 0 5px;
-  color: #996e76;
-}
-.paper-copy > p:not(.venue) {
-  margin: 14px 0 18px;
-  font-size: 15px;
-}
-.paper-copy details p {
+.venue strong { color: var(--ink); }
+.venue-separator { color: #a3adb5; }
+.paper-abstract {
   max-width: 72ch;
-  margin: 5px 0 9px;
+  margin: 18px 0 12px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #38444d;
 }
-.paper-copy summary {
-  justify-content: flex-start;
+.paper-contact { display: flex; justify-content: flex-end; }
+.paper-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
 }
-.paper:hover .scanline {
-  animation: readout 2s var(--ease) 1;
+.paper-contact a:not(:hover) { text-decoration: underline; text-decoration-color: #a6b3ba; }
+.paper-contact a:is(:hover, :focus-visible) { color: #304e65; text-decoration: underline; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .paper-visual:hover .scanline { animation: readout 2s var(--ease) 1; }
 }
 @keyframes readout {
   45% {
@@ -1020,19 +1029,6 @@ details[open] > summary .icon {
 .chapter-section {
   scroll-margin-top: -27px;
 }
-.paper {
-  grid-template-columns: minmax(170px, 0.46fr) minmax(0, 1.8fr);
-}
-.paper-visual {
-  background-image: radial-gradient(#9db4c350 0.75px, transparent 0.85px);
-  background-size: 9px 9px;
-}
-.paper-copy {
-  max-width: 86ch;
-}
-.paper-visual svg {
-  max-width: 180px;
-}
 .viewing-plate {
   overflow: hidden;
 }
@@ -1135,9 +1131,8 @@ details[open] > summary .icon {
   .viewer-bar h2 {
     font-size: 15px;
   }
-  .paper h3 {
-    text-wrap: pretty;
-  }
+  .venue { flex-direction: column; }
+  .venue-separator { display: none; }
   .work-notes article {
     gap: 8px;
   }
@@ -1154,7 +1149,7 @@ details[open] > summary .icon {
   }
   .paper-visual {
     display: grid;
-    grid-template-columns: 82px 1fr;
+    grid-template-columns: 82px minmax(0, 1fr);
     grid-template-rows: auto auto;
     align-content: center;
     justify-items: start;
@@ -1168,7 +1163,7 @@ details[open] > summary .icon {
   .paper-visual > span,
   .paper-visual small {
     grid-column: 2;
-    white-space: nowrap;
+    text-align: left;
   }
   .paper-visual > span {
     align-self: end;
