@@ -282,12 +282,24 @@ def volume_followup(root):
     below = sum(d["arms"]["gray"]["unmatched_counts"].get("below 64", 0) for d in audit.values())
     if seed["advance"] or (gained, extra, below) != (3, 33, 23):
         raise ValueError("Recheck small-seed population before publishing")
+    mass = read("mass/summary.json")
+    replays = read("mass/replay.json")["development"]
+    recovered = {k: sum(len(v[k]["gained"]) for v in mass["development"].values()) for k in ("mass", "size")}
+    blocked = sum(v["mass"]["below_rejected"] for v in mass["development"].values())
+    abstained = 0
+    for i in (2, 3, 5):
+        estimates = {r["seed"]: r["estimate"] for r in read(f"mass/sample{i}-estimates.json")}
+        abstained += sum(r["old_category"] == "below 64" and estimates[r["seed"]]["reason"] != "ok" for r in read(f"mass/sample{i}.json")["previous_entrants"])
+    if mass["advance"] or (blocked, abstained, recovered["mass"], recovered["size"]) != (20, 14, 2, 2) or any(any(r["mask_differences"].values()) for r in replays.values()):
+        raise ValueError("Recheck the signed-volume screen and independent replay")
+    mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
     base = "https://github.com/EtherealBian/cone-fdk/blob/b2dda34490dce0f786afad9549e301b7d99bbf4b/pores"
     return f'''<div id="pore-volume-review"><h3>多看前后两层，能把孔量得更准吗？</h3>
 <p>在同一段 96 层开发图像中，用前后五层共同预测中心层。试件 2 里两种模型都匹配到的 {len(screens[0]["shared_ids"])} 个孔，体积误差 P95 从 {tails[0][0]:.2f}% 降至 {tails[0][1]:.2f}%；试件 3 从 {tails[1][0]:.2f}% 升至 {tails[1][1]:.2f}%，试件 5 从 {tails[2][0]:.2f}% 升至 {tails[2][1]:.2f}%。没有替换正式候选。</p>
 <p>回到试件 3 的正式开发区，有 {len(rows)} 个漏配孔的原始灰度对比度达到匹配孔的中位数。与它们重叠最多的预测分别只有 {"、".join(str(r["largest_overlap"]["voxels"]) for r in rows)} 个体素，均不到 64 体素的计量下限。</p>
 <p>那么，把小预测沿原图暗区扩大会怎样？在迁移区找回了 {gained} 个参考孔，却新增 {extra} 个未匹配预测，其中 {below} 个最大重叠的参考孔本身就小于计量下限。保留原算法和下限。</p>
+<p id="pore-mass-review">再用原始灰度估算体积，{below} 个本来就小的孔中有 {blocked} 个没有被推过线：{abstained} 个因裁边或邻孔而弃判，只有 {blocked-abstained} 个靠估值被筛掉。灰度法保住 {recovered["mass"]} 个原来漏配的孔，与只按原始大小排序打平。在原有匹配孔上移动边界，也只有试件 3 的误差 P95 下降。<a href="{mass_report}">核对全部估值、弃判和逐孔结果 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
