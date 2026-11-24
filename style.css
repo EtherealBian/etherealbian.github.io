@@ -516,18 +516,12 @@ details[open] > summary .icon {
 .cover-ring picture { display: block; }
 .cover-ring img { width: 100%; height: auto; }
 .ring-toggle { display: none; }
-@keyframes cover-ring-settle {
-  from { transform: rotate(-10deg); }
-  to { transform: rotate(0); }
-}
 @keyframes cover-ring-turn {
   from { transform: rotate(0turn); }
   to { transform: rotate(1turn); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  /* 入场转动外层，持续旋转内层；悬停与轻触共用同一条时间轴。 */
-  .cover-ring picture { animation: cover-ring-settle 2.4s ease-out; }
-  .cover-ring img { animation: cover-ring-turn 72s linear infinite paused; }
+  .cover-ring img { animation: cover-ring-turn 72s linear infinite; }
   .ring-toggle {
     display: block;
     position: absolute;
@@ -540,10 +534,7 @@ details[open] > summary .icon {
     cursor: pointer;
   }
   .ring-toggle:focus-visible + picture { outline: 2px solid var(--blue); outline-offset: -3px; }
-  .ring-toggle:checked + picture img { animation-play-state: running; }
-}
-@media (any-hover: hover) and (prefers-reduced-motion: no-preference) {
-  .cover-ring:hover img { animation-play-state: running; }
+  .ring-toggle:checked + picture img { animation-play-state: paused; }
 }
 @media (min-width: 681px) {
   .ring-cover h1, .ring-cover .cover-focus {
