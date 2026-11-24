@@ -408,8 +408,16 @@ def ledger(root):
         raise ValueError("The retained comparison has changed; review the portfolio text")
     retained = ranking["candidates"]["E"]
     worst = float(Fraction(retained["worst_exact_pct"]))
-    retained_report = "https://github.com/EtherealBian/cone-fdk/blob/cd32b2b59cebd52632cfbf766806191aa2e5ee44/pores/RETAINED-BASELINE.md"
-    intake_report = "https://github.com/EtherealBian/cone-fdk/blob/a8436d85e34389fbd823f66f3bfe1bd43d49dda5/pores/EXTERNAL-DATA-INTAKE.md"
+    retained_report = "https://github.com/EtherealBian/cone-fdk/blob/7b9d4bfc9c1ea8fe2750baa1a2b8154bfd09b418/pores/RETAINED-BASELINE.md"
+    intake_report = "https://github.com/EtherealBian/cone-fdk/blob/7b9d4bfc9c1ea8fe2750baa1a2b8154bfd09b418/pores/EXTERNAL-DATA-INTAKE.md"
+    agreement_report = "https://github.com/EtherealBian/cone-fdk/blob/7b9d4bfc9c1ea8fe2750baa1a2b8154bfd09b418/pores/EXTERNAL-REFERENCE-AGREEMENT.md"
+    external = json.loads((root / "external-reference/volume-agreement.json").read_bytes())
+    ids = ("RBF_05", "RBF_09", "RBF_21", "RBF_105")
+    if set(external["specimens"]) != set(ids):
+        raise ValueError("Review the external specimen set before publishing")
+    comparisons = [external["specimens"][i]["pairs"]["Binary_vs_UNet"] for i in ids]
+    pairs_count = sum(len(v["matches"]) for v in comparisons)
+    disjoint = [v["no_common_estimate_within_15pct_of_both"] for v in comparisons]
     passed = []
     rows = []
     common = []
@@ -491,6 +499,7 @@ def ledger(root):
         START
         + f'''\n<section class="pore-ledger" id="pore-errors" aria-labelledby="pore-errors-title"><span class="section-label">实验记录 <i>/</i> D → E</span><h3 id="pore-errors-title">换一种边界算法，同一个孔测准了吗？</h3>
 <p id="pore-retained-review"><strong>当前保留 E 作为开发比较基线。</strong>回看 A–H 八种候选，按各自误差最大的试件比较，E 的匹配孔体积误差 P95 最低，为 {worst:.2f}%，仍高于 15% 的验收线。从原始扫描重新训练并独立复算后，2、3、5 号试件分别通过 {"、".join(passed)} 项。4、6 号保留件尚未启用。<a href="{retained_report}">核对逐件结果 ↗</a> · <a href="{intake_report}">哪些数据是真正的新试件？ ↗</a></p>
+<p id="pore-external-agreement"><strong>同一个孔，换一份分割能差多少？</strong>四件外部试件上，阈值法 Binary 和 UNet 共同找到 {pairs_count} 个可配对的孔。其中 {sum(disjoint)} 个孔的两份体积各放宽 ±15% 后仍不重叠，四件分别有 {"、".join(map(str, disjoint))} 个。这里比较的是两种分割给出的边界，不是 E 的误差。<a href="{agreement_report}">核对逐孔体积与 CUDA 重放 ↗</a></p>
 <p>候选 E 按局部纹理选取相似图像块，并在校准时给小孔边界加权。下面逐件比较两种算法：先看全部匹配孔，再看两种算法都找到的同一批孔。验收要求体积绝对相对误差的第 95 百分位（P95）不超过 15%；三个开发试件均未达标。</p>
 {table("各方法的全部匹配孔", rows, "匹配数（D → E）")}
 <details><summary>只比较两种算法都匹配到的孔</summary>{table("相同参考孔的配对比较", common, "共同匹配数")}<p>新增和丢失的匹配没有放进这一行的百分位；它们仍计入正式验收的覆盖率。</p></details>
