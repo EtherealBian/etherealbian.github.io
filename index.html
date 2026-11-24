@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=research-card-1" />
+    <link rel="stylesheet" href="style.css?v=footer-contact-1" />
     <script src="portfolio.js" defer></script>
     <script src="viewer.js" defer></script>
   </head>
@@ -86,11 +86,14 @@
     <main id="main">
       <section class="wrap ring-cover" id="home" aria-labelledby="hero-title">
         <h1 id="hero-title" lang="en"><span>Signals.</span> <span>Logic.</span> <span>Quantum.</span></h1>
-        <picture class="cover-ring">
-          <source media="(max-width: 680px)" srcset="assets/harmonic-study-small.svg" />
-          <img src="assets/harmonic-study.svg" width="580" height="430" fetchpriority="high"
-            alt="墨绿色细线编织成的三叶环面结" />
-        </picture>
+        <div class="cover-ring">
+          <input class="ring-toggle" type="checkbox" aria-label="保持三叶结旋转" title="保持三叶结旋转" autocomplete="off" />
+          <picture>
+            <source media="(max-width: 680px)" srcset="assets/harmonic-study-small.svg" />
+            <img src="assets/harmonic-study.svg" width="580" height="430" fetchpriority="high"
+              alt="墨绿色细线编织成的三叶环面结" />
+          </picture>
+        </div>
         <p class="cover-focus" lang="en">
           <strong>Heterogeneous Computing &amp; Systems <span lang="zh-CN">| 异构计算与系统栈</span></strong><br />
           <span>FPGA Signal/Image Processing</span> · <span>HLS/CUDA Operator Acceleration</span><br />
@@ -109,10 +112,7 @@
             <div class="bio">
               <div class="identity" lang="en">
                 <img src="assets/avatar.jpg" width="80" height="80" alt="" />
-                <div>
-                  <h3>Xiangyu Bian</h3>
-                  <p>Ethereal</p>
-                </div>
+                <h3>Xiangyu Bian</h3>
               </div>
               <p class="profile-intro">南京理工大学 通信工程在读</p>
               <p class="profile-note">研究 FPGA 图像处理、数字频谱分析和信号跟踪，目前探索中性原子量子计算（<span lang="en">Neutral Atom Quantum Computing</span>）。</p>
@@ -147,7 +147,7 @@
                 </div>
                 <div>
                   <dt lang="en">Neutral Atom Quantum Computing</dt>
-                  <dd>探索中性原子阵列的读出与控制。</dd>
+                  <dd>探索中性原子量子计算。</dd>
                 </div>
                 <div>
                   <dt lang="en">Operator Acceleration</dt>
@@ -158,92 +158,75 @@
                   <dd>关注数字电路的逻辑综合与形式验证。</dd>
                 </div>
               </dl>
-              <section class="tech-stack" lang="en" aria-labelledby="tech-stack-title">
-                <h3 id="tech-stack-title">Tech Stack</h3>
-                <ul>
-                  <li>C++</li><li>Verilog</li><li>HLS</li><li>CUDA</li><li>Linux</li><li>Python</li>
-                </ul>
-              </section>
             </aside>
           </div>
         </section>
-        <section class="chapter-section" id="experience">
-          <header class="section-head">
+        <section class="chapter-section" id="experience" aria-labelledby="experience-title">
+          <header class="section-head" lang="en">
             <div>
-              <div class="chapter">
-                <i></i>
-                FIELD NOTES
-                <b>/</b>
-                02
-              </div>
-              <h2 lang="en">Experience<span class="period">.</span></h2>
+              <div class="chapter"><i></i> FIELD NOTES <b>/</b> 02</div>
+              <h2 id="experience-title">Experience<span class="period">.</span></h2>
             </div>
-            <span class="chapter-cn">实习经历</span>
           </header>
           <div class="timeline">
-            <div class="when">
-              <time datetime="2026-10">2026.10</time>
-              — 至今
-            </div>
+            <p class="when" lang="en"><time datetime="2026-10">Oct 2026</time> – Present</p>
             <div class="role">
-              <a
-                class="company-brand"
-                href="https://www.cyzone.cn/article/848608.html"
-                aria-label="太一量生品牌图来源"
-              >
-                <img src="assets/taiyi-brand.png" loading="lazy" alt="太一量生" />
-              </a>
-              <h3>太一量生（上海）量子科技有限公司</h3>
-              <p>控制算法工程师</p>
-              <div class="work-notes">
-                <article>
-                  <span>01</span>
+              <header class="role-head">
+                <div>
+                  <h3>太一量生（上海）量子科技有限公司</h3>
+                  <p lang="en">Control Algorithm Engineer</p>
+                </div>
+                <a class="company-brand" href="https://www.cyzone.cn/article/848608.html" aria-label="太一量生品牌图来源">
+                  <img src="assets/taiyi-brand.png" loading="lazy" alt="太一量生" />
+                </a>
+              </header>
+              <ol class="work-notes" role="list">
+                <li>
+                  <span class="work-index" aria-hidden="true">01</span>
                   <div>
-                    <h4>CXP 采集与显示</h4>
-                    <p>
-                      在 ZCU216 上实现两版 CXP 采集与显示系统，分别对接滨松 C15550-22UP 相机和星测电子
-                      PCIe-1005 CXP 模拟卡。设计 CXP 至 AXI-Stream 转换和 FIFO 背压缓冲，搭建 SGDMA 写入 PL
-                      DDR、CDMA 搬运至 PS DDR 的两级通路，并实现 AXI DMA 直写 PS DDR 的备选路径。在 PetaLinux
-                      下通过 UDP 回显图像。
-                    </p>
+                    <h4 lang="en">CXP Data Acquisition &amp; Display</h4>
+                    <p>在 <strong>ZCU216</strong> 上实现两版 CXP 采集与显示系统，分别对接滨松 C15550-22UP 相机和星测电子 PCIe-1005 CXP 模拟卡。</p>
+                    <dl>
+                      <div><dt>采集</dt><dd>将 CXP 数据转为 <strong>AXI-Stream</strong>，用 FIFO 缓冲数据并处理下游背压；先由 SGDMA 写入 PL DDR，再由 CDMA 搬运至 PS DDR。备选路径由 AXI DMA 直写 PS DDR。</dd></div>
+                      <div><dt>回显</dt><dd>在 <strong>PetaLinux</strong> 下通过 UDP 回显图像。</dd></div>
+                    </dl>
                   </div>
-                </article>
-                <article>
-                  <span>02</span>
+                </li>
+                <li>
+                  <span class="work-index" aria-hidden="true">02</span>
                   <div>
-                    <h4>HLS 原子检测</h4>
-                    <p>
-                      设计 4-bank 行分片 DATAFLOW
-                      流水线，通过三副本行缓存和冲突仲裁解决多读口冲突，实现窗口提取与乘加流水化。用二分法预计算判决边界，将实时浮点比较替换为整数判决。在
-                      300 MHz 下，单帧延迟为 0.268 ms。
-                    </p>
+                    <h4 lang="en">HLS-based Atom Detection</h4>
+                    <p>按行将数据分到 4 个 bank，在 <strong>DATAFLOW</strong> 流水线中完成窗口提取与乘加。</p>
+                    <dl>
+                      <div><dt>实现</dt><dd>用三副本行缓存和仲裁处理多读口冲突；用二分法预计算判决边界，以整数判决替代实时浮点比较。</dd></div>
+                      <div><dt>延迟</dt><dd>在 300 MHz 下，单帧延迟为 <strong class="metric">0.268 ms</strong>。</dd></div>
+                    </dl>
                   </div>
-                </article>
-                <article>
-                  <span>03</span>
+                </li>
+                <li>
+                  <span class="work-index" aria-hidden="true">03</span>
                   <div>
-                    <h4>HLS 原子重排</h4>
-                    <p>
-                      设计基于 40
-                      位行列掩码的双轴重排流水线，通过分配、压缩和按需均衡填充中心目标区。每条搬运以一拍 256
-                      位 AXI4-Stream 指令输出，最多包含 16 对源与目的坐标。在 250 MHz 下，500
-                      原子基准帧的板上实测规划耗时为 13.57 μs。重排核布线后占用 5,077 LUT、4,388 FF，BRAM 与
-                      DSP 用量均为 0。
-                    </p>
+                    <h4 lang="en">HLS-based Atom Rearrangement</h4>
+                    <p>用 <strong>40 位行列掩码</strong>设计双轴重排流水线，通过分配、压缩和按需均衡填充中心目标区。</p>
+                    <dl>
+                      <div><dt>接口</dt><dd>通过 <strong>256 位 AXI4-Stream</strong> 在一拍内输出一条搬运指令，最多包含 16 对源与目的坐标。</dd></div>
+                      <div><dt>性能</dt><dd>在 250 MHz 下，对 500 原子基准帧进行板上实测，规划耗时 <strong class="metric">13.57 μs</strong>。</dd></div>
+                      <div><dt>资源</dt><dd>重排核布线后占用 5,077 LUT、4,388 FF；<strong class="metric">0 BRAM</strong>，<strong class="metric">0 DSP</strong>。</dd></div>
+                    </dl>
                   </div>
-                </article>
-                <article>
-                  <span>04</span>
+                </li>
+                <li>
+                  <span class="work-index" aria-hidden="true">04</span>
                   <div>
-                    <h4>AOD 多音调控制</h4>
-                    <p>
-                      在 ZCU216 上实现 X/Y 双轴多音调 RF 波形合成。每轴支持 16 音调，通过四路并行 CORDIC
-                      生成连续 I/Q 样本，经多音调求和、包络整形后打包送入
-                      RF-DAC，支持频率配置、扫频与包络控制。
-                    </p>
+                    <h4 lang="en">AOD Multi-tone Control</h4>
+                    <p>在 <strong>ZCU216</strong> 上合成 X/Y 双轴多音调 RF 波形，<strong>每轴支持 16 个音调</strong>。</p>
+                    <dl>
+                      <div><dt>合成</dt><dd>四路并行 CORDIC 生成连续 I/Q 样本；多音调求和并整形包络后，将样本打包送入 RF-DAC。</dd></div>
+                      <div><dt>控制</dt><dd>支持频率配置、扫频与包络控制。</dd></div>
+                    </dl>
                   </div>
-                </article>
-              </div>
+                </li>
+              </ol>
             </div>
           </div>
         </section>
@@ -298,7 +281,7 @@
                 how detection latency changes as the atom array grows.
               </p>
               <footer class="paper-contact">
-                <a href="mailto:EtheralBian@njust.edu.cn?subject=Preprint%20request%3A%20FPGA%20neutral-atom%20readout">
+                <a href="mailto:EtherealBian@njust.edu.cn?subject=Preprint%20request%3A%20FPGA%20neutral-atom%20readout">
                   <svg class="icon" width="15" height="15" aria-hidden="true"><use href="#mail" /></svg>
                   Request the preprint by email
                 </a>
@@ -601,7 +584,7 @@
             </article>
           </div>
         </section>
-        <section class="chapter-section" id="awards">
+        <section class="chapter-section" id="awards" aria-labelledby="honors-title" lang="en">
           <header class="section-head">
             <div>
               <div class="chapter">
@@ -610,101 +593,91 @@
                 <b>/</b>
                 05
               </div>
-              <h2 lang="en">Honors<span class="period">.</span></h2>
+              <h2 id="honors-title">Honors<span class="period">.</span></h2>
             </div>
-            <span class="chapter-cn">竞赛与获奖</span>
           </header>
-          <ul class="awards">
+          <ul class="awards" role="list">
             <li>
-              <div>
-                <span>2026</span>
+              <div class="award-meta">
+                <time datetime="2026">2026</time>
                 <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#star" /></svg>
               </div>
-              <strong>全国一等奖</strong>
-              <h3>第十届 FPGA 创新设计竞赛</h3>
-              <p>中科亿海微赛道 · Yosys PMUX 优化</p>
+              <h3>National First Prize</h3>
+              <p class="award-contest">10th FPGA Innovation Design Contest</p>
+              <p class="award-detail" lang="zh-CN">中科亿海微赛道 · Yosys PMUX 优化</p>
             </li>
             <li>
-              <div>
-                <span>2026</span>
+              <div class="award-meta">
+                <time datetime="2026">2026</time>
                 <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#star" /></svg>
               </div>
-              <strong>省一等奖</strong>
-              <h3>全国大学生电子设计竞赛</h3>
-              <p>江苏赛区 · F 题</p>
+              <h3>Provincial First Prize</h3>
+              <p class="award-contest">National Undergraduate Electronics Design Contest</p>
+              <p class="award-detail" lang="zh-CN">江苏赛区 · F 题</p>
             </li>
             <li>
-              <div>
-                <span>2026</span>
+              <div class="award-meta">
+                <time datetime="2026">2026</time>
                 <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#star" /></svg>
               </div>
-              <strong>信号赛道第一名</strong>
-              <h3>利利普杯</h3>
-              <p>伪相控阵定向传声</p>
+              <h3>1st Place (Signal Track)</h3>
+              <p class="award-contest">Lilliput Cup</p>
+              <p class="award-detail" lang="zh-CN">伪相控阵定向传声</p>
             </li>
             <li>
-              <div>
-                <span>2026</span>
+              <div class="award-meta">
+                <time datetime="2026">2026</time>
                 <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#star" /></svg>
               </div>
-              <strong>全国三等奖</strong>
-              <h3>全国大学生集成电路创新创业大赛</h3>
-              <p>中科亿海微赛道 · FPGA 图像处理</p>
+              <h3>National Third Prize</h3>
+              <p class="award-contest">National IC Innovation &amp; Entrepreneurship Competition</p>
+              <p class="award-detail" lang="zh-CN">中科亿海微赛道 · FPGA 图像处理</p>
             </li>
             <li>
-              <div>
-                <span>2025</span>
+              <div class="award-meta">
+                <time datetime="2025">2025</time>
                 <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#star" /></svg>
               </div>
-              <strong>全国二等奖</strong>
-              <h3>第九届 FPGA 创新设计赛</h3>
-              <p>AMD 赛道 · HLS 算子优化与频谱仪</p>
+              <h3>National Second Prize</h3>
+              <p class="award-contest">9th FPGA Innovation Design Contest</p>
+              <p class="award-detail" lang="zh-CN">AMD 赛道 · HLS 算子优化与频谱仪</p>
             </li>
           </ul>
         </section>
       </div>
     </main>
-    <footer id="contact">
+    <footer id="contact" aria-labelledby="contact-title">
       <div class="contact">
         <div class="wrap contact-inner">
           <div>
-            <h2 lang="en">
-              Thanks for stopping by
-              <span>.</span>
-            </h2>
-            <p>关于数字硬件、研究或工程项目，欢迎来信交流。</p>
+            <h2 id="contact-title" lang="en">Thanks for stopping by<span>.</span></h2>
+            <p class="contact-note">关于数字硬件、研究与工程，欢迎来信交流。<br />
+              <span lang="en">Open to collaborations and discussions.</span>
+            </p>
           </div>
-          <div class="contact-links">
-            <a href="cv.html">
-              在线阅读简历
-              <span>CV ↗</span>
-            </a>
-            <a href="mailto:EtheralBian@njust.edu.cn">
+          <ul class="contact-links" lang="en" role="list">
+            <li><a href="mailto:EtherealBian@njust.edu.cn">
               <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#mail" /></svg>
-              EtheralBian@njust.edu.cn
-              <svg class="icon" aria-hidden="true" width="20" height="20">
-                <use href="#out" />
-              </svg>
-            </a>
-            <a href="https://github.com/EtherealBian">
+              <span>EtherealBian@njust.edu.cn</span>
+              <svg class="link-arrow icon" aria-hidden="true" width="16" height="16"><use href="#out" /></svg>
+            </a></li>
+            <li><a href="https://github.com/EtherealBian">
               <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#git" /></svg>
-              GitHub / EtherealBian
-              <svg class="icon" aria-hidden="true" width="20" height="20">
-                <use href="#out" />
-              </svg>
-            </a>
-          </div>
+              <span>GitHub / EtherealBian</span>
+              <svg class="link-arrow icon" aria-hidden="true" width="16" height="16"><use href="#out" /></svg>
+            </a></li>
+            <li><a href="cv.html">
+              <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#book" /></svg>
+              <span>View CV</span>
+              <svg class="link-arrow icon" aria-hidden="true" width="16" height="16"><use href="#east" /></svg>
+            </a></li>
+          </ul>
         </div>
       </div>
-      <div class="wrap endmark">
-        <span>
-          Etherealbian
-          <i>/</i>
-          Hardware field notes
-        </span>
-        <a href="#top">
-          返回顶部
-          <svg class="icon" aria-hidden="true" width="20" height="20"><use href="#up" /></svg>
+      <div class="wrap endmark" lang="en">
+        <small>© 2026 Xiangyu Bian.</small>
+        <a href="#top">Back to top
+          <svg class="icon" aria-hidden="true" width="16" height="16"><use href="#up" /></svg>
         </a>
       </div>
     </footer>

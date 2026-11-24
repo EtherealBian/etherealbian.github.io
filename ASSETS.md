@@ -17,7 +17,7 @@
 - `assets/portfolio-cover.jpg`：从独立扉页的三个英文词、原有环形线稿及研究方向导出的 1200 × 630 社交分享图。首页不请求这张图片。
 - `assets/orbit.svg`：原创轨道标志，用在导航和 favicon。About Me 的姓名旁使用原有 `assets/avatar.jpg`，右侧研究方向只用文字。
 - 论文旁的点阵和扫描线是标为“概念示意”的视觉辅助，**不是荧光实验图或重建结果**。原站未提供论文原图、作者表或公开全文地址。
-- 太一量生品牌图仍链接回原站保留的品牌图来源。邮箱拼写沿用原站的 `EtheralBian@njust.edu.cn`。
+- 太一量生品牌图仍链接回原站保留的品牌图来源。学校邮箱经本人确认，统一使用 `EtherealBian@njust.edu.cn`。
 
 记录页的 WebP 用作页内预览，放大链接指向保留在本地的对应原始文件：`wired-dpll.png`、`cnn-pipeline.png`、`fig_array_top.png` 和 `competition-app.jpg`。来源分别与上表四个项目链接一致。
 
