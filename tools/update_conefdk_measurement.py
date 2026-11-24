@@ -344,6 +344,12 @@ def volume_followup(root):
         raise ValueError("Recheck the frozen volume-panel bound")
     shell_bounds = "、".join(f'{d["bound"]["p95"]["interval"]:.2f}%' for d in shell)
     shell_report = "https://github.com/EtherealBian/cone-fdk/blob/d0211051ab52306b539f18cdaef1f2ce7914ccf4/pores/RESULTS-SHELL-VOLUME.md"
+    face = [read(f"face-profile/sample{i}.json") for i in (2, 3, 5)]
+    seven = [(d["volume_audit"]["rows"][str(r)], r) for d, old in zip(face, shell) for r in old["bound"]["outside_15"]]
+    if len(seven) != 7 or not all(100*abs(row["actual"]-row["reference"]) <= 15*row["reference"] for row, _ in seven) or any(d["advance"] or d["comparison"]["lost"] for d in face):
+        raise ValueError("Recheck all seven previously reported out-of-range pores")
+    face_tails = "、".join(f'{d["arms"]["face"]["objects"]["p95_abs_volume_error_pct"]:.2f}%' for d in face)
+    face_report = "https://github.com/EtherealBian/cone-fdk/blob/482d053c512e59516e28fff139ddee519da58295/pores/RESULTS-FACE-PROFILE.md"
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
     mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
@@ -363,6 +369,7 @@ def volume_followup(root):
 <p id="pore-byte-review">如果只看去噪后的中心、最低、最高灰度和试件对比度，完全相同的输入有时会得到相反的参考标签。按这些数判定，在 2、3、5 号这三段扫描里分别至少会错 {floors} 个体素。这个下限不适用于保留完整邻域的算法。<a href="{byte_report}">查看灰度组合、误差下限和实际漏孔 ↗</a></p>
 <p id="pore-curvature-review">沿原始 CT 的 13 个方向比较灰度变化，2、3、5 号分别找到了 {curve_hits} 个参考孔：每件多找到一个，原有匹配全部保留，预测侧和参考侧的覆盖率也都达到 90%。但体积误差 P95 分别为 {curve_tails}，三件都比原模型高。<a href="{curve_report}">查看新增的三个孔和同孔体积对照 ↗</a></p>
 <p id="pore-shell-review">固定这些孔，只在边界上增减一层中的体素，三个试件都没丢匹配。体积估计为什么还是不准？即使知道参考答案，逐孔从合格估计的范围内选最优体积，三件原匹配孔的误差 P95 仍至少为 {shell_bounds}，均高于 15% 验收线。<a href="{shell_report}">查看范围外的七个孔及实际边界误差 ↗</a></p>
+<p id="pore-face-review">在原始 CT 的灰度剖面上重新定位边界，前述七个低估孔的体积误差全部降到 15% 以内，包括 2 号一个原来只量到 64 体素的孔（参考 91，这次量到 87）。同一规则用到所有孔，三件体积误差 P95 却分别为 {face_tails}，不能作为通用测量方法。<a href="{face_report}">核对七个孔及所有匹配结果 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
