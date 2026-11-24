@@ -50,5 +50,9 @@
 <p>在开发迁移区给连接与间隙增加训练权重后，试件 5 的 9 个共同匹配孔，体积误差 P95 从 17.01% 降至 12.42%。但预测中能与参考孔一一配对的比例从 9/11 降到 9/14；试件 3 的同孔误差则从 18.30% 升到 45.92%。因此保留原方法。</p>
 <p>对照论文截面的两步灰度变化，把 27 点中值改为 19 点，右区误差从 4.90 升到 4.93；改变去噪补丁内的权重，从 4.44 升到 4.48。后者在三个试件各自的校准检查区也都降低了 Dice。这里没有使用保留试件。</p>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores/RESULTS-LOCAL-CONNECTIVITY.md">逐孔误差与触边反例 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores/RESULTS-FILTER-PROFILE.md">两步灰度对照与校准数据 ↗</a></div></div>
+<div id="pore-target-review"><h3>原图对上了，黑白插图就能当孔标签吗？</h3>
+<p>在试件 2 第 447 层未用于配准拟合的右区，每个原生体素中心只计一次。共 13,464 个中心：论文插图与归档分割的 Dice 为 0.88964，固定算法与同一归档为 0.97889。从原始 TIFF 与 PDF 独立重算，两条路径的分歧计数逐格相同。测量继续以归档为参考。</p>
+<p>另在 96 层开发迁移区，把原始灰度按 4×4 网格汇总，让模型看到更远的材料。三个试件匹配到的参考孔 ID 都没变：试件 2 的同孔体积误差 P95 从 14.89% 变为 15.55%，试件 3 从 19.36% 变为 19.31%，试件 5 仍为 17.01%。都没有达到预定的 2 个百分点改善。</p>
+<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/82e6f821986d72eceb0d1761638b2a2ce7323c8c/pores/RESULTS-PRINTED-TARGET.md">原档、论文和 CPU 独立重算 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/82e6f821986d72eceb0d1761638b2a2ce7323c8c/pores/RESULTS-TWO-SCALE.md">三种尺度对照与逐孔表 ↗</a></div></div>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-evidence-3/pores/RESULTS-E.md">逐孔误差、漏检与失败项 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/tag/measurement-evidence-3">下载三个试件的离线复核包 ↗</a></div></section>
 <!-- measured-pore-ledger:end --></section></main></body></html>

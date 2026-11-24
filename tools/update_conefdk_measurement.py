@@ -243,6 +243,27 @@ def filter_followup(root):
 <div class="bench-links"><a href="{base}/RESULTS-LOCAL-CONNECTIVITY.md">逐孔误差与触边反例 ↗</a><a href="{base}/RESULTS-FILTER-PROFILE.md">两步灰度对照与校准数据 ↗</a></div></div>'''
 
 
+def target_followup(root):
+    def read(path):
+        return json.loads((root / path).read_text(encoding="utf8"))
+    paper = read("figure-binary/check.json")
+    replay = read("figure-binary/replay.json")["partitions"]
+    results = [read(f"two-scale/sample{i}.json") for i in (2, 3, 5)]
+    if paper["concordant"] or any(not r["sufficient"] or r["concordant"] for r in paper["partitions"].values()) or any(r["archive_bit_differences"] or r["cpu_filter_bit_differences"] for r in replay.values()) or any(r["advance"] for r in results):
+        raise ValueError("Recheck the source and transfer outcomes")
+    right = paper["partitions"]["check"]
+    screens = [r["screens"]["census"] for r in results]
+    for r, screen in zip(results, screens):
+        if not all(len(screen["shared_ids"]) == arm["objects"]["matches"] for arm in r["arms"].values()):
+            raise ValueError("Matched population changed")
+    tails = [r["shared_p95"] for r in screens]
+    base = "https://github.com/EtherealBian/cone-fdk/blob/82e6f821986d72eceb0d1761638b2a2ce7323c8c/pores"
+    return f'''<div id="pore-target-review"><h3>原图对上了，黑白插图就能当孔标签吗？</h3>
+<p>在试件 2 第 447 层未用于配准拟合的右区，每个原生体素中心只计一次。共 {right["count"]:,} 个中心：论文插图与归档分割的 Dice 为 {right["archive_reference_printed"]["dice"]:.5f}，固定算法与同一归档为 {right["archive_reference_fixed"]["dice"]:.5f}。从原始 TIFF 与 PDF 独立重算，两条路径的分歧计数逐格相同。测量继续以归档为参考。</p>
+<p>另在 96 层开发迁移区，把原始灰度按 4×4 网格汇总，让模型看到更远的材料。三个试件匹配到的参考孔 ID 都没变：试件 2 的同孔体积误差 P95 从 {tails[0][0]:.2f}% 变为 {tails[0][1]:.2f}%，试件 3 从 {tails[1][0]:.2f}% 变为 {tails[1][1]:.2f}%，试件 5 仍为 {tails[2][1]:.2f}%。都没有达到预定的 2 个百分点改善。</p>
+<div class="bench-links"><a href="{base}/RESULTS-PRINTED-TARGET.md">原档、论文和 CPU 独立重算 ↗</a><a href="{base}/RESULTS-TWO-SCALE.md">三种尺度对照与逐孔表 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -326,6 +347,7 @@ def ledger(root):
 {context_followup(root)}
 {source_followup(root)}
 {filter_followup(root)}
+{target_followup(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
