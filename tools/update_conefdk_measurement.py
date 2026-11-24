@@ -264,6 +264,33 @@ def target_followup(root):
 <div class="bench-links"><a href="{base}/RESULTS-PRINTED-TARGET.md">原档、论文和 CPU 独立重算 ↗</a><a href="{base}/RESULTS-TWO-SCALE.md">三种尺度对照与逐孔表 ↗</a></div></div>'''
 
 
+def volume_followup(root):
+    def read(path):
+        return json.loads((root / path).read_text(encoding="utf8"))
+    studies = [read(f"five-plane/sample{i}.json") for i in (2, 3, 5)]
+    screens = [q["screens"]["census"] for q in studies]
+    tails = [q["shared_p95"] for q in screens]
+    formal = read("local-contrast/sample3.json")["reference"]
+    ids = formal["summary"]["unmatched_at_or_above_matched_median"]
+    rows = [r for r in formal["rows"] if r["id"] in ids]
+    if any(q["advance"] for q in studies) or not rows or any(r["matched"] or r["largest_overlap"]["voxels"] >= 64 for r in rows):
+        raise ValueError("Recheck the five-plane and native contrast findings")
+    seed = read("small-seed/summary.json")
+    audit = read("small-seed/overlap.json")["specimens"]
+    gained = sum(len(d["gained"]) for d in seed["development"].values())
+    extra = sum(d["extra_unmatched"] for d in seed["development"].values())
+    below = sum(d["arms"]["gray"]["unmatched_counts"].get("below 64", 0) for d in audit.values())
+    if seed["advance"] or (gained, extra, below) != (3, 33, 23):
+        raise ValueError("Recheck small-seed population before publishing")
+    seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
+    base = "https://github.com/EtherealBian/cone-fdk/blob/b2dda34490dce0f786afad9549e301b7d99bbf4b/pores"
+    return f'''<div id="pore-volume-review"><h3>多看前后两层，能把孔量得更准吗？</h3>
+<p>在同一段 96 层开发图像中，用前后五层共同预测中心层。试件 2 里两种模型都匹配到的 {len(screens[0]["shared_ids"])} 个孔，体积误差 P95 从 {tails[0][0]:.2f}% 降至 {tails[0][1]:.2f}%；试件 3 从 {tails[1][0]:.2f}% 升至 {tails[1][1]:.2f}%，试件 5 从 {tails[2][0]:.2f}% 升至 {tails[2][1]:.2f}%。没有替换正式候选。</p>
+<p>回到试件 3 的正式开发区，有 {len(rows)} 个漏配孔的原始灰度对比度达到匹配孔的中位数。与它们重叠最多的预测分别只有 {"、".join(str(r["largest_overlap"]["voxels"]) for r in rows)} 个体素，均不到 64 体素的计量下限。</p>
+<p>那么，把小预测沿原图暗区扩大会怎样？在迁移区找回了 {gained} 个参考孔，却新增 {extra} 个未匹配预测，其中 {below} 个最大重叠的参考孔本身就小于计量下限。保留原算法和下限。</p>
+<div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -339,6 +366,7 @@ def ledger(root):
 {table("各方法的全部匹配孔", rows, "匹配数（D → E）")}
 <details><summary>只比较两种算法都匹配到的孔</summary>{table("相同参考孔的配对比较", common, "共同匹配数")}<p>新增和丢失的匹配没有放进这一行的百分位；它们仍计入正式验收的覆盖率。</p></details>
 <p>再回到每件的 24 张校准切片：试件 2、3、5 分别只有 {"、".join(small)} 个体积在 64–127 体素之间、且没有被裁切的小孔。试件 5 并非没有孔，而是这段校准图像里没有可完整测量的该尺寸小孔。<a href="{CONTROL}">查看边界放宽、收紧的对照结果 ↗</a></p>
+{volume_followup(root)}
 {transfer_section(root)}
 {spatial_section(root)}
 {latent_section(root)}
