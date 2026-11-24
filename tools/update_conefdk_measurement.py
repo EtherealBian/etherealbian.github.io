@@ -504,6 +504,7 @@ def ledger(root):
 {table("各方法的全部匹配孔", rows, "匹配数（D → E）")}
 <details><summary>只比较两种算法都匹配到的孔</summary>{table("相同参考孔的配对比较", common, "共同匹配数")}<p>新增和丢失的匹配没有放进这一行的百分位；它们仍计入正式验收的覆盖率。</p></details>
 <p>再回到每件的 24 张校准切片：试件 2、3、5 分别只有 {"、".join(small)} 个体积在 64–127 体素之间、且没有被裁切的小孔。试件 5 并非没有孔，而是这段校准图像里没有可完整测量的该尺寸小孔。<a href="{CONTROL}">查看边界放宽、收紧的对照结果 ↗</a></p>
+<details id="pore-experiment-archive"><summary>展开历次边界实验与失败案例</summary>
 {volume_followup(root)}
 {transfer_section(root)}
 {spatial_section(root)}
@@ -514,6 +515,7 @@ def ledger(root):
 {source_followup(root)}
 {filter_followup(root)}
 {target_followup(root)}
+</details>
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )

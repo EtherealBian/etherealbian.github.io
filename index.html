@@ -309,6 +309,27 @@
           </header>
           <span id="filter-status" role="status" class="sr-only"></span>
           <div class="projects">
+            <article class="project vision ct-feature" data-group="vision" id="cone-fdk" aria-labelledby="cone-fdk-title">
+              <div class="catalog-meta" lang="en"><span><b>07</b> / Computed tomography</span><span>Featured project</span></div>
+              <a class="plate ct-sweep" href="work/cone-fdk.html" aria-label="查看 ConeFDK 核桃 CT 重建记录"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif"><img loading="lazy" decoding="async" src="assets/conefdk-walnut.png" alt="CT 扫层展示核桃的壳、隔膜与核仁；静态替代图为三个正交断面。"></picture></a>
+              <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
+              <div class="project-body">
+                <div class="project-heading">
+                  <h3 id="cone-fdk-title" lang="en"><a href="work/cone-fdk.html">ConeFDK: CUDA CT Reconstruction<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/cone-fdk.html" aria-label="Case study: reconstruction and pore measurement">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/cone-fdk" aria-label="GitHub: ConeFDK: CUDA CT Reconstruction">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
+                <p class="project-summary">在 RTX 5060 Laptop 上，把 720 幅核桃 X 射线投影重建为 <strong>512³ 体数据</strong>，预热后整进程耗时中位数为 <strong>2.009 秒</strong>。另一组钴铬合金 CT 实验记录了每个匹配孔的体积，也保留了漏检和误检。</p>
+                <ul class="tags" lang="en">
+                  <li>CUDA C++</li>
+                  <li>cuFFT</li>
+                  <li>FDK</li>
+                  <li><a href="work/cone-fdk.html#pore-retained-review" title="查看当前基线 E 的三件开发结果；自动分割未通过跨试件验收。">Pore measurement · experimental ↗</a></li>
+                </ul>
+              </div>
+            </article>
             <article class="project logic" data-group="logic" id="yosys-pmux" aria-labelledby="yosys-pmux-title">
               <div class="catalog-meta" lang="en">
                 <span>
@@ -543,27 +564,6 @@
                   <li>YOLO11n</li>
                   <li>TensorRT FP16</li>
                   <li>Multi-object tracking</li>
-                </ul>
-              </div>
-            </article>
-            <article class="project vision" data-group="vision" id="cone-fdk" aria-labelledby="cone-fdk-title">
-              <div class="catalog-meta" lang="en"><span><b>07</b> / Computed tomography</span><span>CT slices</span></div>
-              <a class="plate ct-sweep" href="work/cone-fdk.html" aria-label="查看 ConeFDK 核桃 CT 重建记录"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif"><img loading="lazy" decoding="async" src="assets/conefdk-walnut.png" alt="CT 扫层展示核桃的壳、隔膜与核仁；静态替代图为三个正交断面。"></picture></a>
-              <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
-              <div class="project-body">
-                <div class="project-heading">
-                  <h3 id="cone-fdk-title" lang="en"><a href="work/cone-fdk.html">ConeFDK: CUDA CT Reconstruction<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
-                  <div class="project-links" lang="en">
-                    <a class="entry-link" href="work/cone-fdk.html" aria-label="Reconstruction notes: ConeFDK: CUDA CT Reconstruction">Reconstruction notes <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
-                    <a class="source-link" href="https://github.com/EtherealBian/cone-fdk" aria-label="GitHub: ConeFDK: CUDA CT Reconstruction">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
-                  </div>
-                </div>
-                <p class="project-summary"><span data-room="2">经 cuFFT 分批滤波</span><span data-room="3">与 GPU 并行反投影</span><span data-room="2">，</span>将 720 幅<span data-room="3">核桃 X 射线</span>投影重建为 <strong>512³ 体数据</strong><span data-room="4">，按块写回磁盘</span>。<span data-room="1">在 RTX 5060 Laptop 上，</span>预热后<span data-room="4">端到端</span>重建耗时中位数为 <strong>2.009 秒</strong><span data-room="5">；相对 ASTRA 的全体素 L2 差异为 0.02899%</span>。</p>
-                <ul class="tags" lang="en">
-                  <li>CUDA C++</li>
-                  <li>cuFFT</li>
-                  <li>FDK</li>
-                  <li><a href="work/cone-fdk.html#pore-volume-review" title="灰度估体积与按大小筛选各找回两个孔；三件均未通过全部正式门槛。">Per-pore validation · 0/3 met all criteria ↗</a></li>
                 </ul>
               </div>
             </article>
