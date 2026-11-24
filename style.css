@@ -513,6 +513,18 @@ details[open] > summary .icon {
   justify-self: center;
 }
 .cover-ring img { width: 100%; height: auto; }
+@keyframes cover-ring-turn {
+  from { transform: rotate(0turn); }
+  to { transform: rotate(1turn); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cover-ring img {
+    /* 悬停由静止的 picture 判断，移出时保留当前角度。 */
+    pointer-events: none;
+    animation: cover-ring-turn 120s linear infinite paused;
+  }
+  .cover-ring:hover img { animation-play-state: running; }
+}
 .cover-focus {
   align-self: start;
   grid-area: 3 / 1;
@@ -538,49 +550,70 @@ details[open] > summary .icon {
   .cover-ring { grid-area: 1 / 2; }
   .cover-focus { grid-area: 2 / 1 / 3 / -1; margin-top: 0; font-size: .94rem; }
 }
-/* About：左页沿用原版人物资料，右页以短注说明每个方向具体做了什么。 */
+/* About：左栏是个人与教育经历，右栏用同一张浅色卡片收拢研究方向与工具。 */
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  gap: clamp(40px, 7vw, 108px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: clamp(32px, 5vw, 76px);
   align-items: start;
 }
-.identity { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 19px; }
+.bio { container-type: inline-size; }
+.identity { display: flex; align-items: center; gap: 16px; }
 .identity img { flex: none; width: clamp(60px, 5.5vw, 80px); height: auto; border-radius: 17%; }
 .identity h3 {
   color: #293e4a;
-  font: 400 clamp(2.2rem, 3.85vw, 3.85rem)/1.15 var(--display);
+  font: 400 clamp(2.15rem, 3.6vw, 3.6rem)/1.08 var(--display);
   letter-spacing: -.055em;
 }
-.identity p { color: #576874; font: italic 1.1rem/1.4 var(--serif); }
-.bio .profile-intro { margin-block: 21px 9px; color: #293e4a; font-size: clamp(1.01rem, 1.24vw, 1.17rem); line-height: 1.75; }
-.bio .profile-note { max-width: 36em; color: #53616d; font-size: .94rem; line-height: 1.85; }
-.profile-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-block: 9px 19px; }
-.profile-links a { display: inline-flex; align-items: center; min-height: 44px; color: #365d70; font-size: .875rem; font-weight: 600; }
-.bio #education h3 { font: 600 1.05rem/1.5 var(--sans); }
-.bio dl > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .25em 1em; padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: .925rem; }
-.bio dd { color: var(--muted); }
+.identity p { margin-top: 3px; color: #576874; font: italic 1.1rem/1.4 var(--serif); }
+.bio .profile-intro { margin-block: 21px 6px; color: #293e4a; font-size: 1.03rem; line-height: 1.75; }
+.bio .profile-note { color: var(--muted); font-size: .94rem; line-height: 1.8; }
+.profile-links { display: flex; flex-wrap: wrap; gap: 10px; margin-block: 18px 26px; }
+.profile-links .btn { gap: 8px; padding-inline: 13px; }
+#education h3,
+.research-notes h3 {
+  color: #293f3a;
+  font: 600 1.25rem/1.3 var(--serif);
+}
+#education dl { margin-top: 9px; border-top: 1px solid var(--rule); }
+#education dl > div {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  align-items: baseline;
+  gap: 3px 16px;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.5;
+}
+#education dt { font-size: .9rem; font-weight: 600; text-wrap: balance; }
+#education dd { color: var(--muted); font: italic 1rem/1.45 var(--serif); text-align: right; text-wrap: balance; }
+@container (max-width: 420px) {
+  #education dl > div { grid-template-columns: 1fr; }
+  #education dd { text-align: left; }
+}
 .research-notes {
   container-type: inline-size;
-  padding: clamp(19px, 2.1vw, 30px);
-  background: #edf1ed;
-  color: #293f3a;
-  border-radius: 3px;
+  padding: clamp(20px, 2.45vw, 36px);
+  background: #f1f4ef;
+  border: 1px solid #dce2da;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(38 62 55 / 4%);
 }
-.research-notes h3 { font: 600 clamp(1.08rem, 1.45vw, 1.3rem)/1.4 var(--sans); }
-.research-notes dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 24px; margin-top: 20px; }
-.research-notes dt { margin-bottom: 5px; font-size: .94rem; font-weight: 650; }
-.research-notes dd { font-size: .885rem; color: #445951; line-height: 1.78; overflow-wrap: break-word; }
-.research-notes a { color: #2f5549; text-decoration: underline; text-decoration-color: #91a79b; text-underline-offset: .2em; }
-.research-notes a:hover { text-decoration-color: currentColor; }
-@container (max-width: 355px) {
-  .research-notes dl { grid-template-columns: 1fr; gap: 14px; }
-  .research-notes dl > div { display: grid; grid-template-columns: 6.1em minmax(0, 1fr); gap: 10px; }
+.research-notes dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 26px;
+  margin-top: 22px;
 }
-@container (max-width: 255px) {
-  .research-notes dl > div { display: block; }
+@container (max-width: 382px) {
+  .research-notes dl { grid-template-columns: 1fr; gap: 17px; }
 }
-@media (max-width: 750px) {
+.research-notes dt { margin-bottom: 5px; color: #2b514d; font-weight: 650; line-height: 1.35; text-wrap: balance; }
+.research-notes dd { color: #475951; font-size: .9rem; line-height: 1.75; }
+.tech-stack { margin-top: 24px; padding-top: 18px; border-top: 1px solid #d0d9d1; }
+.tech-stack ul { display: flex; flex-wrap: wrap; margin-top: 8px; gap: 4px 0; color: #33544e; font: .875rem/1.5 var(--mono); }
+.tech-stack li:not(:last-child)::after { content: ""; display: inline-block; width: 3px; height: 3px; margin: 0 clamp(.38em, 1.7cqi, .7em); vertical-align: middle; border-radius: 50%; background: #85968e; }
+@media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 26px; }
 }
 .timeline {
