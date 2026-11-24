@@ -160,6 +160,26 @@ def shared_section(root):
 <p>原始档和封存权重可以重放，但三件都没有通过全部精度指标。保留试件 4、6 尚未开启。</p><div class="bench-links"><a href="{repo}/blob/{tag}/pores/RESULTS-H.md">查看逐孔反例和独立重放 ↗</a><a href="{repo}/releases/tag/{tag}">下载 H 的三件离线复核包 ↗</a></div></div>'''
 
 
+def section_followup(root):
+    study = root / "section-area"
+    row = json.loads((study / "sample5.json").read_text(encoding="utf8"))
+    trace = json.loads((study / "trace-5-15.json").read_text(encoding="utf8"))
+    fiji = json.loads((root / "bernsen-check.json").read_text(encoding="utf8"))
+    ipol = json.loads((root / "ipol-check.json").read_text(encoding="utf8"))
+    if any(v["implementation_disagreements"] for v in fiji.values()) or any(v["advance"] for v in ipol.values()):
+        raise ValueError("Published denoising conclusion has changed")
+    decisions = sum(sum(v["strict"][k] for k in ("tp", "tn", "fp", "fn")) for v in fiji.values())
+    before, after = row["screen"]["shared_p95"]
+    lost = trace["arms"]["area"][0]
+    if lost["unclipped"] or row["arms"]["area"]["references"]["15"]["voxels"] is not None:
+        raise ValueError("Reference 15 is no longer a clipped miss")
+    base = "https://github.com/EtherealBian/cone-fdk/blob/d02f9837e6b235a0fb0602c8d6b4e72c27e795e6/pores"
+    return f'''<div id="pore-sections"><h3>多认出了孔里的体素，为什么反而漏掉了这个孔？</h3>
+<p>在另一段 96 层的开发图像上，试件 5 的两种方法都找到了 {len(row["screen"]["shared_ids"])} 个孔。加入截面面积监督后，这些孔的体积误差 P95 从 {before:.2f}% 降至 {after:.2f}%。但有一个原来能单独测量的孔，共 {trace["reference_voxels"]} 个体素，其中 {lost["intersection"]} 个被连进一个触及边界的 {lost["voxels"]:,} 体素对象，无法再单独匹配。试件 2、3 的同孔误差也上升，因此没有升级算法。</p>
+<p>换成历史 Fiji 插件，在相同去噪图像上的 {decisions:,} 个判定与本项目全部一致。再换用论文引用的原版 IPOL 去噪器，三件开发切片的 Dice 都没有提高。</p>
+<div class="bench-links"><a href="{base}/RESULTS-SECTION-AREA.md">逐孔数据、权重与封存掩膜 ↗</a><a href="{base}/RESULTS-BERNSEN.md">Fiji 对照 ↗</a><a href="{base}/RESULTS-IPOL.md">去噪器对照 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -239,6 +259,7 @@ def ledger(root):
 {spatial_section(root)}
 {latent_section(root)}
 {shared_section(root)}
+{section_followup(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
