@@ -110,6 +110,23 @@ def spatial_section(root):
 <p>保留试件 4、6 尚未用于确认。原图切片、逐孔表和失败案例均可离线复核。</p><div class="bench-links"><a href="{repo}/blob/{tag}/pores/RESULTS-F.md">查看同一批孔的配对结果 ↗</a><a href="{repo}/releases/tag/{tag}">下载 F 与拆孔实验复核包 ↗</a></div></div>'''
 
 
+def latent_section(root):
+    repo = "https://github.com/EtherealBian/cone-fdk"
+    tag = "measurement-evidence-5"
+    rows = []
+    replay = json.loads((root / "candidate-g/raw-weight-replay.json").read_text(encoding="utf8"))
+    for i in (2, 3, 5):
+        g, f = (json.loads((root / name / f"sample{i}.json").read_text(encoding="utf8")) for name in ("candidate-g", "candidate-f"))
+        rr = replay["specimens"][str(i)]
+        if (g["role"] != "development" or g["specimen"] != i or g["source"] != f["source"] or g["evaluation_z"] != [400, 528] or len(g["final_gates"]) != 11 or replay["pipeline_id"] != g["pipeline_id"] or rr["mask"] != g["seal"]["mask"] or rr["decision_disagreements"] != 0):
+            raise ValueError("Mismatched G replay or development ROI")
+        a, b = f["objects"], g["objects"]
+        rows.append(f'<tr><th scope="row">试件 {i}</th><td>{b["matches"]} / {b["eligible_reference"]}<small>通过 {sum(g["final_gates"].values())} / 11 项</small></td><td>{a["p95_abs_volume_error_pct"]:.2f}% → {b["p95_abs_volume_error_pct"]:.2f}%</td></tr>')
+    return f'''<div id="pore-latent"><h3>先校正灰度，再找孔边界</h3><p>候选 G 只用每件的 24 张校准切片学习灰度修正，再用固定的局部阈值划出孔。2 号仅差体积误差 P95，3 号却比 F 少匹配了 6 个孔。不能按试件挑表现最好的模型。</p>
+<table><caption>同一正式区域 · 全部匹配孔的体积误差 P95，目标 ≤15%</caption><thead><tr><th scope="col">开发试件</th><th scope="col">G 匹配 / 参考</th><th scope="col">体积误差 P95：F → G</th></tr></thead><tbody>{"".join(rows)}</tbody></table>
+<p>从原始灰度和已封存权重重算，三件的 CPU 与 CUDA 在正式区域均给出完全相同的孔掩膜。3 号的量化中间图有 4 处数值不同，最终二值结果没有改变。算法仍未过关，4、6 号继续封存。</p><div class="bench-links"><a href="{repo}/blob/{tag}/pores/RESULTS-G.md">查看原图重放与全部失败项 ↗</a><a href="{repo}/releases/tag/{tag}">下载 G 的逐层阅片器、权重和结果 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -187,6 +204,7 @@ def ledger(root):
 <p>再回到每件的 24 张校准切片：试件 2、3、5 分别只有 {"、".join(small)} 个体积在 64–127 体素之间、且没有被裁切的小孔。试件 5 并非没有孔，而是这段校准图像里没有可完整测量的该尺寸小孔。<a href="{CONTROL}">查看边界放宽、收紧的对照结果 ↗</a></p>
 {transfer_section(root)}
 {spatial_section(root)}
+{latent_section(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
