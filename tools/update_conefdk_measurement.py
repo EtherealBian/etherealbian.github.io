@@ -200,6 +200,25 @@ def context_followup(root):
 <div class="bench-links"><a href="{base}/RESULTS-AXIAL-RAW.md">相邻切片与逐孔配对 ↗</a><a href="{base}/RESULTS-BYTE-RADIUS.md">灰度扰动上限 ↗</a><a href="{base}/RESULTS-WINDOW-UNITS.md">窗口宽度对照 ↗</a></div></div>'''
 
 
+def source_followup(root):
+    def read(path):
+        return json.loads((root / path).read_text(encoding="utf8"))
+    reg = read("figure-locator/registration.json")
+    ck = read("figure-gray/check.json")
+    results = [read(f"census-train/sample{i}.json")["screen"] for i in (2, 3, 5)]
+    if not reg["advance"] or ck["advance"] or [r["advance"] for r in results] != [True, False, False]:
+        raise ValueError("Source comparison or coverage experiment changed")
+    m = ck["partitions"]["check"]["methods"]
+    rms = [m[k]["all"]["change_rmse"] for k in ("median", "r10h30", ck["selected"])]
+    a, b = results[0]["shared_p95"]
+    trace = read("census-train/trace-5-15.json")["arms"]["census"][0]
+    base = "https://github.com/EtherealBian/cone-fdk/blob/83775b0c15fdf6383e14343f1aa5625239a23f77/pores"
+    return f'''<div id="pore-source-check"><h3>能在原始扫描中找到论文里的那一层吗？</h3>
+<p>在试件 2 的 900 张原图中找到了第 {reg["z"]} 层。只对齐原图，再用同一映射核对论文的中值图，未参与拟合的右侧相关系数为 {reg["test_right_median"]["ncc"]:.4f}。比较去噪前后的灰度变化，右侧误差从不加去噪的 {rms[0]:.2f} 降到固定去噪的 {rms[1]:.2f}；调整参数后为 {rms[2]:.2f}，仅比固定方法再降 {100*(1-ck["check_ratios"]["r10h30"]):.2f}%，没有达到预定的 10%。</p>
+<p>另一次训练遍历了全部校准体素。试件 2 的 {len(results[0]["shared_ids"])} 个共同匹配孔，体积误差 P95 从 {a:.2f}% 降到 {b:.2f}%；试件 3、5 的同孔误差却上升。试件 5 有 {trace["intersection"]} 个属于同一参考孔的体素被连进 {trace["voxels"]:,} 体素的触边对象，不能再单独测量。两项实验都未升级正式候选。</p>
+<div class="bench-links"><a href="{base}/RESULTS-FIGURE-GRAY.md">截面定位、灰度对照与独立重算 ↗</a><a href="{base}/RESULTS-CENSUS-TRAIN.md">遍历训练的逐孔结果 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -281,6 +300,7 @@ def ledger(root):
 {shared_section(root)}
 {section_followup(root)}
 {context_followup(root)}
+{source_followup(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )

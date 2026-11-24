@@ -42,5 +42,9 @@
 <p>三件开发迁移区的 Dice 都提高了，但只比较两臂都找到的同一批孔，体积误差 P95 在试件 2 降至 17.43%，在试件 3、5 却分别升至 17.64%、22.45%。单纯扩大去噪窗口也没能改善这三件的校准检查结果。</p>
 <p>在另一段正式开发区，只允许固定基线改变 ±2 个灰度级时，即使每个体素都选最有利的结果，试件 3 的参考孔匹配数上限也只有 24/27，低于要求的 90%。这是数学上限，不是算法测得的覆盖率。</p>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-AXIAL-RAW.md">相邻切片与逐孔配对 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-BYTE-RADIUS.md">灰度扰动上限 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-WINDOW-UNITS.md">窗口宽度对照 ↗</a></div></div>
+<div id="pore-source-check"><h3>能在原始扫描中找到论文里的那一层吗？</h3>
+<p>在试件 2 的 900 张原图中找到了第 447 层。只对齐原图，再用同一映射核对论文的中值图，未参与拟合的右侧相关系数为 0.9871。比较去噪前后的灰度变化，右侧误差从不加去噪的 5.57 降到固定去噪的 4.49；调整参数后为 4.44，仅比固定方法再降 1.08%，没有达到预定的 10%。</p>
+<p>另一次训练遍历了全部校准体素。试件 2 的 42 个共同匹配孔，体积误差 P95 从 21.04% 降到 14.89%；试件 3、5 的同孔误差却上升。试件 5 有 406 个属于同一参考孔的体素被连进 1,902 体素的触边对象，不能再单独测量。两项实验都未升级正式候选。</p>
+<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/83775b0c15fdf6383e14343f1aa5625239a23f77/pores/RESULTS-FIGURE-GRAY.md">截面定位、灰度对照与独立重算 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/83775b0c15fdf6383e14343f1aa5625239a23f77/pores/RESULTS-CENSUS-TRAIN.md">遍历训练的逐孔结果 ↗</a></div></div>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-evidence-3/pores/RESULTS-E.md">逐孔误差、漏检与失败项 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/tag/measurement-evidence-3">下载三个试件的离线复核包 ↗</a></div></section>
 <!-- measured-pore-ledger:end --></section></main></body></html>
