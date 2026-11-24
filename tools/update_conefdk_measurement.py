@@ -12,9 +12,60 @@ END = "<!-- measured-pore-ledger:end -->"
 RELEASE = "https://github.com/EtherealBian/cone-fdk/releases/tag/measurement-evidence-3"
 REPORT = "https://github.com/EtherealBian/cone-fdk/blob/measurement-evidence-3/pores/RESULTS-E.md"
 
-CONTROL = (
-    "https://github.com/EtherealBian/cone-fdk/blob/ff4d996e3fcc762c00a28ea129272dfca75dd423/pores/SHELL-PILOT.md"
-)
+CONTROL = "https://github.com/EtherealBian/cone-fdk/blob/ff4d996e3fcc762c00a28ea129272dfca75dd423/pores/SHELL-PILOT.md"
+
+
+def transfer_section(root):
+    tag = "boundary-transfer-pilot-1"
+    repo = "https://github.com/EtherealBian/cone-fdk"
+    rows = []
+    decisions = []
+    for i in (2, 3, 5):
+        r = json.loads(
+            (root / "transfer-pilot" / f"sample{i}.json").read_text(encoding="utf8")
+        )
+        if (
+            r["specimen"] != i
+            or r["source_xyz"] != [360, 376, 256]
+            or r["shape_zyx"] != [96, 256, 256]
+            or set(r["trained_on"]) != {str(j) for j in (2, 3, 5) if j != i}
+        ):
+            raise ValueError("Wrong transfer population or donor leakage")
+        t = r["screen"]
+        decisions.append(t["decision"])
+        n = len(t["shared_ids"])
+        title = {
+            "fail": "未通过",
+            "pass": "通过筛选",
+            "insufficient support": "样本不足",
+        }[t["decision"]]
+
+        def pct(x):
+            return "—" if x is None else f"{x:.2f}%"
+
+        rows.append(
+            f'<tr><th scope="row">试件 {i}</th><td>{n} 个<small>{title}</small></td><td>{pct(t["shared_p95_pct"][0])} → {pct(t["shared_p95_pct"][1])}</td></tr>'
+        )
+    note = (
+        "三个试件都通过这轮研究筛选；仍需按原协议验证。"
+        if all(v == "pass" for v in decisions)
+        else "这项修正没有同时通过三个试件的筛选，保留原算法。"
+    )
+    w = json.loads(
+        (root / "transfer-pilot/sample5-merge.json").read_text(encoding="utf8")
+    )
+    ids = {v["reference"]: v for v in w["overlaps"]}
+    flags = json.loads(
+        (root / "transfer-pilot/bridge-review.json").read_text(encoding="utf8")
+    )
+    hit = next(r for r in flags["5"]["rows"] if r["pred"] == w["pred"])
+    if hit["category"] != "tp" or w["reference"] != 42 or set(ids) != {42, 26}:
+        raise ValueError("Merge illustration and review flag disagree")
+    return f'''<div id="pore-transfer"><h3>用别的试件校准，小孔会量得更准吗？</h3><p>每件另取 96 层作开发实验。先保存三件的原始预测，再用另外两件的完整孔估计边界应移动多少，最后对修正后的掩膜重新测量。下表只比较修正前后都找到的同一批小孔。{note}</p>
+<table><caption>新区域 z=256–351 · 64–127 体素的同一批参考孔</caption><thead><tr><th scope="col">目标试件</th><th scope="col">共同小孔</th><th scope="col">体积误差 P95：修正前 → 后</th></tr></thead><tbody>{"".join(rows)}</tbody></table>
+<figure style="margin:1.5rem 0"><a href="../assets/conefdk-transfer-merge.png"><img src="../assets/conefdk-transfer-merge.png" width="528" height="600" style="display:block;width:min(100%,528px);height:auto" loading="lazy" alt="试件 5 的同一张切片：两个分离的蓝、黄参考孔被绿色预测连在一起；右下标出重叠和多出的背景体素。"></a><figcaption>试件 5 · 第 {w["source_z"]} 层。参考孔 42 有 {w["reference_voxels"]} 个体素，预测为 {w["predicted_voxels"]} 个，其中 {ids[26]["overlap_voxels"]} 个属于旁边的参考孔 26。一次测量既高估了一个孔，又漏报了另一个孔。</figcaption></figure>
+<p>离线阅片器能在没有参考标注时提示这种粘连。它在这三段切片中提示了这一个案例；规则是在看到案例后设计的，尚未独立验证，也不会自动拆孔。</p>
+<p>这批切片不替代上方正式开发区的评分。离线包能逐层对照原图、数字标注和两种掩膜，也能定位未匹配的预测。<a href="{repo}/blob/{tag}/pores/RESULTS-TRANSFER.md">查看逐件结果和修正幅度的极限 ↗</a></p><div class="bench-links"><a href="{repo}/releases/tag/{tag}">下载跨试件实验的离线复核包 ↗</a></div></div>'''
 
 
 def ledger(root):
@@ -92,6 +143,7 @@ def ledger(root):
 {table("各方法的全部匹配孔", rows, "匹配数（D → E）")}
 <details><summary>只比较两种算法都匹配到的孔</summary>{table("相同参考孔的配对比较", common, "共同匹配数")}<p>新增和丢失的匹配没有放进这一行的百分位；它们仍计入正式验收的覆盖率。</p></details>
 <p>再回到每件的 24 张校准切片：试件 2、3、5 分别只有 {"、".join(small)} 个体积在 64–127 体素之间、且没有被裁切的小孔。试件 5 并非没有孔，而是这段校准图像里没有可完整测量的该尺寸小孔。<a href="{CONTROL}">查看边界放宽、收紧的对照结果 ↗</a></p>
+{transfer_section(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
