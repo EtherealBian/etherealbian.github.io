@@ -445,3 +445,10 @@
   text-underline-offset: 3px;
   font-size: 13px;
 }
+
+/* CT discrepancy plate: keep the evidence and its three-dimensional interpretation together. */
+.pore-comparison { display: grid; grid-template-columns: minmax(0, 26rem) minmax(0, 32rem); align-items: center; gap: clamp(1.5rem, 4vw, 4.5rem); margin: 2rem 0 1rem; padding-block: 1.4rem; border-block: 1px solid #bac9bd; }
+.pore-plate img { display: block; width: 100%; height: auto; }
+.pore-comparison h3 { margin: .65rem 0; font-size: clamp(19px, 2vw, 27px); }
+.pore-comparison figcaption a { color: var(--fern); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 680px) { .pore-comparison { grid-template-columns: minmax(0, 1fr); gap: 1rem; } }
