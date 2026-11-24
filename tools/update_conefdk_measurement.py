@@ -219,6 +219,30 @@ def source_followup(root):
 <div class="bench-links"><a href="{base}/RESULTS-FIGURE-GRAY.md">截面定位、灰度对照与独立重算 ↗</a><a href="{base}/RESULTS-CENSUS-TRAIN.md">遍历训练的逐孔结果 ↗</a></div></div>'''
 
 
+def filter_followup(root):
+    def read(name):
+        return json.loads((root / name).read_text(encoding="utf8"))
+    local = [read(f"local-connectivity/sample{i}.json") for i in (2, 3, 5)]
+    patch = read("patch-profile/check.json")
+    med = read("median-source/check.json")
+    if any(r["screen"]["advance"] for r in local) or patch["advance"] or med["advance"]:
+        raise ValueError("Research screen changed; review page text")
+    a, b = local[2]["screen"]["shared_p95"]
+    c, d = local[1]["screen"]["shared_p95"]
+    before, after = [local[2]["arms"][k]["objects"] for k in ("census", "critical")]
+    right = med["partitions"]["check"]
+    m, n = [right[k]["all"]["change_rmse"] for k in ("cube27", med["selected"])]
+    q = patch["paper"]
+    u, v = [q["parts"]["check"]["methods"][k+str(q["selected"][k])]["all"]["change_rmse"] for k in ("uniform", "binomial")]
+    if not all(r["binomial"]["dice"] < r["uniform"]["dice"] for r in patch["specimens"].values()):
+        raise ValueError("Check-slice result changed")
+    base = "https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores"
+    return f'''<div id="pore-filter-review"><h3>体积误差小了，怎么还会多报三个孔？</h3>
+<p>在开发迁移区给连接与间隙增加训练权重后，试件 5 的 {len(local[2]["screen"]["shared_ids"])} 个共同匹配孔，体积误差 P95 从 {a:.2f}% 降至 {b:.2f}%。但预测中能与参考孔一一配对的比例从 {before["matches"]}/{before["eligible_prediction"]} 降到 {after["matches"]}/{after["eligible_prediction"]}；试件 3 的同孔误差则从 {c:.2f}% 升到 {d:.2f}%。因此保留原方法。</p>
+<p>对照论文截面的两步灰度变化，把 27 点中值改为 19 点，右区误差从 {m:.2f} 升到 {n:.2f}；改变去噪补丁内的权重，从 {u:.2f} 升到 {v:.2f}。后者在三个试件各自的校准检查区也都降低了 Dice。这里没有使用保留试件。</p>
+<div class="bench-links"><a href="{base}/RESULTS-LOCAL-CONNECTIVITY.md">逐孔误差与触边反例 ↗</a><a href="{base}/RESULTS-FILTER-PROFILE.md">两步灰度对照与校准数据 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -301,6 +325,7 @@ def ledger(root):
 {section_followup(root)}
 {context_followup(root)}
 {source_followup(root)}
+{filter_followup(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )

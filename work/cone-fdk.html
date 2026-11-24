@@ -46,5 +46,9 @@
 <p>在试件 2 的 900 张原图中找到了第 447 层。只对齐原图，再用同一映射核对论文的中值图，未参与拟合的右侧相关系数为 0.9871。比较去噪前后的灰度变化，右侧误差从不加去噪的 5.57 降到固定去噪的 4.49；调整参数后为 4.44，仅比固定方法再降 1.08%，没有达到预定的 10%。</p>
 <p>另一次训练遍历了全部校准体素。试件 2 的 42 个共同匹配孔，体积误差 P95 从 21.04% 降到 14.89%；试件 3、5 的同孔误差却上升。试件 5 有 406 个属于同一参考孔的体素被连进 1,902 体素的触边对象，不能再单独测量。两项实验都未升级正式候选。</p>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/83775b0c15fdf6383e14343f1aa5625239a23f77/pores/RESULTS-FIGURE-GRAY.md">截面定位、灰度对照与独立重算 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/83775b0c15fdf6383e14343f1aa5625239a23f77/pores/RESULTS-CENSUS-TRAIN.md">遍历训练的逐孔结果 ↗</a></div></div>
+<div id="pore-filter-review"><h3>体积误差小了，怎么还会多报三个孔？</h3>
+<p>在开发迁移区给连接与间隙增加训练权重后，试件 5 的 9 个共同匹配孔，体积误差 P95 从 17.01% 降至 12.42%。但预测中能与参考孔一一配对的比例从 9/11 降到 9/14；试件 3 的同孔误差则从 18.30% 升到 45.92%。因此保留原方法。</p>
+<p>对照论文截面的两步灰度变化，把 27 点中值改为 19 点，右区误差从 4.90 升到 4.93；改变去噪补丁内的权重，从 4.44 升到 4.48。后者在三个试件各自的校准检查区也都降低了 Dice。这里没有使用保留试件。</p>
+<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores/RESULTS-LOCAL-CONNECTIVITY.md">逐孔误差与触边反例 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores/RESULTS-FILTER-PROFILE.md">两步灰度对照与校准数据 ↗</a></div></div>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-evidence-3/pores/RESULTS-E.md">逐孔误差、漏检与失败项 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/tag/measurement-evidence-3">下载三个试件的离线复核包 ↗</a></div></section>
 <!-- measured-pore-ledger:end --></section></main></body></html>
