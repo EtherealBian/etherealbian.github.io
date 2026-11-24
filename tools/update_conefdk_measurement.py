@@ -368,6 +368,10 @@ def volume_followup(root):
     if gained or lost != 1 or any(q["advance"] or q["comparison"]["lost"] or q["comparison"]["gained"] or q["changes"]["previous"].get("face_to_curvature", 0) for q in cross):
         raise ValueError("Recheck the cross-fitted gate contrast")
     cross_report = "https://github.com/EtherealBian/cone-fdk/blob/a73f77f06d9398fa875d42ae10ea032751803357/pores/RESULTS-CROSSFIT-GATE.md"
+    observed = read("observed-volume-support/support.json")["specimens"]["5"]
+    if observed["support"] or observed["complete"]["pairs"] or observed["all"]["tie"]:
+        raise ValueError("Recheck observed 3D support on specimen 5")
+    obs_report = "https://github.com/EtherealBian/cone-fdk/blob/26a973175a143edcc6ed18767aa5014da07d3b64/pores/RESULTS-OBSERVED-VOLUME.md"
     sect_report = "https://github.com/EtherealBian/cone-fdk/blob/5fd41504c4863bd04090df546292309c6eacd040/pores/RESULTS-SECTION-GATE.md"
     frac_report = "https://github.com/EtherealBian/cone-fdk/blob/3dd3f6b83658715ee851f7a44810a60bb313c0e3/pores/RESULTS-CHORD-FRACTION.md"
     face_report = "https://github.com/EtherealBian/cone-fdk/blob/482d053c512e59516e28fff139ddee519da58295/pores/RESULTS-FACE-PROFILE.md"
@@ -394,6 +398,7 @@ def volume_followup(root):
 <p id="pore-fraction-review">把所有孔的边界都少移一点行不行？在同一批匹配孔上，穷尽所有统一位移比例，即使知道参考体积，三件里最差一件的 P95 最低仍是 {float(Fraction(frac["minimax"])):.2f}%。如果每个孔都能选对原边界或新边界，三件可分别降至 {endpoint_tails}。后者用了答案，不是预测精度。<a href="{frac_report}">核对实测结果和精确枚举 ↗</a></p>
 <p id="pore-section-gate-review">真能逐孔选对吗？5 号用 {sect_cal["parents"]} 个三维结构的 {sect_cal["sections"]} 个截面做校准，再在另一段已研究过的扫描上不看标签选边界。三个开发件共 {len(picked)} 个已匹配孔，每个至少有一种边界能把体积量进 ±15%；但实际选择后，三件 P95 仍分别为 {sect_tails}，没有一件下降。<a href="{sect_report}">逐孔核对哪些选对了、哪些漏改了 ↗</a></p>
 <p id="pore-crossfit-review">如果让检测器先在没训练过的试件上犯错，再用这些误差教它选边界呢？另一段扫描里，与上一版相比有 {changed} 个匹配孔改选了灰度边界。没有一个原本超出 ±15% 的孔因此进线，3 号反而多了一个超线孔，体积误差 P95 从 {control:.2f}% 升至 {held_out:.2f}%。没有将此方法用于正式验收。<a href="{cross_report}">核对三折训练名单、逐孔改选与完整结果 ↗</a></p>
+<p id="pore-observed-review">截面来自几个不同的孔？只比较校准区中实际看得到的三维部分，5 号能配对 {observed["z_cut"]["pairs"]} 个结构，全部被切到边界；{observed["all"]["under"]} 个量小了，只有 {observed["all"]["over"]} 个量大了。还不足以从这组样本学习两种误差方向。<a href="{obs_report}">查看每个试件的三维校准样本 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
