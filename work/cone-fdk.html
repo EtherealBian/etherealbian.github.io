@@ -37,5 +37,10 @@
 <p>在另一段 96 层的开发图像上，试件 5 的两种方法都找到了 9 个孔。加入截面面积监督后，这些孔的体积误差 P95 从 20.25% 降至 14.19%。但有一个原来能单独测量的孔，共 452 个体素，其中 415 个被连进一个触及边界的 1,928 体素对象，无法再单独匹配。试件 2、3 的同孔误差也上升，因此没有升级算法。</p>
 <p>换成历史 Fiji 插件，在相同去噪图像上的 638,976 个判定与本项目全部一致。再换用论文引用的原版 IPOL 去噪器，三件开发切片的 Dice 都没有提高。</p>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/d02f9837e6b235a0fb0602c8d6b4e72c27e795e6/pores/RESULTS-SECTION-AREA.md">逐孔数据、权重与封存掩膜 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/d02f9837e6b235a0fb0602c8d6b4e72c27e795e6/pores/RESULTS-BERNSEN.md">Fiji 对照 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/d02f9837e6b235a0fb0602c8d6b4e72c27e795e6/pores/RESULTS-IPOL.md">去噪器对照 ↗</a></div></div>
+<div id="pore-context"><h3>一个孔重新分开了，体积量得有多准？</h3>
+<p>试件 5 的同一个 452 体素孔，在新的平面对照里与一个触边对象连在一起，共 1,852 体素。给网络加入前后原始切片后，这个孔被单独测为 400 体素，交并比 0.860，体积仍低估 11.50%。</p>
+<p>三件开发迁移区的 Dice 都提高了，但只比较两臂都找到的同一批孔，体积误差 P95 在试件 2 降至 17.43%，在试件 3、5 却分别升至 17.64%、22.45%。单纯扩大去噪窗口也没能改善这三件的校准检查结果。</p>
+<p>在另一段正式开发区，只允许固定基线改变 ±2 个灰度级时，即使每个体素都选最有利的结果，试件 3 的参考孔匹配数上限也只有 24/27，低于要求的 90%。这是数学上限，不是算法测得的覆盖率。</p>
+<div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-AXIAL-RAW.md">相邻切片与逐孔配对 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-BYTE-RADIUS.md">灰度扰动上限 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores/RESULTS-WINDOW-UNITS.md">窗口宽度对照 ↗</a></div></div>
 <div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/measurement-evidence-3/pores/RESULTS-E.md">逐孔误差、漏检与失败项 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/tag/measurement-evidence-3">下载三个试件的离线复核包 ↗</a></div></section>
 <!-- measured-pore-ledger:end --></section></main></body></html>

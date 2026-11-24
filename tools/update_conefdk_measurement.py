@@ -180,6 +180,26 @@ def section_followup(root):
 <div class="bench-links"><a href="{base}/RESULTS-SECTION-AREA.md">逐孔数据、权重与封存掩膜 ↗</a><a href="{base}/RESULTS-BERNSEN.md">Fiji 对照 ↗</a><a href="{base}/RESULTS-IPOL.md">去噪器对照 ↗</a></div></div>'''
 
 
+def context_followup(root):
+    def read(path):
+        return json.loads((root / path).read_text(encoding="utf8"))
+    bound = read("byte-radius/coverage-bounds.json")["3"]["2"]
+    trace = read("axial-raw/trace-5-15.json")
+    records = [read(f"axial-raw/sample{i}.json") for i in (2,3,5)]
+    wide = read("window-units/check.json")
+    if (not bound["coverage_gate_impossible"] or any(r["screen"]["advance"] for r in records)
+        or any(v["wide"]["dice"] >= v["control"]["dice"] for v in wide.values())):
+        raise ValueError("Development evidence changed; review interpretation")
+    before, after = [trace["arms"][k][0] for k in ("plane", "axial")]
+    base = "https://github.com/EtherealBian/cone-fdk/blob/2e35689367af16b4d09cae921ade1a3c701b3951/pores"
+    tails = [r["screen"]["shared_p95"] for r in records]
+    return f'''<div id="pore-context"><h3>一个孔重新分开了，体积量得有多准？</h3>
+<p>试件 5 的同一个 {trace["reference_voxels"]} 体素孔，在新的平面对照里与一个触边对象连在一起，共 {before["voxels"]:,} 体素。给网络加入前后原始切片后，这个孔被单独测为 {after["voxels"]} 体素，交并比 {after["iou"]:.3f}，体积仍低估 {100*(1-after["voxels"]/trace["reference_voxels"]):.2f}%。</p>
+<p>三件开发迁移区的 Dice 都提高了，但只比较两臂都找到的同一批孔，体积误差 P95 在试件 2 降至 {tails[0][1]:.2f}%，在试件 3、5 却分别升至 {tails[1][1]:.2f}%、{tails[2][1]:.2f}%。单纯扩大去噪窗口也没能改善这三件的校准检查结果。</p>
+<p>在另一段正式开发区，只允许固定基线改变 ±2 个灰度级时，即使每个体素都选最有利的结果，试件 3 的参考孔匹配数上限也只有 {bound["match_count_upper"]}/{bound["reference_count"]}，低于要求的 90%。这是数学上限，不是算法测得的覆盖率。</p>
+<div class="bench-links"><a href="{base}/RESULTS-AXIAL-RAW.md">相邻切片与逐孔配对 ↗</a><a href="{base}/RESULTS-BYTE-RADIUS.md">灰度扰动上限 ↗</a><a href="{base}/RESULTS-WINDOW-UNITS.md">窗口宽度对照 ↗</a></div></div>'''
+
+
 def ledger(root):
     rows = []
     common = []
@@ -260,6 +280,7 @@ def ledger(root):
 {latent_section(root)}
 {shared_section(root)}
 {section_followup(root)}
+{context_followup(root)}
 <div class="bench-links"><a href="{REPORT}">逐孔误差、漏检与失败项 ↗</a><a href="{RELEASE}">下载三个试件的离线复核包 ↗</a></div></section>\n'''
         + END
     )
