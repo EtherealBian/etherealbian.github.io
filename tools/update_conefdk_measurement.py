@@ -302,6 +302,13 @@ def volume_followup(root):
     groups = [read(f"monotone/sample{i}.json")["arms"]["band-color"]["objects"]["matches"] for i in (2, 3, 5)]
     if read("monotone/summary.json")["advance"] or any(a >= b for a, b in zip(groups, matched)):
         raise ValueError("Recheck the fixed-band experiment")
+    interface = "https://github.com/EtherealBian/cone-fdk/blob/7ac637a0648bdf5c67d4475daa48e23df3ad543d/pores"
+    catalog = read("object-catalog/sample5.json")
+    b = catalog["bound"]
+    orient3 = read("orientation/sample3.json")["screen"]["shared_p95"]
+    dist5 = read("distance-target/sample5.json")["comparisons"]["census"]["shared_p95"]
+    if catalog["unmixed_passing"] or not b["possible"] or b["union"] != b["needed"] or read("orientation/summary.json")["advance"] or read("distance-target/summary.json")["advance"]:
+        raise ValueError("Recheck selector headroom and transfer screens")
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
     mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
@@ -313,6 +320,8 @@ def volume_followup(root):
 <p id="pore-mass-review">再用原始灰度估算体积，{below} 个本来就小的孔中有 {blocked} 个没有被推过线：{abstained} 个因裁边或邻孔而弃判，只有 {blocked-abstained} 个靠估值被筛掉。灰度法保住 {recovered["mass"]} 个原来漏配的孔，与只按原始大小排序打平。在原有匹配孔上移动边界，也只有试件 3 的误差 P95 下降。<a href="{mass_report}">核对全部估值、弃判和逐孔结果 ↗</a></p>
 <p id="pore-forward-review">知道孔在哪里时，能预测它周围的灰度吗？三件的校准检查都通过了，试件 2 的边界灰度均方根误差从 {first["center"]["balanced"]:.3f} 降到 {first["blur"]["balanced"]:.3f}。但反过来用灰度同时修改孔边界，迁移区原本分别能匹配的 {"、".join(map(str, matched))} 个孔，一个也没留下。<a href="{forward_report}">查看完整未匹配对象 ↗</a></p>
 <p id="pore-monotone-review">改为只在原边界上分组更新后，三个试件的灰度拟合目标都下降了，分别匹配到 {"、".join(map(str, groups))} 个孔，仍比不修改边界少。该方法不进入正式验收。<a href="{monotone_report}">核对同一批孔的体积误差 ↗</a></p>
+<p id="pore-interface-review">同一批孔换八个方向预测，试件 3 的体积误差 P95 从 {orient3[0]:.2f}% 降到 {orient3[1]:.2f}%，没有达到预定的 2 个百分点。改为学习边界距离，试件 5 从原基线的 {dist5[0]:.2f}% 升到 {dist5[1]:.2f}%。<a href="{interface}/RESULTS-ORIENTATION.md">核对八个方向 ↗</a> · <a href="{interface}/RESULTS-DISTANCE-TARGET.md">核对距离对照 ↗</a></p>
+<p id="pore-catalog-review">试件 5 的 {b["reference"]} 个参考孔，把十二项实验中曾经独立匹配的孔合起来只有 {b["union"]} 个，刚够 90% 覆盖线。即使知道正确答案、为每个孔挑最准确的已有预测，体积误差 P95 仍是 {b["best_p95"]:.2f}%。没有一种原方法同时达到这两项要求；理想值不是可用算法。<a href="{interface}/RESULTS-OBJECT-CATALOG.md">查看每个孔的候选体积 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
