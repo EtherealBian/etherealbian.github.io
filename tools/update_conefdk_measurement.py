@@ -339,6 +339,11 @@ def volume_followup(root):
     curve_hits = "、".join(f'{o["matches"]}/{o["eligible_reference"]}' for o in measured)
     curve_tails = "、".join(f'{o["p95_abs_volume_error_pct"]:.2f}%' for o in measured)
     curve_report = "https://github.com/EtherealBian/cone-fdk/blob/705e12fb435d1e891ea9f1044d04b9e45156c489/pores/RESULTS-VOLUME-CURVATURE.md"
+    shell = [read(f"shell-volume/sample{i}.json") for i in (2, 3, 5)]
+    if any(d["advance"] or d["comparison"]["gained"] or d["comparison"]["lost"] or d["bound"]["p95"]["interval"] <= 15 for d in shell):
+        raise ValueError("Recheck the frozen volume-panel bound")
+    shell_bounds = "、".join(f'{d["bound"]["p95"]["interval"]:.2f}%' for d in shell)
+    shell_report = "https://github.com/EtherealBian/cone-fdk/blob/d0211051ab52306b539f18cdaef1f2ce7914ccf4/pores/RESULTS-SHELL-VOLUME.md"
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
     mass_report = "https://github.com/EtherealBian/cone-fdk/blob/cac216672a7ae6fa321f7d78e311c19b035cc641/pores/RESULTS-MASS.md"
     seed_report = "https://github.com/EtherealBian/cone-fdk/blob/ffbbd1e4f20a33727318b15da083b8b1ff0b2b36/pores/RESULTS-SMALL-SEED.md"
@@ -357,6 +362,7 @@ def volume_followup(root):
 <p id="pore-depth-review">把同一组权重放到各试件另一段不重叠的 96 层，不重新训练：2、3、5 号的逐孔体积误差 P95 分别为 {cross_tails}，都比原区域高。分数能逐个重算，不代表换个深度仍能量准。<a href="{cross_root}/RESULTS-CROSS-DEPTH.md">核对两个深度的覆盖率与误差 ↗</a></p>
 <p id="pore-byte-review">如果只看去噪后的中心、最低、最高灰度和试件对比度，完全相同的输入有时会得到相反的参考标签。按这些数判定，在 2、3、5 号这三段扫描里分别至少会错 {floors} 个体素。这个下限不适用于保留完整邻域的算法。<a href="{byte_report}">查看灰度组合、误差下限和实际漏孔 ↗</a></p>
 <p id="pore-curvature-review">沿原始 CT 的 13 个方向比较灰度变化，2、3、5 号分别找到了 {curve_hits} 个参考孔：每件多找到一个，原有匹配全部保留，预测侧和参考侧的覆盖率也都达到 90%。但体积误差 P95 分别为 {curve_tails}，三件都比原模型高。<a href="{curve_report}">查看新增的三个孔和同孔体积对照 ↗</a></p>
+<p id="pore-shell-review">固定这些孔，只在边界上增减一层中的体素，三个试件都没丢匹配。体积估计为什么还是不准？即使知道参考答案，逐孔从合格估计的范围内选最优体积，三件原匹配孔的误差 P95 仍至少为 {shell_bounds}，均高于 15% 验收线。<a href="{shell_report}">查看范围外的七个孔及实际边界误差 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
