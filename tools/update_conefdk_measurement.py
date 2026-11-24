@@ -354,6 +354,13 @@ def volume_followup(root):
     if frac["joint_passing_sites"] or any(Fraction(v["per_pore_endpoint"]) >= 15 for v in frac["specimens"].values()):
         raise ValueError("Recheck exact single-fraction volume limits")
     endpoint_tails = "、".join(f'{float(Fraction(frac["specimens"][str(i)]["per_pore_endpoint"])):.2f}%' for i in (2, 3, 5))
+    section_choices = [read(f"section-gate/sample{i}.json") for i in (2, 3, 5)]
+    picked = [r for d in section_choices for r in d["decisions"]["rows"].values()]
+    if any(d["advance"] or len(set(d["comparison"]["shared_p95"])) != 1 or d["comparison"]["gained"] or d["comparison"]["lost"] for d in section_choices) or any(100*min(abs(r["detector"]-r["reference"]), abs(r["full"]-r["reference"])) > 15*r["reference"] for r in picked):
+        raise ValueError("Recheck actual section choices versus retrospective endpoint volumes")
+    sect_cal = read("section-gate/fit.json")["calibration"]["5"]
+    sect_tails = "、".join(f'{d["arms"]["gate"]["objects"]["p95_abs_volume_error_pct"]:.2f}%' for d in section_choices)
+    sect_report = "https://github.com/EtherealBian/cone-fdk/blob/5fd41504c4863bd04090df546292309c6eacd040/pores/RESULTS-SECTION-GATE.md"
     frac_report = "https://github.com/EtherealBian/cone-fdk/blob/3dd3f6b83658715ee851f7a44810a60bb313c0e3/pores/RESULTS-CHORD-FRACTION.md"
     face_report = "https://github.com/EtherealBian/cone-fdk/blob/482d053c512e59516e28fff139ddee519da58295/pores/RESULTS-FACE-PROFILE.md"
     monotone_report = "https://github.com/EtherealBian/cone-fdk/blob/94672f8efce45356211756292a72c6ee41963a54/pores/RESULTS-MONOTONE.md"
@@ -377,6 +384,7 @@ def volume_followup(root):
 <p id="pore-shell-review">固定这些孔，只在边界上增减一层中的体素，三个试件都没丢匹配。体积估计为什么还是不准？即使知道参考答案，逐孔从合格估计的范围内选最优体积，三件原匹配孔的误差 P95 仍至少为 {shell_bounds}，均高于 15% 验收线。<a href="{shell_report}">查看范围外的七个孔及实际边界误差 ↗</a></p>
 <p id="pore-face-review">在原始 CT 的灰度剖面上重新定位边界，前述七个低估孔的体积误差全部降到 15% 以内，包括 2 号一个原来只量到 64 体素的孔（参考 91，这次量到 87）。同一规则用到所有孔，三件体积误差 P95 却分别为 {face_tails}，不能作为通用测量方法。<a href="{face_report}">核对七个孔及所有匹配结果 ↗</a></p>
 <p id="pore-fraction-review">把所有孔的边界都少移一点行不行？在同一批匹配孔上，穷尽所有统一位移比例，即使知道参考体积，三件里最差一件的 P95 最低仍是 {float(Fraction(frac["minimax"])):.2f}%。如果每个孔都能选对原边界或新边界，三件可分别降至 {endpoint_tails}。后者用了答案，不是预测精度。<a href="{frac_report}">核对实测结果和精确枚举 ↗</a></p>
+<p id="pore-section-gate-review">真能逐孔选对吗？5 号用 {sect_cal["parents"]} 个三维结构的 {sect_cal["sections"]} 个截面做校准，再在另一段已研究过的扫描上不看标签选边界。三个开发件共 {len(picked)} 个已匹配孔，每个至少有一种边界能把体积量进 ±15%；但实际选择后，三件 P95 仍分别为 {sect_tails}，没有一件下降。<a href="{sect_report}">逐孔核对哪些选对了、哪些漏改了 ↗</a></p>
 <div class="bench-links"><a href="{base}/RESULTS-FIVE-PLANE.md">核对两组对照的同孔误差 ↗</a><a href="{base}/RESULTS-LOCAL-CONTRAST.md">查看每个漏配孔的灰度与坐标 ↗</a><a href="{seed_report}">逐个核对新增预测 ↗</a></div></div>'''
 
 
