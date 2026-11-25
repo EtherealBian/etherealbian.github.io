@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">SparkFuse — residual and LayerNorm fusion</title>
+  <desc id="desc">Two PyTorch operations, a residual addition and affine LayerNorm, become one CUDA kernel. The dense projection remains in PyTorch.</desc>
+  <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#35594f" opacity=".4"/></pattern></defs>
+  <rect width="800" height="500" fill="#17372f"/><rect width="800" height="500" fill="url(#grid)"/>
+  <g font-family="ui-monospace,Consolas,monospace" fill="#b4d9c5"><text x="40" y="48" font-size="19">08A / FUSION MAP</text><text x="758" y="48" text-anchor="end" font-size="19">DGX SPARK</text></g>
+  <g font-family="Arial,sans-serif"><text x="38" y="114" fill="#f5f6e9" font-size="45" font-weight="bold">Two ops, one kernel.</text></g>
+  <g fill="none" stroke="#98bca9" stroke-width="3"><path d="M80 245v54m0-3-7-10m7 10 7-10"/><path d="M316 217h32q15 0 15 16v25q0 14 17 14h50m-13-7 13 7-13 7M316 331h32q15 0 15-15v-27q0-17 17-17"/></g>
+  <g font-family="ui-monospace,Consolas,monospace"><g fill="#213f35" stroke="#a6c8b6" stroke-width="2"><rect x="40" y="185" width="276" height="64" rx="5"/><rect x="40" y="299" width="276" height="64" rx="5"/></g><g fill="#edf4e5" font-size="26"><text x="62" y="226">residual add</text><text x="62" y="340">layer_norm</text></g>
+  <rect x="441" y="185" width="319" height="178" rx="7" fill="#d8edb2"/><text x="464" y="226" fill="#32513a" font-size="19">CUDA / GENERATED</text><text x="462" y="274" fill="#17372f" font-size="37" font-weight="bold">1 launch</text><text x="464" y="322" fill="#32513a" font-size="20">add → norm → store</text>
+  <path d="M40 407H760" stroke="#6b8f7e"/><text x="40" y="449" fill="#c6dcc9" font-size="19">BertSelfOutput</text><text x="760" y="449" text-anchor="end" fill="#c6dcc9" font-size="19">BF16 / 1 × 97 × 768</text></g>
+</svg>

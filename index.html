@@ -305,6 +305,7 @@
               <button type="button" data-filter="hardware" aria-pressed="false">Hardware</button>
               <button type="button" data-filter="logic" aria-pressed="false">Logic</button>
               <button type="button" data-filter="vision" aria-pressed="false">Vision</button>
+              <button type="button" data-filter="infra" aria-pressed="false">AI Infra</button>
             </div>
           </header>
           <span id="filter-status" role="status" class="sr-only"></span>
@@ -565,6 +566,21 @@
                   <li>FDK</li>
                   <li>DGX SPARK</li>
                 </ul>
+              </div>
+            </article>
+            <article class="project infra" data-group="infra" id="spark-fuse" aria-labelledby="spark-fuse-title">
+              <div class="catalog-meta" lang="en"><span><b>08</b> / AI Infrastructure</span><span>GPU compiler</span></div>
+              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 SparkFuse 的 CUDA 融合图和基准结果"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="BERT 残差加法与 LayerNorm 由同一个 CUDA kernel 执行。"></a>
+              <div class="project-body">
+                <div class="project-heading">
+                  <h3 id="spark-fuse-title" lang="en"><a href="work/spark-fuse.html">SparkFuse: PyTorch to CUDA<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <div class="project-links" lang="en">
+                    <a class="entry-link" href="work/spark-fuse.html" aria-label="Case study: SparkFuse compiler">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="source-link" href="https://github.com/EtherealBian/spark-fuse" aria-label="GitHub: SparkFuse">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
+                  </div>
+                </div>
+                <p class="project-summary">在 DGX Spark 上，从 PyTorch 计算图生成 CUDA 代码。编译器把 BERT 的<strong>残差加法和 LayerNorm 合成一个 kernel</strong>，再用独立输入检验选出的线程布局。</p>
+                <ul class="tags" lang="en"><li>torch.export</li><li>CUDA C++</li><li>DGX SPARK</li></ul>
               </div>
             </article>
           </div>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SparkFuse · 从 PyTorch 图生成 CUDA — EtherealBian 工程图志</title>
+  <meta name="description" content="看 SparkFuse 怎样把 BERT 的残差加法和 LayerNorm 合为一个 CUDA kernel，并在 DGX Spark 上分别测量设备时间与主机延迟。">
+  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css">
+</head>
+<body class="dossier">
+<a class="skip" href="#sheet">跳至图志</a>
+<header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#spark-fuse">← 返回工程图集</a></div></header>
+<main class="sheet-wrap" id="sheet">
+  <header class="sheet-title"><div class="issue"><span>ENGINEERING RECORD <i>/</i> 08</span><span>AI Infrastructure</span></div>
+    <h1 lang="en">SparkFuse<b>.</b></h1><h2>从 PyTorch 计算图，到一次 CUDA 发射</h2>
+    <p>BERT 在一次注意力计算之后，把投影结果与残差相加，再做 LayerNorm。SparkFuse 从 <code>torch.export</code> 图中识别这两个相邻算子，生成可读的 CUDA C++。前面的线性投影仍由 PyTorch 执行。</p>
+    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">查看实测时间 ↓</a></nav>
+  </header>
+  <div class="exhibit-grid"><figure class="evidence"><div class="plate-head"><span>FIG. 08A</span><b>BertSelfOutput · 算子融合</b></div><div class="exhibit"><img src="../assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="残差相加与带仿射参数的 LayerNorm 被编译为一个 CUDA kernel，线性投影仍在融合区外。"></div><figcaption><span>图中只画出融合区域。计时包含它前面的线性投影。</span></figcaption></figure>
+    <aside class="readout"><div class="rail-kicker">DGX SPARK <i>/</i> GB10</div><strong>12.86 µs</strong><p>在留作计时的第四组输入上，整个 BertSelfOutput 模块的热设备时间。</p><dl><dt>输入</dt><dd>BF16，1 × 97 × 768，固定随机权重。</dd><dt>对照</dt><dd>同一设备、同一模块，PyTorch eager 为 14.46 µs。</dd></dl><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json">核对每轮采样 ↗</a></aside>
+  </div>
+  <section class="analysis" id="timing"><div class="section-label">01 <i>/</i> BENCHMARK</div><h2>GPU 执行变快，调用延迟呢？</h2>
+    <p>前三组输入用于选型与校验，第四组独立计时。CUDA Graph 重放测 GPU 执行时间；另一个实验从主机发起调用，一直计到 GPU 同步完成。两项测量给出了不同的排序。</p>
+    <table><caption>BertSelfOutput · 同一组输入 · 中位数（µs，越低越好）</caption><thead><tr><th scope="col">执行路径</th><th scope="col">热设备时间</th><th scope="col">同步主机延迟</th></tr></thead><tbody>
+      <tr><th scope="row">PyTorch eager</th><td>14.46</td><td>27.52</td></tr><tr><th scope="row">SparkFuse 默认布局</th><td>14.20</td><td>47.09</td></tr><tr><th scope="row">SparkFuse 实测选型</th><td>12.86</td><td>45.92</td></tr></tbody></table>
+    <p>在这组输入上，选型缩短了 GPU 执行时间；从主机发起单次调用，eager 仍然更快。TorchInductor 未通过这次逐元素精度检查，因此不列速度。数据仅覆盖这个输出模块。</p>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/tools/bert_output.py">复核计时方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/docs/performance.md">查看其他形状的对照 ↗</a></div>
+  </section>
+</main></body></html>
