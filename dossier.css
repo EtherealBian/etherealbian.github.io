@@ -464,3 +464,8 @@
 .pore-ledger summary { cursor: pointer; padding: .6rem 0; color: #265a44; text-decoration: underline; text-underline-offset: .2em; }
 .pore-ledger summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 @media (max-width: 480px) { .pore-ledger td, .pore-ledger th { padding: .55rem .2rem; font-size: .86rem; } }
+
+/* Measured solver differences: preserve the native plot aspect ratio at phone sizes. */
+.peak-plot { min-width: 0; margin: 0; }
+.peak-plot img { display: block; width: 100%; height: auto; }
+.peak-plot figcaption { margin-top: .65rem; font-size: .85rem; line-height: 1.65; color: #40584e; }
