@@ -9,6 +9,12 @@
 <li><b>分开跑和一起跑，各花多久？</b><p>在 DGX Spark 上做了六组配对计时。三个任务依次执行，中位数为 1.743 秒；共享投影后为 0.643 秒。计时包含进程启动、GPU 计算和结果写盘，不含输入校验与导出。</p></li>
 <li id="slab-recovery"><b>算到一半停了，要从头来吗？</b><p>把核桃体数据分成五块重建。写完两块后强制终止进程，重新启动时复用这两块，只算余下三块。恢复出的 512 MiB 体数据与一次跑完的结果逐字节一致。</p></li>
 <li><b>怎样自己复核？</b><p>仓库另附同一颗核桃的两个局部区域，各有原生 CUDA 和 ASTRA 两份数据。只用 Python 标准库就能比对全部 138,948 个体素，不需要 GPU。</p></li></ol><div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/3c07af67107c2a5546147ce1a95d69fbc48b122a/platform/spark/QUICKSTART.md">离线复核步骤 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/3c07af67107c2a5546147ce1a95d69fbc48b122a/reports/gb10/multigrid-timing.json">六组计时原表 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/c8f958bbfe246db87ae78b127e9d2803fae39c0b/reports/gb10/slab-recovery.json">核对中断与恢复记录 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/releases/download/v0.1.0/walnut-512-viewer.html">下载核桃阅片器 ↗</a></div></section>
+<section class="record-table" id="threshold-review" aria-labelledby="threshold-title"><div><div class="section-label">01B <i>/</i> SIMULATED WALL LOSS</div><h2 id="threshold-title">换个阈值，缺陷范围会变多少？</h2><p>对同一组仿真数据，参考图和待检图各取三个边缘阈值。九种组合都找到一个连通区域，但面积并不固定：达到壁厚损失判定线的网格单元从 253 个到 275 个。重复扫描对照在九组中均为零。</p><div class="bench-links"><a href="https://github.com/EtherealBian/cone-fdk/blob/645ec38b917d687aff3090d819c1227f3ae3bfc8/platform/spark/QUICKSTART.md#offline-threshold-review">不用 GPU，复算全部 22 张图 ↗</a><a href="https://github.com/EtherealBian/cone-fdk/blob/645ec38b917d687aff3090d819c1227f3ae3bfc8/reports/gb10/directory-edge-qualification.json">逐组核对原始记录 ↗</a></div></div>
+<div><table><caption>壁厚损失 ≥ 0.3 mm 的单元数<br>行：参考阈值；列：待检阈值（mm⁻¹）</caption><thead><tr><th scope="col">参考 / 待检</th><th scope="col">0.018</th><th scope="col">0.020</th><th scope="col">0.022</th></tr></thead><tbody>
+<tr><th scope="row">0.018</th><td>262</td><td>271</td><td>275</td></tr>
+<tr><th scope="row">0.020</th><td>254</td><td>263</td><td>272</td></tr>
+<tr><th scope="row">0.022</th><td>253</td><td>255</td><td>263</td></tr>
+</tbody></table><p>另一个边缘无效的对照只有四种组合。其中一组的 14,760 个单元全部无法判定；不能把它读成“没有缺陷”。这些仿真结果不用于估计实物尺寸误差。</p></div></section>
 <section class="analysis" id="pore-lab"><div class="section-label">02 <i>/</i> MEASUREMENT LAB</div><h2>金属里的每一个孔，都能回到原始切片复核吗？</h2>
 <ol><li><b>先检查测量器</b><p>给定 NIST 发布的孔隙掩膜，CUDA 与独立 CPU 程序在三个钴铬试件的指定区域共核对 602 个连通体，孔隙体素计数差为零。这只验证计量，不验证自动找孔。</p></li>
 <li><b>同一个位置，究竟有几个孔？</b><p>试件 3 的参考标注里，121 和 127 是两个孔。候选 C 把它们连成一个，体积比 121 号孔大了 47.3%。加入相邻切片后，候选 D 把它们分开，但体积仍分别低估了 6.08% 和 15.625%。</p></li>
