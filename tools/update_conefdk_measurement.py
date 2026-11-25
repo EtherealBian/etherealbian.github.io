@@ -196,7 +196,7 @@ def context_followup(root):
     tails = [r["screen"]["shared_p95"] for r in records]
     return f'''<div id="pore-context"><h3>一个孔重新分开了，体积量得有多准？</h3>
 <p>试件 5 的同一个 {trace["reference_voxels"]} 体素孔，在新的平面对照里与一个触边对象连在一起，共 {before["voxels"]:,} 体素。给网络加入前后原始切片后，这个孔被单独测为 {after["voxels"]} 体素，交并比 {after["iou"]:.3f}，体积仍低估 {100*(1-after["voxels"]/trace["reference_voxels"]):.2f}%。</p>
-<p>三件开发迁移区的 Dice 都提高了，但只比较两臂都找到的同一批孔，体积误差 P95 在试件 2 降至 {tails[0][1]:.2f}%，在试件 3、5 却分别升至 {tails[1][1]:.2f}%、{tails[2][1]:.2f}%。单纯扩大去噪窗口也没能改善这三件的校准检查结果。</p>
+<p>在三个开发试件的另一段扫描上，Dice 都提高了，但只比较两臂都找到的同一批孔，体积误差 P95 在试件 2 降至 {tails[0][1]:.2f}%，在试件 3、5 却分别升至 {tails[1][1]:.2f}%、{tails[2][1]:.2f}%。单纯扩大去噪窗口也没能改善这三件的校准检查结果。</p>
 <p>在另一段正式开发区，只允许固定基线改变 ±2 个灰度级时，即使每个体素都选最有利的结果，试件 3 的参考孔匹配数上限也只有 {bound["match_count_upper"]}/{bound["reference_count"]}，低于要求的 90%。这是数学上限，不是算法测得的覆盖率。</p>
 <div class="bench-links"><a href="{base}/RESULTS-AXIAL-RAW.md">相邻切片与逐孔配对 ↗</a><a href="{base}/RESULTS-BYTE-RADIUS.md">灰度扰动上限 ↗</a><a href="{base}/RESULTS-WINDOW-UNITS.md">窗口宽度对照 ↗</a></div></div>'''
 
@@ -239,7 +239,7 @@ def filter_followup(root):
         raise ValueError("Check-slice result changed")
     base = "https://github.com/EtherealBian/cone-fdk/blob/c4e69d07024dab63b62454d351d0da86de491d48/pores"
     return f'''<div id="pore-filter-review"><h3>体积误差小了，怎么还会多报三个孔？</h3>
-<p>在开发迁移区给连接与间隙增加训练权重后，试件 5 的 {len(local[2]["screen"]["shared_ids"])} 个共同匹配孔，体积误差 P95 从 {a:.2f}% 降至 {b:.2f}%。但预测中能与参考孔一一配对的比例从 {before["matches"]}/{before["eligible_prediction"]} 降到 {after["matches"]}/{after["eligible_prediction"]}；试件 3 的同孔误差则从 {c:.2f}% 升到 {d:.2f}%。因此保留原方法。</p>
+<p>在开发试件的另一段扫描中给连接与间隙增加训练权重后，试件 5 的 {len(local[2]["screen"]["shared_ids"])} 个共同匹配孔，体积误差 P95 从 {a:.2f}% 降至 {b:.2f}%。但预测中能与参考孔一一配对的比例从 {before["matches"]}/{before["eligible_prediction"]} 降到 {after["matches"]}/{after["eligible_prediction"]}；试件 3 的同孔误差则从 {c:.2f}% 升到 {d:.2f}%。因此保留原方法。</p>
 <p>对照论文截面的两步灰度变化，把 27 点中值改为 19 点，右区误差从 {m:.2f} 升到 {n:.2f}；改变去噪补丁内的权重，从 {u:.2f} 升到 {v:.2f}。后者在三个试件各自的校准检查区也都降低了 Dice。这里没有使用保留试件。</p>
 <div class="bench-links"><a href="{base}/RESULTS-LOCAL-CONNECTIVITY.md">逐孔误差与触边反例 ↗</a><a href="{base}/RESULTS-FILTER-PROFILE.md">两步灰度对照与校准数据 ↗</a></div></div>'''
 
@@ -261,7 +261,7 @@ def target_followup(root):
     base = "https://github.com/EtherealBian/cone-fdk/blob/82e6f821986d72eceb0d1761638b2a2ce7323c8c/pores"
     return f'''<div id="pore-target-review"><h3>原图对上了，黑白插图就能当孔标签吗？</h3>
 <p>在试件 2 第 447 层未用于配准拟合的右区，每个原生体素中心只计一次。共 {right["count"]:,} 个中心：论文插图与归档分割的 Dice 为 {right["archive_reference_printed"]["dice"]:.5f}，固定算法与同一归档为 {right["archive_reference_fixed"]["dice"]:.5f}。从原始 TIFF 与 PDF 独立重算，两条路径的分歧计数逐格相同。测量继续以归档为参考。</p>
-<p>另在 96 层开发迁移区，把原始灰度按 4×4 网格汇总，让模型看到更远的材料。三个试件匹配到的参考孔 ID 都没变：试件 2 的同孔体积误差 P95 从 {tails[0][0]:.2f}% 变为 {tails[0][1]:.2f}%，试件 3 从 {tails[1][0]:.2f}% 变为 {tails[1][1]:.2f}%，试件 5 仍为 {tails[2][1]:.2f}%。都没有达到预定的 2 个百分点改善。</p>
+<p>另取开发试件的 96 层切片，把原始灰度按 4×4 网格汇总，让模型看到更远的材料。三个试件匹配到的参考孔 ID 都没变：试件 2 的同孔体积误差 P95 从 {tails[0][0]:.2f}% 变为 {tails[0][1]:.2f}%，试件 3 从 {tails[1][0]:.2f}% 变为 {tails[1][1]:.2f}%，试件 5 仍为 {tails[2][1]:.2f}%。都没有达到预定的 2 个百分点改善。</p>
 <div class="bench-links"><a href="{base}/RESULTS-PRINTED-TARGET.md">原档、论文和 CPU 独立重算 ↗</a><a href="{base}/RESULTS-TWO-SCALE.md">三种尺度对照与逐孔表 ↗</a></div></div>'''
 
 
@@ -382,9 +382,9 @@ def volume_followup(root):
     return f'''<div id="pore-volume-review"><h3>多看前后两层，能把孔量得更准吗？</h3>
 <p>在同一段 96 层开发图像中，用前后五层共同预测中心层。试件 2 里两种模型都匹配到的 {len(screens[0]["shared_ids"])} 个孔，体积误差 P95 从 {tails[0][0]:.2f}% 降至 {tails[0][1]:.2f}%；试件 3 从 {tails[1][0]:.2f}% 升至 {tails[1][1]:.2f}%，试件 5 从 {tails[2][0]:.2f}% 升至 {tails[2][1]:.2f}%。没有替换正式候选。</p>
 <p>回到试件 3 的正式开发区，有 {len(rows)} 个漏配孔的原始灰度对比度达到匹配孔的中位数。与它们重叠最多的预测分别只有 {"、".join(str(r["largest_overlap"]["voxels"]) for r in rows)} 个体素，均不到 64 体素的计量下限。</p>
-<p>那么，把小预测沿原图暗区扩大会怎样？在迁移区找回了 {gained} 个参考孔，却新增 {extra} 个未匹配预测，其中 {below} 个最大重叠的参考孔本身就小于计量下限。保留原算法和下限。</p>
+<p>那么，把小预测沿原图暗区扩大会怎样？在另一段扫描中找回了 {gained} 个参考孔，却新增 {extra} 个未匹配预测，其中 {below} 个最大重叠的参考孔本身就小于计量下限。保留原算法和下限。</p>
 <p id="pore-mass-review">再用原始灰度估算体积，{below} 个本来就小的孔中有 {blocked} 个没有被推过线：{abstained} 个因裁边或邻孔而弃判，只有 {blocked-abstained} 个靠估值被筛掉。灰度法保住 {recovered["mass"]} 个原来漏配的孔，与只按原始大小排序打平。在原有匹配孔上移动边界，也只有试件 3 的误差 P95 下降。<a href="{mass_report}">核对全部估值、弃判和逐孔结果 ↗</a></p>
-<p id="pore-forward-review">知道孔在哪里时，能预测它周围的灰度吗？三件的校准检查都通过了，试件 2 的边界灰度均方根误差从 {first["center"]["balanced"]:.3f} 降到 {first["blur"]["balanced"]:.3f}。但反过来用灰度同时修改孔边界，迁移区原本分别能匹配的 {"、".join(map(str, matched))} 个孔，一个也没留下。<a href="{forward_report}">查看完整未匹配对象 ↗</a></p>
+<p id="pore-forward-review">知道孔在哪里时，能预测它周围的灰度吗？三件的校准检查都通过了，试件 2 的边界灰度均方根误差从 {first["center"]["balanced"]:.3f} 降到 {first["blur"]["balanced"]:.3f}。但反过来用灰度同时修改孔边界，另一段扫描中原本分别能匹配的 {"、".join(map(str, matched))} 个孔，一个也没留下。<a href="{forward_report}">查看完整未匹配对象 ↗</a></p>
 <p id="pore-monotone-review">改为只在原边界上分组更新后，三个试件的灰度拟合目标都下降了，分别匹配到 {"、".join(map(str, groups))} 个孔，仍比不修改边界少。该方法不进入正式验收。<a href="{monotone_report}">核对同一批孔的体积误差 ↗</a></p>
 <p id="pore-interface-review">同一批孔换八个方向预测，试件 3 的体积误差 P95 从 {orient3[0]:.2f}% 降到 {orient3[1]:.2f}%，没有达到预定的 2 个百分点。改为学习边界距离，试件 5 从原基线的 {dist5[0]:.2f}% 升到 {dist5[1]:.2f}%。<a href="{interface}/RESULTS-ORIENTATION.md">核对八个方向 ↗</a> · <a href="{interface}/RESULTS-DISTANCE-TARGET.md">核对距离对照 ↗</a></p>
 <p id="pore-catalog-review">试件 5 的 {b["reference"]} 个参考孔，把十二项实验中曾经独立匹配的孔合起来只有 {b["union"]} 个，刚够 90% 覆盖线。即使知道正确答案、为每个孔挑最准确的已有预测，体积误差 P95 仍是 {b["best_p95"]:.2f}%。没有一种原方法同时达到这两项要求；理想值不是可用算法。<a href="{interface}/RESULTS-OBJECT-CATALOG.md">查看每个孔的候选体积 ↗</a></p>
