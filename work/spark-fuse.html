@@ -13,7 +13,7 @@
   <header class="sheet-title"><div class="issue"><span>ENGINEERING RECORD <i>/</i> 08</span><span>AI Infrastructure</span></div>
     <h1 lang="en">SparkFuse<b>.</b></h1><h2>从 PyTorch 计算图，到一次 CUDA 发射</h2>
     <p>BERT 在一次注意力计算之后，把投影结果与残差相加，再做 LayerNorm。SparkFuse 从 <code>torch.export</code> 图中识别这两个相邻算子，生成可读的 CUDA C++。前面的线性投影仍由 PyTorch 执行。</p>
-    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">BERT 算子计时 ↓</a><a href="#qwen32b">32B 整模型实测 ↓</a><a href="#qwen72b">72B 缓存与路由 ↓</a><a href="#gpt-oss-120b">120B 微批对照 ↓</a><a href="#qwen235b">235B 单机容量 ↓</a></nav>
+    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">BERT 算子计时 ↓</a><a href="#qwen32b">32B 整模型实测 ↓</a><a href="#qwen72b">72B 缓存与路由 ↓</a><a href="#gpt-oss-120b">120B 微批对照 ↓</a><a href="#qwen235b">235B 单机容量 ↓</a><a href="#glm355b">355B 单机推理 ↓</a></nav>
   </header>
   <div class="exhibit-grid"><figure class="evidence"><div class="plate-head"><span>FIG. 08A</span><b>BertSelfOutput · 算子融合</b></div><div class="exhibit"><img src="../assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="残差相加与带仿射参数的 LayerNorm 被编译为一个 CUDA kernel，线性投影仍在融合区外。"></div><figcaption><span>图中只画出融合区域。计时包含它前面的线性投影。</span></figcaption></figure>
     <aside class="readout"><div class="rail-kicker">DGX SPARK <i>/</i> GB10</div><strong>12.86 µs</strong><p>在留作计时的第四组输入上，整个 BertSelfOutput 模块的热设备时间。</p><dl><dt>输入</dt><dd>BF16，1 × 97 × 768，固定随机权重。</dd><dt>对照</dt><dd>同一设备、同一模块，PyTorch eager 为 14.46 µs。</dd></dl><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json">核对每轮采样 ↗</a></aside>
@@ -49,6 +49,10 @@
     <p>Qwen3-235B-A22B 的两片 Q2_K 权重共 85.69 GB。校验完整文件后，llama.cpp CUDA 后端加载了全部 94 层和输出层。每层从 128 个专家中选 8 个参与计算。</p>
     <table><caption>模型已加载 · 不复用提示缓存 · 每个请求固定生成 16 个 token</caption><thead><tr><th scope="col">输入长度</th><th scope="col">请求耗时中位数</th><th scope="col">重复请求输出一致</th></tr></thead><tbody><tr><th scope="row">128 token</th><td>1.74 秒</td><td>2/2 条</td></tr><tr><th scope="row">1,024 token</th><td>5.07 秒</td><td>2/2 条</td></tr></tbody></table>
     <p>每种长度测两条提示，再倒序各跑一次。整机可用内存每秒采样一次：装载阶段最低 35.9 GiB，请求阶段最低 35.5 GiB。这里验证能否运行，没有测量量化对回答质量的影响。</p>
-    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/docs/qwen235b.md">查看容量与测量方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/reports/qwen235b/summary.json">复核八个请求 ↗</a></div>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/docs/qwen235b.md">查看容量与测量方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/reports/qwen235b/summary.json">复核八个请求 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/docs/qwen235b-tiles.md">235B 预填充对照 ↗</a></div>
+  </section>
+  <section class="analysis" id="glm355b"><div class="section-label">06 <i>/</i> SINGLE-SPARK INFERENCE</div><h2>单台 DGX Spark 上的 GLM-4.5 355B</h2>
+    <p>两个 UD-IQ1_S 权重分片合计 97.05 GB。固定生成 16 个 token，输入 128 和 1,024 个 token 时，请求耗时中位数分别为 2.59 秒和 9.81 秒。4 条提示各运行两次，每对输出 token 均一致；这项测试不评价回答质量。</p>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/docs/glm45-355b.md">355B 测量方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/reports/glm45-355b/summary.json">复核 355B 请求 ↗</a></div>
   </section>
 </main></body></html>
