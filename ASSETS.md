@@ -39,3 +39,5 @@
 - `assets/conefdk-transfer-merge.png`: specimen 5, axial slice 280 of the NIST CoCr data (Felix H. Kim et al., [10.18434/M32162](https://doi.org/10.18434/M32162)). ConeFDK contrast-windowed and enlarged the same crop in four panels, with digital-reference and experimental prediction overlays. See the [coordinates and 3D overlap counts](https://github.com/EtherealBian/cone-fdk/blob/boundary-transfer-pilot-1/pores/evidence/transfer-pilot/sample5-merge.json); no NIST endorsement.
 
 - `assets/plates/sparkfuse-kernel.svg`: original diagram of the two fused operations in the [BertSelfOutput experiment](https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json).
+
+- `assets/plates/vcu118-rocket-boot.svg`：本站原创启动路径图。根据 VCU118 Rocket 工程的入口地址和流水级绘制，非板上实拍或实测时序。
