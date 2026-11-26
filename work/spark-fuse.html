@@ -53,6 +53,7 @@
   </section>
   <section class="analysis" id="glm355b"><div class="section-label">06 <i>/</i> SINGLE-SPARK INFERENCE</div><h2>单台 DGX Spark 上的 GLM-4.5 355B</h2>
     <p>两个 UD-IQ1_S 权重分片合计 97.05 GB。固定生成 16 个 token，输入 128 和 1,024 个 token 时，请求耗时中位数分别为 2.59 秒和 9.81 秒。4 条提示各运行两次，每对输出 token 均一致；这项测试不评价回答质量。</p>
+    <p>另测八份清单，要求只返回更新后的代号，最多生成 12 个 token。无论是否复用前缀，GLM-4.5 都是 0/8，Qwen3-235B 都是 8/8。<a href="https://github.com/EtherealBian/spark-fuse/blob/27d64bf0c032ee84b07d56e24dfc3e7d2cd533d1/docs/glm45-manifest.md">查看逐项判分 ↗</a></p>
     <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/docs/glm45-355b.md">355B 测量方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/reports/glm45-355b/summary.json">复核 355B 请求 ↗</a></div>
   </section>
 </main></body></html>
