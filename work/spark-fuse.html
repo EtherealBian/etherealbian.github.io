@@ -14,7 +14,12 @@
       <p>这个编译器读入 PyTorch 导出的计算图，为可融合的子图生成 CUDA C++。在 DGX Spark 上，我用四层 BERT 检查一次前向究竟要启动多少个 GPU 内核。</p>
       <nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#timing">看内核启动次数 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav>
     </div>
-    <figure class="sf-plate"><img src="../assets/plates/sparkfuse-qkv-fusion.webp" width="1600" height="1000" alt="三次矩阵乘法，合成一次。标记 Q、K、V 的三条网格色带并排合为一张，三种颜色仍清晰可辨。"><figcaption>同一层的三个投影共用一次矩阵乘法，仍分别返回 Q、K、V。</figcaption></figure>
+    <figure class="sf-plate">
+      <figcaption>同一层内，Q、K、V 共用一次 INT8 矩阵乘法，再分别写回 BF16。</figcaption>
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-qkv-atlas.webp" aria-label="放大 Q、K、V 工程剖面图，查看权重布局、CUDA 执行路径和内核计数">
+        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-qkv-atlas.webp" width="2520" height="1575" alt="左：三组 768 × 768 的权重沿列拼成 768 × 2304。右：INT32 累加后，经缩放和偏置分别写回 BF16；8 个请求的 8 个返回张量均与量化基线逐字节一致。下：四种实现分别启动 233、88、72、64 次 GPU 内核。">
+      </a>
+    </figure>
   </header>
   <section id="timing" class="sf-launches" aria-labelledby="sf-launch-title">
     <div><p class="sf-note">四层 BERT · 33 个 token</p><h2 id="sf-launch-title">一次前向启动多少次 GPU 内核？</h2><p>四种实现使用相同输入。每层先共享输入的量化结果，再把三组投影权重并排打包。最终实现的八个返回值与量化 eager 逐字节一致。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">核对图改写与原始计数 ↗</a></div>

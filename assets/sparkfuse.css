@@ -12,3 +12,22 @@
 .sf-launches{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.2fr);gap:clamp(24px,4.8vw,76px);align-items:center;padding:clamp(28px,4vw,54px) 0;border-top:1px solid var(--sf-line)}
 .sf-launches h2{font-size:clamp(1.5rem,2.8vw,2.3rem);letter-spacing:-.035em;margin:.2em 0}.sf-launches p:not(.sf-note){color:var(--sf-body);line-height:1.85}.sf-launches a{display:inline-block;margin-top:.65em;color:var(--sf-deep);text-underline-offset:4px}.sf-launches dl{margin:0;display:grid;grid-template-columns:repeat(4,1fr);gap:.6em}.sf-launches dl div{border-top:2px solid #a4afb7;padding-top:.75em}.sf-launches dl div:last-child{border-color:#304dae;color:#263e91}.sf-launches dt{font-size:.88rem}.sf-launches dd{font:550 clamp(1.8rem,3.5vw,3rem)/1.15 var(--sans);margin:.2em 0 0;font-variant-numeric:tabular-nums}.sf-rest article:only-of-type{grid-column:1/-1;max-width:72ch}
 @media(max-width:760px){.sf-launches{grid-template-columns:1fr;gap:18px}.sf-launches dt{font-size:.78rem}}
+
+/* 图版与正文使用不同的阅读宽度，保留小屏原图入口。 */
+.sf-hero{display:block}
+.sf-plate{position:relative}
+.sf .sf-plate{margin-top:clamp(20px,3vw,38px)}
+.sf-plate figcaption{color:#42566f;font-size:.9rem;line-height:1.55;margin:0 8.5em .65em 0}
+.sf-enlarge{display:block;color:#264b74;cursor:zoom-in}
+.sf-enlarge span{position:absolute;inset:0 0 auto auto;font-size:.88rem;font-weight:650;text-decoration:underline;text-underline-offset:3px}
+.sf-enlarge:hover span{color:#142e51;text-decoration-thickness:2px}
+@media(min-width:761px){
+ .sf-intro{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);column-gap:clamp(24px,6vw,82px);align-items:start}
+ .sf-intro .sf-issue{grid-area:1/1}.sf-intro h1{grid-area:2/1/4/2;margin:9px 0 0}
+ .sf-intro>p:not(.sf-issue){grid-area:1/2/3/3;align-self:end;margin:0}.sf-intro .sf-links{grid-area:3/2;margin-top:14px}
+}
+@media print{.sf .sf-plate{max-width:none}.sf-enlarge span{display:none}}
+@media(max-width:560px){
+ .sf-plate figcaption{margin-right:0}.sf-enlarge{display:flex;flex-direction:column}
+ .sf-enlarge span{position:static;order:1;align-self:flex-end;padding:.45em 0}
+}
