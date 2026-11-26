@@ -550,7 +550,46 @@ details[open] > summary .icon {
   font-size: 1rem;
   line-height: 1.8;
 }
-.cover-focus span { display: inline-block; max-width: 100%; }
+/* 定位与方向分开；换行后的首项不带分隔点。 */
+.cover-position strong {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: .8em;
+  overflow: hidden;
+}
+.cover-position [lang] { position: relative; }
+.cover-position [lang]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -.4em;
+  top: 50%;
+  height: .85em;
+  border-inline-start: 1px solid currentColor;
+  transform: translateY(-50%);
+}
+.cover-topics {
+  margin-block-start: clamp(10px, 1vw, 16px);
+  font-size: .96em;
+  line-height: 1.65;
+}
+.cover-topics ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  overflow: hidden;
+}
+.cover-topics li { position: relative; }
+.cover-topics li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -.5em;
+  inset-block-start: .825em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
 @media (max-width: 680px) {
   .ring-cover {
     grid-template-columns: minmax(0, 1.17fr) minmax(0, .83fr);
