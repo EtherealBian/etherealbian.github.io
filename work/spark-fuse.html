@@ -30,7 +30,7 @@
     <table><caption>单请求 · 每次生成 32 个 token · 解码延迟中位数（ms/token，越低越好）</caption><thead><tr><th scope="col">输入长度</th><th scope="col">PyTorch eager</th><th scope="col">SparkFuse 共享权重</th></tr></thead><tbody>
       <tr><th scope="row">128 token</th><td>284.52</td><td>284.52</td></tr><tr><th scope="row">2,048 token</th><td>310.84</td><td>310.39</td></tr></tbody></table>
     <p>两种输入长度各用两条独立提示验证：生成的 token 相同，在相同前缀上逐步比较，整份 logits 也逐字节一致。四个计时请求的中位数接近，不能据此判断共享权重让整模型解码更快。</p>
-    <p>把同一条 128-token 输入分两段预填充，第 6 个输出 token 变了；即使不恢复缓存，也能重现。固定解码输入后，八条分支中，原地分段与恢复快照两种方式的全词表 logits 都逐位相同。<a href="https://github.com/EtherealBian/spark-fuse/blob/b649bc033ec4f5f566e2c8a86bf37f5ffe331e8f/docs/qwen32b-attribution.md">用原始 BF16 数据复核这次分歧 ↗</a></p>
+    <p>把同一条 128-token 输入分两段预填充，第 6 个输出 token 变了；即使不恢复缓存，也能重现。固定解码输入后，八条分支中，原地分段与恢复快照两种方式的全词表 logits 都逐位相同。<a href="https://github.com/EtherealBian/spark-fuse/blob/b649bc033ec4f5f566e2c8a86bf37f5ffe331e8f/docs/qwen32b-attribution.md">复核整模型 BF16 对照 ↗</a>。再单测第一层，四条短输入都在 K/V 投影出现差异；将两段的投影行数补齐后，三个采样位置与整段计算逐位相同。<a href="https://github.com/EtherealBian/spark-fuse/blob/637b2d3cb6b142dc2db9aa80b07d98add6423dc4/docs/qwen32b-layer0-shape.md">复核首层投影 ↗</a></p>
     <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/docs/qwen32b.md">阅读 32B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/reports/qwen32b-summary.json">核对延迟与一致性 ↗</a></div>
   </section>
   <section class="analysis" id="qwen72b"><div class="section-label">03 <i>/</i> QUANTIZED SERVING</div><h2>72B 服务：哪些前缀不用重算？</h2>
