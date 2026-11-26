@@ -36,6 +36,7 @@
     <p>单台 DGX Spark 运行 Qwen2.5-72B-Instruct（Q4_K_M）。llama.cpp 的 CUDA 后端执行模型；SparkFuse 根据输入 token 选择缓存槽，并核对实际复用量和输出。</p>
     <table><caption>单槽 · 相同请求关闭与开启缓存复用 · 每次固定生成 24 个 token</caption><thead><tr><th scope="col">输入长度</th><th scope="col">预填充中位数（ms）：关 → 开</th><th scope="col">输出逐 token 相同</th></tr></thead><tbody><tr><th scope="row">256 token</th><td>753 → 279</td><td>3/4 对</td></tr><tr><th scope="row">2,048 token</th><td>6,072 → 286</td><td>4/4 对</td></tr></tbody></table>
     <p>两个槽依次处理六个请求时，交替流量下两种路由的预填充量分别为 2,088 和 2,088 token。换成折返流量，轮询需要处理 6,144 token，按最长前缀选槽需要 2,088 token；两种策略的输出有 11/12 对完全一致。这里测的是串行请求，不是并发吞吐。</p>
-    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/fe03467fda6bb81354f9686a029b2053f8bb9444/docs/qwen72b.md">阅读 72B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/fe03467fda6bb81354f9686a029b2053f8bb9444/reports/qwen72b/summary.json">复核缓存、路由与输出 ↗</a></div>
+    <p>提前准备公共前缀后，四条 2,048-token 提示的请求中位耗时从 11.72 秒降到 5.64 秒，每条生成的 24 个 token 都与冷对照相同。准备本身耗时中位数为 6.36 秒；按这四条请求逐条估算，都要命中两次才回本。<a href="https://github.com/EtherealBian/spark-fuse/blob/7d73c0dea453aa9d4985e57b1350e3fddbd20b67/docs/qwen72b.md#prepared-prefix">查看准备开销与逐条对照 ↗</a></p>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/7d73c0dea453aa9d4985e57b1350e3fddbd20b67/docs/qwen72b.md">阅读 72B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/fe03467fda6bb81354f9686a029b2053f8bb9444/reports/qwen72b/summary.json">复核缓存、路由与输出 ↗</a></div>
   </section>
 </main></body></html>
