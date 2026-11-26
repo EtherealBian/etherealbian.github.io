@@ -13,7 +13,7 @@
   <header class="sheet-title"><div class="issue"><span>ENGINEERING RECORD <i>/</i> 08</span><span>AI Infrastructure</span></div>
     <h1 lang="en">SparkFuse<b>.</b></h1><h2>从 PyTorch 计算图，到一次 CUDA 发射</h2>
     <p>BERT 在一次注意力计算之后，把投影结果与残差相加，再做 LayerNorm。SparkFuse 从 <code>torch.export</code> 图中识别这两个相邻算子，生成可读的 CUDA C++。前面的线性投影仍由 PyTorch 执行。</p>
-    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">查看实测时间 ↓</a></nav>
+    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">BERT 算子计时 ↓</a><a href="#qwen32b">32B 整模型实测 ↓</a></nav>
   </header>
   <div class="exhibit-grid"><figure class="evidence"><div class="plate-head"><span>FIG. 08A</span><b>BertSelfOutput · 算子融合</b></div><div class="exhibit"><img src="../assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="残差相加与带仿射参数的 LayerNorm 被编译为一个 CUDA kernel，线性投影仍在融合区外。"></div><figcaption><span>图中只画出融合区域。计时包含它前面的线性投影。</span></figcaption></figure>
     <aside class="readout"><div class="rail-kicker">DGX SPARK <i>/</i> GB10</div><strong>12.86 µs</strong><p>在留作计时的第四组输入上，整个 BertSelfOutput 模块的热设备时间。</p><dl><dt>输入</dt><dd>BF16，1 × 97 × 768，固定随机权重。</dd><dt>对照</dt><dd>同一设备、同一模块，PyTorch eager 为 14.46 µs。</dd></dl><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json">核对每轮采样 ↗</a></aside>
@@ -24,5 +24,12 @@
       <tr><th scope="row">PyTorch eager</th><td>14.46</td><td>27.52</td></tr><tr><th scope="row">SparkFuse 默认布局</th><td>14.20</td><td>47.09</td></tr><tr><th scope="row">SparkFuse 实测选型</th><td>12.86</td><td>45.92</td></tr></tbody></table>
     <p>在这组输入上，选型缩短了 GPU 执行时间；从主机发起单次调用，eager 仍然更快。TorchInductor 未通过这次逐元素精度检查，因此不列速度。数据仅覆盖这个输出模块。</p>
     <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/tools/bert_output.py">复核计时方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/docs/performance.md">查看其他形状的对照 ↗</a></div>
+  </section>
+  <section class="analysis" id="qwen32b"><div class="section-label">02 <i>/</i> FULL MODEL</div><h2>32B 解码：两条路径共用一份权重</h2>
+    <p>单台 DGX Spark 以 BF16 运行 Qwen2.5-32B 的全部 64 层。预填充分别读取 gate 和 up 投影；逐 token 解码将两次投影合为一次矩阵乘法，再调用生成的 CUDA SwiGLU。两条路径复用同一块权重存储，无需另存 33.75 GiB 的合并权重。</p>
+    <table><caption>单请求 · 每次生成 32 个 token · 解码延迟中位数（ms/token，越低越好）</caption><thead><tr><th scope="col">输入长度</th><th scope="col">PyTorch eager</th><th scope="col">SparkFuse 共享权重</th></tr></thead><tbody>
+      <tr><th scope="row">128 token</th><td>284.52</td><td>284.52</td></tr><tr><th scope="row">2,048 token</th><td>310.84</td><td>310.39</td></tr></tbody></table>
+    <p>两种输入长度各用两条独立提示验证：生成的 token 相同，在相同前缀上逐步比较，整份 logits 也逐字节一致。四个计时请求的中位数接近，不能据此判断共享权重让整模型解码更快。</p>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/docs/qwen32b.md">阅读 32B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/reports/qwen32b-summary.json">核对延迟与一致性 ↗</a></div>
   </section>
 </main></body></html>
