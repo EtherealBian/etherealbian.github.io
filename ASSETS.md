@@ -41,3 +41,5 @@
 - `assets/plates/sparkfuse-kernel.svg`: original diagram of the two fused operations in the [BertSelfOutput experiment](https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json).
 
 - `assets/plates/vcu118-rocket-boot.svg`：本站原创启动路径图。根据 VCU118 Rocket 工程的入口地址和流水级绘制，非板上实拍或实测时序。
+
+- `assets/plates/sparkfuse-prefix.svg`：本站原创 KV 复用示意图。一份共享前缀连接两条续写路径，线数与几何长度不编码层数、耗时或显存量。数据见 [32B 双请求实测](https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen32b-fork.md)。

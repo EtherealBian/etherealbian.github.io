@@ -569,18 +569,18 @@
               </div>
             </article>
             <article class="project infra" data-group="infra" id="spark-fuse" aria-labelledby="spark-fuse-title">
-              <div class="catalog-meta" lang="en"><span><b>08</b> / AI Infrastructure</span><span>GPU compiler</span></div>
-              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 SparkFuse 的 CUDA 融合图和基准结果"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="BERT 残差加法与 LayerNorm 由同一个 CUDA kernel 执行。"></a>
+              <div class="catalog-meta" lang="en"><span><b>08</b> / AI Infrastructure</span><span>Inference systems</span></div>
+              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 SparkFuse 的前缀复用图和推理实测"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-prefix.svg" width="800" height="500" alt="一份共享 KV 前缀在切点分成两条生成路径。"></a>
               <div class="project-body">
                 <div class="project-heading">
-                  <h3 id="spark-fuse-title" lang="en"><a href="work/spark-fuse.html">SparkFuse: PyTorch to CUDA<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <h3 id="spark-fuse-title" lang="en"><a href="work/spark-fuse.html">SparkFuse<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
                   <div class="project-links" lang="en">
                     <a class="entry-link" href="work/spark-fuse.html" aria-label="Case study: SparkFuse compiler">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
                     <a class="source-link" href="https://github.com/EtherealBian/spark-fuse" aria-label="GitHub: SparkFuse">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
                   </div>
                 </div>
-                <p class="project-summary">在 DGX Spark 上把 BERT 的<strong>残差加法与 LayerNorm 融合为一个 CUDA kernel</strong>，在 32B 上验证权重共享，并用量化模型实测请求调度和单机容量，最高实测到 GLM-4.5 355B（低比特量化）。</p>
-                <ul class="tags" lang="en"><li>torch.export</li><li>CUDA C++</li><li>DGX SPARK</li></ul>
+                <p class="project-summary">在 DGX Spark 上把 PyTorch 子图编译成 CUDA，并测量真实模型的请求耗时。<strong>两个 32B 请求共享长前缀，总耗时从 9.44 秒降到 7.66 秒</strong>；改测短输入，复用反而多用约 0.30 秒。</p>
+                <ul class="tags" lang="en"><li>CUDA C++</li><li>DGX SPARK</li></ul>
               </div>
             </article>
             <article class="project hardware" data-group="hardware" id="vcu118-rocket" aria-labelledby="vcu118-rocket-title">
