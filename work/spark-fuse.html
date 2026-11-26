@@ -13,7 +13,7 @@
   <header class="sheet-title"><div class="issue"><span>ENGINEERING RECORD <i>/</i> 08</span><span>AI Infrastructure</span></div>
     <h1 lang="en">SparkFuse<b>.</b></h1><h2>从 PyTorch 计算图，到一次 CUDA 发射</h2>
     <p>BERT 在一次注意力计算之后，把投影结果与残差相加，再做 LayerNorm。SparkFuse 从 <code>torch.export</code> 图中识别这两个相邻算子，生成可读的 CUDA C++。前面的线性投影仍由 PyTorch 执行。</p>
-    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">BERT 算子计时 ↓</a><a href="#qwen32b">32B 整模型实测 ↓</a></nav>
+    <nav class="bench-links" aria-label="项目阅读入口"><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a><a href="#timing">BERT 算子计时 ↓</a><a href="#qwen32b">32B 整模型实测 ↓</a><a href="#qwen72b">72B 缓存与路由 ↓</a></nav>
   </header>
   <div class="exhibit-grid"><figure class="evidence"><div class="plate-head"><span>FIG. 08A</span><b>BertSelfOutput · 算子融合</b></div><div class="exhibit"><img src="../assets/plates/sparkfuse-kernel.svg" width="800" height="500" alt="残差相加与带仿射参数的 LayerNorm 被编译为一个 CUDA kernel，线性投影仍在融合区外。"></div><figcaption><span>图中只画出融合区域。计时包含它前面的线性投影。</span></figcaption></figure>
     <aside class="readout"><div class="rail-kicker">DGX SPARK <i>/</i> GB10</div><strong>12.86 µs</strong><p>在留作计时的第四组输入上，整个 BertSelfOutput 模块的热设备时间。</p><dl><dt>输入</dt><dd>BF16，1 × 97 × 768，固定随机权重。</dd><dt>对照</dt><dd>同一设备、同一模块，PyTorch eager 为 14.46 µs。</dd></dl><a href="https://github.com/EtherealBian/spark-fuse/blob/1249a325a3c0edf2567554e2afb1215a1875ad5e/reports/bert-self-output-guarded-gb10.json">核对每轮采样 ↗</a></aside>
@@ -31,5 +31,11 @@
       <tr><th scope="row">128 token</th><td>284.52</td><td>284.52</td></tr><tr><th scope="row">2,048 token</th><td>310.84</td><td>310.39</td></tr></tbody></table>
     <p>两种输入长度各用两条独立提示验证：生成的 token 相同，在相同前缀上逐步比较，整份 logits 也逐字节一致。四个计时请求的中位数接近，不能据此判断共享权重让整模型解码更快。</p>
     <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/docs/qwen32b.md">阅读 32B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/4a0d37b754cd12297b98d48fdb3e257183e14c0b/reports/qwen32b-summary.json">核对延迟与一致性 ↗</a></div>
+  </section>
+  <section class="analysis" id="qwen72b"><div class="section-label">03 <i>/</i> QUANTIZED SERVING</div><h2>72B 服务：哪些前缀不用重算？</h2>
+    <p>单台 DGX Spark 运行 Qwen2.5-72B-Instruct（Q4_K_M）。llama.cpp 的 CUDA 后端执行模型；SparkFuse 根据输入 token 选择缓存槽，并核对实际复用量和输出。</p>
+    <table><caption>单槽 · 相同请求关闭与开启缓存复用 · 每次固定生成 24 个 token</caption><thead><tr><th scope="col">输入长度</th><th scope="col">预填充中位数（ms）：关 → 开</th><th scope="col">输出逐 token 相同</th></tr></thead><tbody><tr><th scope="row">256 token</th><td>753 → 279</td><td>3/4 对</td></tr><tr><th scope="row">2,048 token</th><td>6,072 → 286</td><td>4/4 对</td></tr></tbody></table>
+    <p>两个槽依次处理六个请求时，交替流量下两种路由的预填充量分别为 2,088 和 2,088 token。换成折返流量，轮询需要处理 6,144 token，按最长前缀选槽需要 2,088 token；两种策略的输出有 11/12 对完全一致。这里测的是串行请求，不是并发吞吐。</p>
+    <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/fe03467fda6bb81354f9686a029b2053f8bb9444/docs/qwen72b.md">阅读 72B 实验方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/fe03467fda6bb81354f9686a029b2053f8bb9444/reports/qwen72b/summary.json">复核缓存、路由与输出 ↗</a></div>
   </section>
 </main></body></html>
