@@ -50,7 +50,7 @@
   <section class="analysis" id="qwen235b"><div class="section-label">05 <i>/</i> SINGLE-SPARK CAPACITY</div><h2>一台 Spark 跑 235B，单个请求要多久？</h2>
     <p>Qwen3-235B-A22B 的两片 Q2_K 权重共 85.69 GB。校验完整文件后，llama.cpp CUDA 后端加载了全部 94 层和输出层。每层从 128 个专家中选 8 个参与计算。</p>
     <table><caption>模型已加载 · 不复用提示缓存 · 每个请求固定生成 16 个 token</caption><thead><tr><th scope="col">输入长度</th><th scope="col">请求耗时中位数</th><th scope="col">重复请求输出一致</th></tr></thead><tbody><tr><th scope="row">128 token</th><td>1.74 秒</td><td>2/2 条</td></tr><tr><th scope="row">1,024 token</th><td>5.07 秒</td><td>2/2 条</td></tr></tbody></table>
-    <p>每种长度测两条提示，再倒序各跑一次。整机可用内存每秒采样一次：装载阶段最低 35.9 GiB，请求阶段最低 35.5 GiB。这里验证能否运行，没有测量量化对回答质量的影响。</p>
+    <p>每种长度测两条提示，再倒序各跑一次。整机可用内存每秒采样一次：装载阶段最低 35.9 GiB，请求阶段最低 35.5 GiB。另测 32 个自然结束的流式请求：微批从 128 调到 256，首个可见字符提前约 28%–30%；但一条短解释稳定地少了一个词，因此保留原默认值。<a href="https://github.com/EtherealBian/spark-fuse/blob/f357693c73830023e4eefa5272037dc68c2950ad/docs/qwen235b-natural.md">查看逐 token 对照 ↗</a></p>
     <div class="bench-links"><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/docs/qwen235b.md">查看容量与测量方法 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/1c409dce0bac06563a8bdf44e98e930b8a54feee/reports/qwen235b/summary.json">复核八个请求 ↗</a><a href="https://github.com/EtherealBian/spark-fuse/blob/a88e63c8fbdf8dcfd8bc7209cf599ac527834c1e/docs/qwen235b-tiles.md">235B 预填充对照 ↗</a></div>
   </section>
   <section class="analysis" id="glm355b"><div class="section-label">06 <i>/</i> SINGLE-SPARK INFERENCE</div><h2>单台 DGX Spark 上的 GLM-4.5 355B</h2>
