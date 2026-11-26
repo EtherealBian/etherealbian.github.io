@@ -10,32 +10,22 @@
 <main class="sheet-wrap" id="sheet">
   <header class="sf-hero">
     <div class="sf-intro"><p class="sf-issue">工程图志 08 <span>/</span> AI Infrastructure</p><h1 lang="en">SparkFuse</h1>
-    <h2>单台 DGX Spark 上的推理优化</h2><p>从 PyTorch 计算图生成 CUDA，再从请求发起一直测到输出返回。在 32B 长输入实验里，两条请求读同一段上下文。把准备快照的时间也算上，第一条略慢，第二条才让缓存回本。</p><nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#qwen32b">看双请求实测 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav></div>
-    <figure class="sf-plate"><img src="../assets/plates/sparkfuse-prefix.svg" width="800" height="500" alt="一份前缀缓存从同一切点分给 A、B 两条续写路径。"><figcaption>两条请求各自续写，复用同一份前缀的键和值（KV）。</figcaption></figure>
+    <h2>为 DGX Spark 编写推理编译器</h2><p>SparkFuse 把 PyTorch 图中可融合的算子编译成 CUDA C++。除了记录一次前向需要发射多少个 kernel，我还在同一台机器上测了另一个问题：两条请求读同一段长上下文时，能省下多少重复计算？</p><nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#qwen32b">看双请求实测 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav></div>
+    <figure class="sf-plate"><img src="../assets/plates/sparkfuse-cache-prism.svg" width="800" height="500" alt="一份前缀缓存从同一切点分给 A、B 两条续写路径。"><figcaption>两条请求各自续写，复用同一份前缀的键和值（KV）。</figcaption></figure>
   </header>
   <section class="sf-study" id="qwen32b" aria-labelledby="study-title">
-    <div class="sf-lead"><p class="sf-note">Qwen2.5-32B · 64 层 BF16</p><h2 id="study-title">第二条请求，<br>能收回快照成本吗？</h2><p>从头算，两条请求就要各读一遍前缀。复用时，先算前缀并保存快照，再分别恢复给两个分支。比较的是两条请求都完成的总时间，快照准备也算在内。</p></div>
-    <fieldset class="sf-compare"><legend>切换输入长度</legend>
-      <input class="sf-radio" type="radio" name="shape" id="sf-long" checked><label for="sf-long">长输入</label>
-      <input class="sf-radio" type="radio" name="shape" id="sf-short"><label for="sf-short">短输入</label>
-      <div class="sf-charts">
-        <div class="sf-panel sf-long"><h3>2,048 个输入 token，共享 1,536 个</h3><p class="sf-measure">提示组 1 · 双请求总耗时中位数</p>
-          <div class="sf-row"><div><span>从头计算</span><b>9.443 s</b></div><div class="sf-track"><i style="--length:94.43%"></i></div></div>
-          <div class="sf-row sf-snap"><div><span>复用前缀</span><b>7.659 s</b></div><div class="sf-track"><i style="--length:76.59%"></i></div></div>
-          <div class="sf-axis" aria-hidden="true"><span>0</span><span>5</span><span>10 秒</span></div>
-          <p class="sf-verdict"><strong>少用约 19%。</strong>另一组为 9.441 → 7.662 秒。两组共四条分支，8 步全词表输出分数逐字节一致。</p></div>
-        <div class="sf-panel sf-short"><h3>128 个输入 token，共享 96 个</h3><p class="sf-measure">提示组 1 · 双请求总耗时中位数</p>
-          <div class="sf-row"><div><span>从头计算</span><b>4.704 s</b></div><div class="sf-track"><i style="--length:47.04%"></i></div></div>
-          <div class="sf-row sf-snap"><div><span>复用前缀</span><b>5.002 s</b></div><div class="sf-track"><i style="--length:50.02%"></i></div></div>
-          <div class="sf-axis" aria-hidden="true"><span>0</span><span>5</span><span>10 秒</span></div>
-          <p class="sf-verdict"><strong>反而多用约 0.30 秒。</strong>另一组为 4.715 → 5.015 秒。四条分支的完整分数均不同，其中一条在第 6 个 token 改变了输出。</p></div>
-      </div>
-    </fieldset>
-    <p class="sf-decision"><strong>仍默认从头计算。</strong>计入快照准备后，长输入的第一条分支多用 14–34 毫秒；两条合计省下 1.77–1.79 秒。短输入的 8 个配对无一回本。固定同一批长输入再测，六个共享切点都保持了完整分数一致：共享 511 和 1,536 个 token 时，最保守的分层节省率分别为 6.1% 和 19.0%。<a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/prefix32-closeout.md">核对六个切点与测试条件 ↗</a></p>
+    <div class="sf-lead"><p class="sf-note">Qwen2.5-32B · BF16</p><h2 id="study-title">一段前缀算一次，<br>两条请求各自续写。</h2><p>每条输入有 2,048 个 token，前 1,536 个相同。保存这段前缀的键和值，两条分支就可以从同一份快照接着算，各生成 8 个 token。计时包括快照准备，直到两份输出都返回主机。</p></div>
+    <figure class="sf-chart" aria-labelledby="chart-title"><figcaption id="chart-title">两条请求的总耗时<span>提示组 1 · 中位数</span></figcaption>
+      <div class="sf-row"><div><span>从头计算</span><b>9.443 秒</b></div><div class="sf-track" aria-hidden="true"><i style="--length:94.43%"></i></div></div>
+      <div class="sf-row sf-snap"><div><span>复用前缀</span><b>7.659 秒</b></div><div class="sf-track" aria-hidden="true"><i style="--length:76.59%"></i></div></div>
+      <div class="sf-axis" aria-hidden="true"><span>0</span><span>5</span><span>10 秒</span></div>
+      <p class="sf-verdict">第二组提示测得 9.441 → 7.662 秒。两组各有两条分支，8 步生成的全词表 BF16 分数均逐字节一致。</p>
+    </figure>
+    <p class="sf-decision">固定这四条长输入，只改变前缀切点：六个实测位置的完整输出分数均与从头计算一致。<a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/prefix32-closeout.md">查看六个切点的实测记录 ↗</a></p>
   </section>
-  <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">另外两种尺度</h2>
-    <article id="timing"><h3>编译器删掉了哪些发射？</h3><p>四层 BERT 中，让 Q、K、V 共用每层输入的量化结果，再合并三个投影。一次前向的 CUDA kernel 发射由 <b>233 次减到 64 次</b>；八个返回值与量化 eager 逐字节一致。这里数的是发射次数，不代表耗时缩短相同比例。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">看编译与对照方法 ↗</a></article>
-    <article id="glm355b"><h3>两个用户，谁先拿到完整答案？</h3><p>在 llama.cpp 的 CUDA 后端运行低比特 GLM-4.5 355B。两条 128-token 请求同时放行，收齐两份响应从 <b>5.17 秒缩至 4.34 秒</b>，第一份完整响应却晚了 66%–69%，一条提示的输出也变了。项目保留原调度。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/glm45-paired.md">看两条请求的时间线 ↗</a></article>
+  <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">从 CUDA 内核到整模型</h2>
+    <article id="timing"><h3>四层 BERT：合并 Q、K、V 投影</h3><p>四层 BERT 中，让 Q、K、V 共用每层输入的量化结果，再合并三个投影。一次前向的 CUDA kernel 发射由 <b>233 次减到 64 次</b>；八个返回值与量化 eager 逐字节一致。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">看编译与对照方法 ↗</a></article>
+    <article id="glm355b"><h3>单机运行量化 GLM-4.5 355B</h3><p>这项独立实验使用 llama.cpp 的 CUDA 后端。校验两个 UD-IQ1_S 权重分片后，在已加载模型上输入 128 个 token、生成 16 个 token，本机 HTTP 请求耗时中位数为 <b>2.588 秒</b>。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/glm45-355b.md">看权重校验与请求计时 ↗</a></article>
   </section>
   <footer class="sf-footer"><div><span>实验档案</span><nav aria-label="补充实验"><a id="qwen72b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen72b.md">72B 路由</a><a id="gpt-oss-120b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/gpt-oss-120b.md">120B 微批</a><a id="qwen235b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen235b.md">235B 容量</a></nav></div><a href="https://github.com/EtherealBian/spark-fuse/blob/8f2596c28ac3dbed4093960bb36d1206dd0bf31a/audit/replay-key-results.sh">用 CPU 复核实测报告 ↗</a></footer>
 </main></body></html>
