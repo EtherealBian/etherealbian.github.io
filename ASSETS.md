@@ -40,6 +40,8 @@
 
 - `assets/plates/vcu118-rocket-boot.svg`：本站原创启动路径图。根据 VCU118 Rocket 工程的入口地址和流水级绘制，非板上实拍或实测时序。
 
+<a id="sparkfuse-artwork"></a>
+
 ### SparkFuse：实物与推理实测
 
 - `assets/plates/sparkfuse-system.webp`（1200 × 750）与 `assets/plates/sparkfuse-system-full.webp`（2080 × 1300）是同一张总览。实物照片：[Nvidia DGX Spark oblique view dllu](https://commons.wikimedia.org/wiki/File:Nvidia_DGX_Spark_oblique_view_dllu.jpg)，Daniel Lu（dllu），Wikimedia Commons，[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。改动：去除桌面背景、缩放、添加投影和实验图解。合成图版由 EtherealBian 按同一许可发布。照片用于识别设备型号，不是本次实验现场照。

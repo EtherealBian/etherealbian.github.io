@@ -16,10 +16,9 @@
     </div>
     <figure class="sf-plate">
       <figcaption>同一台 DGX Spark：上半图是 BERT 编译实验，下半图是两项独立的整模型推理实验。</figcaption>
-      <a class="sf-enlarge" href="../assets/plates/sparkfuse-system-full.webp" aria-label="放大 DGX Spark 实测总览">
-        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-system.webp" srcset="../assets/plates/sparkfuse-system.webp 1200w, ../assets/plates/sparkfuse-system-full.webp 2080w" sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1240px) 94vw, 1160px" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。">
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-system-full.webp?v=2" aria-label="放大 DGX Spark 实测总览">
+        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-system.webp?v=2" srcset="../assets/plates/sparkfuse-system.webp?v=2 1200w, ../assets/plates/sparkfuse-system-full.webp?v=2 2080w" sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1240px) 94vw, 1160px" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。">
       </a>
-      <p class="sf-credit">设备照片：<a href="https://commons.wikimedia.org/wiki/File:Nvidia_DGX_Spark_oblique_view_dllu.jpg">Daniel Lu（dllu）</a>；已去背并编排。照片与合成图均采用 <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。</p>
     </figure>
   </header>
   <section id="timing" class="sf-launches" aria-labelledby="sf-launch-title">
@@ -47,5 +46,5 @@
   <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">量化模型的单机推理</h2>
     <article id="glm355b"><h3>单机运行量化 GLM-4.5 355B</h3><p>这项独立实验使用 llama.cpp 的 CUDA 后端。校验两个 UD-IQ1_S 权重分片后，在已加载模型上输入 128 个 token、生成 16 个 token，本机 HTTP 请求耗时中位数为 <b>2.588 秒</b>。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/glm45-355b.md">看权重校验与请求计时 ↗</a></article>
   </section>
-  <footer class="sf-footer"><div><span>实验档案</span><nav aria-label="补充实验"><a id="qwen72b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen72b.md">72B 路由</a><a id="gpt-oss-120b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/gpt-oss-120b.md">120B 微批</a><a id="qwen235b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen235b.md">235B 容量</a></nav></div><a href="https://github.com/EtherealBian/spark-fuse/blob/8f2596c28ac3dbed4093960bb36d1206dd0bf31a/audit/replay-key-results.sh">用 CPU 复核实测报告 ↗</a></footer>
+  <footer class="sf-footer"><div><span>实验档案</span><nav aria-label="补充实验"><a id="qwen72b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen72b.md">72B 路由</a><a id="gpt-oss-120b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/gpt-oss-120b.md">120B 微批</a><a id="qwen235b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen235b.md">235B 容量</a><a href="https://github.com/EtherealBian/etherealbian.github.io/blob/main/ASSETS.md#sparkfuse-artwork">图片来源</a></nav></div><a href="https://github.com/EtherealBian/spark-fuse/blob/8f2596c28ac3dbed4093960bb36d1206dd0bf31a/audit/replay-key-results.sh">用 CPU 复核实测报告 ↗</a></footer>
 </main></body></html>

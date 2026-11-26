@@ -233,7 +233,8 @@ def overview(totals, qwen, glm, photo):
     p.box(855, 298, 159, 52, RUST, 10); p.text(868, 330, '每层打包', 16, chalk)
     p.text(1002, 339, totals[-1], 43, chalk, 650, DIN, 'end')
 
-    p.box(0, 359, 1040, 259, '#F9F4EC'); p.box(514, 359, 526, 259, '#F4E7D8')
+    p.box(0, 359, 1040, 291, '#F9F4EC'); p.box(514, 359, 526, 291, '#F4E7D8')
+    p.group('translate(0 16)')
     p.line('M514 370v230', '#D8C6AF')
     p.text(30, 391, '长前缀复用', 23, RUST, 650)
     p.text(479, 391, 'BF16', 22, SUB, 550, DIN, 'end')
@@ -250,8 +251,7 @@ def overview(totals, qwen, glm, photo):
     p.text(30, 592, '每条 2,048 输入，共享 1,536，各生成 8', 20, SUB)
     p.text(543, 557, '本机 HTTP 请求耗时中位数', 22, INK, 550)
     p.text(543, 592, 'llama.cpp CUDA · 已加载 · 128 入 / 16 出', 20, SUB)
-    p.text(30, 640, '设备摄影：Daniel Lu（dllu） / Wikimedia Commons', 15, SUB)
-    p.text(1007, 640, '改编图版：CC BY-SA 4.0', 15, SUB, anchor='end')
+    p.end()
     return p
 
 
