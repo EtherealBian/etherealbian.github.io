@@ -1,18 +1,25 @@
 <!doctype html>
 <html lang="zh-CN"><head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SparkFuse · 单 GPU 推理实验 — EtherealBian 工程图志</title>
-  <meta name="description" content="SparkFuse 在单台 DGX Spark 上从 PyTorch 图生成 CUDA，并测量一份共享前缀能为两条 32B 请求省下多少时间。">
+  <title>PyTorch → CUDA 推理编译器 — EtherealBian 工程图志</title>
+  <meta name="description" content="SparkFuse 在 DGX Spark 上把 PyTorch 子图编译成 CUDA C++。看四层 BERT 的 Q、K、V 投影如何合并，以及每次前向少启动了多少 GPU 内核。">
   <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/sparkfuse.css">
 </head><body class="dossier sf">
 <a class="skip" href="#sheet">跳至项目</a>
 <header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#spark-fuse">← 返回工程图集</a></div></header>
 <main class="sheet-wrap" id="sheet">
   <header class="sf-hero">
-    <div class="sf-intro"><p class="sf-issue">工程图志 08 <span>/</span> AI Infrastructure</p><h1 lang="en">SparkFuse</h1>
-    <h2>为 DGX Spark 编写推理编译器</h2><p>SparkFuse 把 PyTorch 图中可融合的算子编译成 CUDA C++。除了记录一次前向需要发射多少个 kernel，我还在同一台机器上测了另一个问题：两条请求读同一段长上下文时，能省下多少重复计算？</p><nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#qwen32b">看双请求实测 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav></div>
-    <figure class="sf-plate"><img src="../assets/plates/sparkfuse-cache-prism.svg" width="800" height="500" alt="一份前缀缓存从同一切点分给 A、B 两条续写路径。"><figcaption>两条请求各自续写，复用同一份前缀的键和值（KV）。</figcaption></figure>
+    <div class="sf-intro"><p class="sf-issue">工程图志 08 <span>/</span> SparkFuse</p>
+      <h1><span lang="en">PyTorch → CUDA</span><br>推理编译器</h1>
+      <p>这个编译器读入 PyTorch 导出的计算图，为可融合的子图生成 CUDA C++。在 DGX Spark 上，我用四层 BERT 检查一次前向究竟要启动多少个 GPU 内核。</p>
+      <nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#timing">看内核启动次数 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav>
+    </div>
+    <figure class="sf-plate"><img src="../assets/plates/sparkfuse-qkv-fusion.webp" width="1600" height="1000" alt="三次矩阵乘法，合成一次。标记 Q、K、V 的三条网格色带并排合为一张，三种颜色仍清晰可辨。"><figcaption>同一层的三个投影共用一次矩阵乘法，仍分别返回 Q、K、V。</figcaption></figure>
   </header>
+  <section id="timing" class="sf-launches" aria-labelledby="sf-launch-title">
+    <div><p class="sf-note">四层 BERT · 33 个 token</p><h2 id="sf-launch-title">一次前向启动多少次 GPU 内核？</h2><p>四种实现使用相同输入。每层先共享输入的量化结果，再把三组投影权重并排打包。最终实现的八个返回值与量化 eager 逐字节一致。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">核对图改写与原始计数 ↗</a></div>
+    <dl aria-label="各实现每次前向的 CUDA 内核启动次数"><div><dt>量化 eager</dt><dd>233</dd></div><div><dt>独立量化</dt><dd>88</dd></div><div><dt>共享量化</dt><dd>72</dd></div><div><dt>再合并投影</dt><dd>64</dd></div></dl>
+  </section>
   <section class="sf-study" id="qwen32b" aria-labelledby="study-title">
     <div class="sf-lead"><p class="sf-note">Qwen2.5-32B · BF16</p><h2 id="study-title">一段前缀算一次，<br>两条请求各自续写。</h2><p>每条输入有 2,048 个 token，前 1,536 个相同。保存这段前缀的键和值，两条分支就可以从同一份快照接着算，各生成 8 个 token。计时包括快照准备，直到两份输出都返回主机。</p></div>
     <figure class="sf-chart" aria-labelledby="chart-title"><figcaption id="chart-title">两条请求的总耗时<span>提示组 1 · 中位数</span></figcaption>
@@ -23,8 +30,7 @@
     </figure>
     <p class="sf-decision">固定这四条长输入，只改变前缀切点：六个实测位置的完整输出分数均与从头计算一致。<a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/prefix32-closeout.md">查看六个切点的实测记录 ↗</a></p>
   </section>
-  <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">从 CUDA 内核到整模型</h2>
-    <article id="timing"><h3>四层 BERT：合并 Q、K、V 投影</h3><p>四层 BERT 中，让 Q、K、V 共用每层输入的量化结果，再合并三个投影。一次前向的 CUDA kernel 发射由 <b>233 次减到 64 次</b>；八个返回值与量化 eager 逐字节一致。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">看编译与对照方法 ↗</a></article>
+  <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">量化模型的单机推理</h2>
     <article id="glm355b"><h3>单机运行量化 GLM-4.5 355B</h3><p>这项独立实验使用 llama.cpp 的 CUDA 后端。校验两个 UD-IQ1_S 权重分片后，在已加载模型上输入 128 个 token、生成 16 个 token，本机 HTTP 请求耗时中位数为 <b>2.588 秒</b>。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/glm45-355b.md">看权重校验与请求计时 ↗</a></article>
   </section>
   <footer class="sf-footer"><div><span>实验档案</span><nav aria-label="补充实验"><a id="qwen72b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen72b.md">72B 路由</a><a id="gpt-oss-120b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/gpt-oss-120b.md">120B 微批</a><a id="qwen235b" href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen235b.md">235B 容量</a></nav></div><a href="https://github.com/EtherealBian/spark-fuse/blob/8f2596c28ac3dbed4093960bb36d1206dd0bf31a/audit/replay-key-results.sh">用 CPU 复核实测报告 ↗</a></footer>

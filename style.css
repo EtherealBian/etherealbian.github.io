@@ -1316,6 +1316,7 @@ details[open] > summary .icon {
   line-height: 1.45;
   color: #273f37;
 }
+#spark-fuse-title span[lang], #spark-fuse-title .sf-title-word { white-space: nowrap; }
 .project-body > p {
   font-size: 15px;
   line-height: 1.75;

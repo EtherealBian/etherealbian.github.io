@@ -40,4 +40,4 @@
 
 - `assets/plates/vcu118-rocket-boot.svg`：本站原创启动路径图。根据 VCU118 Rocket 工程的入口地址和流水级绘制，非板上实拍或实测时序。
 
-- `assets/plates/sparkfuse-cache-prism.svg`：本站原创 KV 复用示意图。金色叠片表示一份 KV 快照，紫色与冰蓝色光路分别指向两条续写分支。图中层数和距离仅为示意；减少动态效果时显示静帧。数据见 [32B 双请求实测](https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/qwen32b-fork.md)。
+- `assets/plates/sparkfuse-qkv-fusion.webp`：原创计算图海报《三次矩阵乘法，合成一次》。三张网格色带代表同一层的 Q、K、V 投影；合版只表示共享一次矩阵乘法，带宽和曲率不表示性能。参见[四层 BERT 的实测记录](https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert)。

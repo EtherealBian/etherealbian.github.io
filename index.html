@@ -570,16 +570,16 @@
             </article>
             <article class="project infra" data-group="infra" id="spark-fuse" aria-labelledby="spark-fuse-title">
               <div class="catalog-meta" lang="en"><span><b>08</b> / AI Infrastructure</span><span>Inference systems</span></div>
-              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 SparkFuse 的前缀复用图和推理实测"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-cache-prism.svg" width="800" height="500" alt="金色 KV 快照沿两条光路连接 A、B 两个续写分支。"></a>
+              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 PyTorch → CUDA 推理编译器的投影融合实测"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-qkv-fusion.webp" width="1600" height="1000" alt="三次矩阵乘法，合成一次：标着 Q、K、V 的三条矩阵色带合成一张连续曲面。"></a>
               <div class="project-body">
                 <div class="project-heading">
-                  <h3 id="spark-fuse-title" lang="en"><a href="work/spark-fuse.html">SparkFuse<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
+                  <h3 id="spark-fuse-title"><a href="work/spark-fuse.html"><span lang="en">PyTorch → CUDA</span> <span class="sf-title-word">推理编译器</span><span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
                   <div class="project-links" lang="en">
-                    <a class="entry-link" href="work/spark-fuse.html" aria-label="Case study: SparkFuse compiler">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
+                    <a class="entry-link" href="work/spark-fuse.html" aria-label="Case study: PyTorch to CUDA inference compiler">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
                     <a class="source-link" href="https://github.com/EtherealBian/spark-fuse" aria-label="GitHub: SparkFuse">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
                   </div>
                 </div>
-                <p class="project-summary">为 DGX Spark 编写的 PyTorch 子图编译器，可生成 CUDA C++。在独立的 32B 推理实验中，两条请求共享 1,536 个前缀 token，<strong>总耗时从 9.44 秒降至 7.66 秒</strong>。</p>
+                <p class="project-summary">在 DGX Spark 上，把 PyTorch 子图编译成 CUDA C++。四层 BERT 的一次 33-token 前向中，共享输入量化并合并投影后，<strong>GPU 内核启动从 233 次减至 64 次</strong>。</p>
                 <ul class="tags" lang="en"><li>CUDA C++</li><li>DGX SPARK</li></ul>
               </div>
             </article>
