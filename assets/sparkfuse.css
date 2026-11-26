@@ -31,3 +31,8 @@
  .sf-plate figcaption{margin-right:0}.sf-enlarge{display:flex;flex-direction:column}
  .sf-enlarge span{position:static;order:1;align-self:flex-end;padding:.45em 0}
 }
+
+.sf .sf-credit{font-size:.76rem;color:var(--sf-body);line-height:1.55;margin:.5em 0 0}.sf-credit a{color:inherit;text-underline-offset:3px}
+.sf-qkv-detail{grid-column:1/-1}.sf-qkv-detail summary{cursor:pointer;color:var(--sf-deep);font-weight:600;line-height:1.6}.sf-qkv-detail summary:focus-visible{outline:2px solid var(--sf-deep);outline-offset:3px}
+.sf-qkv-detail .sf-plate{margin-top:1em}.sf-qkv-detail .sf-enlarge{display:block;margin:0}.sf-qkv-detail .sf-enlarge img{width:100%}
+@media(max-width:560px){.sf-qkv-detail .sf-enlarge{display:flex}}

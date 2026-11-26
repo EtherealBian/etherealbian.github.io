@@ -2,8 +2,8 @@
 <html lang="zh-CN"><head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PyTorch → CUDA 推理编译器 — EtherealBian 工程图志</title>
-  <meta name="description" content="SparkFuse 在 DGX Spark 上把 PyTorch 子图编译成 CUDA C++。看四层 BERT 的 Q、K、V 投影如何合并，以及每次前向少启动了多少 GPU 内核。">
-  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/sparkfuse.css?v=warm1">
+  <meta name="description" content="SparkFuse 在 DGX Spark 上把 PyTorch 子图编译成 CUDA C++。实测四层 BERT 投影融合、Qwen2.5-32B 长前缀复用，以及量化 GLM-4.5 355B 的单机请求耗时。">
+  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/sparkfuse.css?v=overview1">
 </head><body class="dossier sf">
 <a class="skip" href="#sheet">跳至项目</a>
 <header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#spark-fuse">← 返回工程图集</a></div></header>
@@ -11,19 +11,28 @@
   <header class="sf-hero">
     <div class="sf-intro"><p class="sf-issue">工程图志 08 <span>/</span> SparkFuse</p>
       <h1><span lang="en">PyTorch → CUDA</span><br>推理编译器</h1>
-      <p>这个编译器读入 PyTorch 导出的计算图，为可融合的子图生成 CUDA C++。在 DGX Spark 上，我用四层 BERT 检查一次前向究竟要启动多少个 GPU 内核。</p>
+      <p>这个编译器读入 PyTorch 导出的计算图，为可融合的子图生成 CUDA C++。我用四层 BERT 测量编译前后的内核启动次数，再用同一台 DGX Spark 单独测量 32B 长前缀复用和 355B 量化推理。</p>
       <nav class="sf-links" aria-label="项目入口"><a class="sf-primary" href="#timing">看内核启动次数 ↓</a><a href="https://github.com/EtherealBian/spark-fuse">GitHub 仓库 ↗</a></nav>
     </div>
     <figure class="sf-plate">
-      <figcaption>同一层内，Q、K、V 共用一次 INT8 矩阵乘法，再分别写回 BF16。</figcaption>
-      <a class="sf-enlarge" href="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" aria-label="放大 Q、K、V 工程剖面图，查看权重布局、CUDA 执行路径和内核计数">
-        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" width="2520" height="1575" alt="左：三组 768 × 768 的权重沿列拼成 768 × 2304。右：INT32 累加后，经缩放和偏置分别写回 BF16；8 个请求的 8 个返回张量均与量化基线逐字节一致。下：四种实现分别启动 233、88、72、64 次 GPU 内核。">
+      <figcaption>同一台 DGX Spark：上半图是 BERT 编译实验，下半图是两项独立的整模型推理实验。</figcaption>
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-system-full.webp" aria-label="放大 DGX Spark 实测总览">
+        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-system.webp" srcset="../assets/plates/sparkfuse-system.webp 1200w, ../assets/plates/sparkfuse-system-full.webp 2080w" sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1240px) 94vw, 1160px" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。">
       </a>
+      <p class="sf-credit">设备照片：<a href="https://commons.wikimedia.org/wiki/File:Nvidia_DGX_Spark_oblique_view_dllu.jpg">Daniel Lu（dllu）</a>；已去背并编排。照片与合成图均采用 <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>。</p>
     </figure>
   </header>
   <section id="timing" class="sf-launches" aria-labelledby="sf-launch-title">
     <div><p class="sf-note">四层 BERT · 33 个 token</p><h2 id="sf-launch-title">一次前向启动多少次 GPU 内核？</h2><p>四种实现使用相同输入。每层先共享输入的量化结果，再把三组投影权重并排打包。最终实现的八个返回值与量化 eager 逐字节一致。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">核对图改写与原始计数 ↗</a></div>
     <dl aria-label="各实现每次前向的 CUDA 内核启动次数"><div><dt>量化 eager</dt><dd>233</dd></div><div><dt>独立量化</dt><dd>88</dd></div><div><dt>共享量化</dt><dd>72</dd></div><div><dt>再合并投影</dt><dd>64</dd></div></dl>
+    <details class="sf-qkv-detail"><summary>展开 Q/K/V 工程剖面图：权重布局、写回与输出校验</summary>
+    <figure class="sf-plate">
+      <figcaption>同一层内，Q、K、V 共用一次 INT8 矩阵乘法，再分别写回 BF16。</figcaption>
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" aria-label="放大 Q、K、V 工程剖面图，查看权重布局、CUDA 执行路径和内核计数">
+        <span>放大看原图 ↗</span><img loading="lazy" src="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" width="2520" height="1575" alt="左：三组 768 × 768 的权重沿列拼成 768 × 2304。右：INT32 累加后，经缩放和偏置分别写回 BF16；8 个请求的 8 个返回张量均与量化基线逐字节一致。下：四种实现分别启动 233、88、72、64 次 GPU 内核。">
+      </a>
+    </figure>
+    </details>
   </section>
   <section class="sf-study" id="qwen32b" aria-labelledby="study-title">
     <div class="sf-lead"><p class="sf-note">Qwen2.5-32B · BF16</p><h2 id="study-title">一段前缀算一次，<br>两条请求各自续写。</h2><p>每条输入有 2,048 个 token，前 1,536 个相同。保存这段前缀的键和值，两条分支就可以从同一份快照接着算，各生成 8 个 token。计时包括快照准备，直到两份输出都返回主机。</p></div>

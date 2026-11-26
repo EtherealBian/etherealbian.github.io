@@ -1,9 +1,12 @@
-"""Draw the two SparkFuse plates from reports/stacked-bert-gb10.json.
+"""Draw the portfolio overview and the QKV detail from the public SparkFuse reports.
 
-Usage: python tools/draw_sparkfuse.py PATH_TO_REPORT OUTPUT_DIRECTORY
-Outputs editable SVGs; the site serves rasterized WebP for consistent CJK type.
+Usage: python tools/draw_sparkfuse.py REPORTS_DIRECTORY ORIGINAL_PHOTO OUTPUT_DIRECTORY
+Requires Pillow; see ASSETS.md for the pinned photo, license and rendering instructions.
 """
 import argparse
+import base64
+import hashlib
+import io
 import json
 from pathlib import Path
 from xml.sax.saxutils import escape, quoteattr
@@ -124,20 +127,6 @@ def arrow(p, x, y, length=62):
     p.line(f'M{x} {y}h{length}m-13 -11 13 11-13 11', RUST, 4)
 
 
-def cover(totals):
-    p=Plate(960, 600, 'Q、K、V 共用一次矩阵乘法', '三组 INT8 权重按列打包，三个 BF16 输出分别写回。四层 BERT 整图的 GPU 内核启动次数从 233 次降至 64 次。')
-    p.text(35, 76, 'Q、K、V 共用一次矩阵乘法', 49, weight=750)
-    p.box(776, 34, 143, 40, PANEL, 20);p.text(847.5, 61, 'BERT × 4', 24, INK, 600, DIN, 'middle')
-    p.line('M36 103H924', HAIR, 1.4)
-    diagram(p,36,118)
-    p.box(28, 436, 904, 142, '#F3EBDF', 19)
-    p.text(52, 496, 'GPU 内核启动次数', 30, weight=700);p.text(52, 534, '四层 BERT · 33 tokens · 一次前向', 20, SUB)
-    p.text(568, 470, '量化 eager', 17, SUB, 550, CN, 'middle');p.text(569, 549, totals[0], 80, '#674F40', 550, DIN, 'middle')
-    arrow(p, 654, 515, 53)
-    p.box(745, 452, 163, 109, RUST, 16);p.text(826, 479, '每层打包', 17, WHITE, 550, CN, 'middle');p.text(824, 542, totals[-1], 71, WHITE, 650, DIN, 'middle')
-    return p
-
-
 def detail(totals, groups):
     p=Plate(1600, 1000, '四层 BERT 的 QKV 投影融合', '左侧显示冻结权重、列区间和独立写回；右侧说明 GPU 执行顺序和逐字节校验；页底列出四种实现的内核启动数及最终构成。')
     p.text(50, 86, '四层 BERT 的 QKV 投影融合', 56, weight=750)
@@ -181,11 +170,100 @@ def detail(totals, groups):
     return p
 
 
+PHOTO_SHA256 = '6c0e2a9efe3a29fafc07a34d71e7e31903b7b4d4d2a55368b34182a39dc7005a'
+
+
+def cutout(photo):
+    """Keep the physical unit and its front apertures; remove only the desk outside it."""
+    from PIL import Image, ImageDraw, ImageFilter, ImageOps
+
+    if hashlib.sha256(photo.read_bytes()).hexdigest() != PHOTO_SHA256:
+        raise ValueError('The silhouette belongs to the May 19, 2026 Commons revision; see ASSETS.md')
+    # Trace on a 1245 x 768 proxy. Transform at 2x before antialiasing the matte.
+    outline = [(211,220),(214,218),(677,64),(683,65),(996,300),(999,305),
+               (994,445),(992,450),(510,637),(504,637),(224,361),(221,355)]
+    with Image.open(photo) as source:
+        rgb = ImageOps.exif_transpose(source).convert('RGB').resize((2490,1536), Image.Resampling.LANCZOS)
+    mask = Image.new('L', rgb.size); draw = ImageDraw.Draw(mask)
+    draw.polygon([(2*x,2*y) for x,y in outline], fill=255)
+    rgb.putalpha(mask.filter(ImageFilter.GaussianBlur(0.95)))
+    rgb = rgb.crop((414,120,2008,1284)); rgb.thumbnail((1050,780), Image.Resampling.LANCZOS)
+    stream = io.BytesIO(); rgb.save(stream, format='PNG', optimize=True)
+    return base64.b64encode(stream.getvalue()).decode('ascii')
+
+
+def model_results(root):
+    def read(name):
+        return json.loads((root/name).read_bytes())
+
+    cases = read('qwen32b-fork/timing.json')['cases']
+    q = next(r for r in cases if (r['length'], r['prefix_tokens'], r['family']) == (2048, 1536, 1))
+    assert q['passes_strict_gate'] and q['byte_identical_full_logit_trajectories'] == q['trajectories_checked'] == 2
+    g = read('glm45-355b/timing.json'); ckpt = read('glm45-355b/checkpoint.json')
+    assert ckpt['model'] == 'unsloth/GLM-4.5-GGUF' and ckpt['format'] == 'UD-IQ1_S'
+    assert read('glm45-355b/runtime.json')['device'] == 'NVIDIA GB10' and g['output_per_request'] == 16
+    return [f"{q['median_wave_ms'][arm]/1000:.3f}" for arm in ('cold', 'snapshot')], f"{g['cases']['128']['wall_ms']/1000:.3f}"
+
+
+def overview(totals, qwen, glm, photo):
+    p = Plate(1040, 650, 'DGX Spark：编译器与整模型推理实测',
+              '上：Daniel Lu 摄影的 DGX Spark 与四层 BERT 的 QKV 打包。下：Qwen 长前缀双请求和量化 GLM 单机 HTTP 请求，分别计时。摄影与改编图版：CC BY-SA 4.0。')
+    chalk, walnut = '#FEFAF2', '#553A2B'
+    p.put('''<defs>
+    <linearGradient id="bench" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#F6EEDD"/><stop offset="1" stop-color="#EFDFC7"/></linearGradient>
+    <filter id="shade" x="-25%" y="-80%" width="150%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+    </defs>''')
+    p.box(0, 0, 288, 284, 'url(#bench)')
+    p.text(25, 54, 'DGX Spark', 45, walnut, 650, DIN)
+    p.text(26, 85, '单机实验平台 / NVIDIA GB10', 17, SUB, 550)
+    p.put('<path d="M38 183 175 144 269 211 122 267Z" fill="#70563D" opacity=".22" filter="url(#shade)"/>')
+    p.put(f'<image xmlns:xlink="http://www.w3.org/1999/xlink" x="28" y="98" width="232" height="170" xlink:href="data:image/png;base64,{photo}"/>')
+    # Reuse the same three-stage geometry as the full BERT engineering plate.
+    p.text(310, 47, 'Q、K、V 共用一次矩阵乘法', 33, weight=700)
+    p.box(894, 17, 119, 35, PANEL, 17)
+    p.text(953, 41, 'BERT × 4', 21, RUST, 600, DIN, 'middle')
+    diagram(p, 313, 54, .78)
+
+    # One visual band for one within-workload comparison; no speed comparison between models.
+    p.box(0, 290, 1040, 69, '#EFE4D5'); p.line('M0 290h1040', '#DECEB9', 1)
+    p.text(25, 334, 'GPU 内核启动次数', 27, weight=700)
+    p.text(270, 333, '33 tokens · 一次前向', 19, SUB)
+    p.text(589, 330, '量化 eager', 17, SUB); p.text(682, 342, totals[0], 49, walnut, 600, DIN)
+    arrow(p, 785, 324, 41)
+    p.box(855, 298, 159, 52, RUST, 10); p.text(868, 330, '每层打包', 16, chalk)
+    p.text(1002, 339, totals[-1], 43, chalk, 650, DIN, 'end')
+
+    p.box(0, 359, 1040, 259, '#F9F4EC'); p.box(514, 359, 526, 259, '#F4E7D8')
+    p.line('M514 370v230', '#D8C6AF')
+    p.text(30, 391, '长前缀复用', 23, RUST, 650)
+    p.text(479, 391, 'BF16', 22, SUB, 550, DIN, 'end')
+    p.text(30, 443, 'Qwen2.5-32B', 45, weight=650, font=DIN)
+    p.text(543, 391, '单机量化推理', 23, RUST, 650)
+    p.text(1007, 391, 'UD-IQ1_S', 22, SUB, 550, DIN, 'end')
+    p.text(543, 443, 'GLM-4.5 355B', 45, weight=650, font=DIN)
+    # The two distinct metrics deliberately share neither an axis nor a speedup bar.
+    p.text(29, 520, qwen[0], 53, '#715B4B', 550, DIN)
+    arrow(p, 191, 502, 37)
+    p.text(249, 520, qwen[1]+' s', 55, RUST, 650, DIN)
+    p.text(542, 520, glm+' s', 60, RUST, 650, DIN)
+    p.text(30, 557, '两请求总耗时中位数（含快照准备）', 22, INK, 550)
+    p.text(30, 592, '每条 2,048 输入，共享 1,536，各生成 8', 20, SUB)
+    p.text(543, 557, '本机 HTTP 请求耗时中位数', 22, INK, 550)
+    p.text(543, 592, 'llama.cpp CUDA · 已加载 · 128 入 / 16 出', 20, SUB)
+    p.text(30, 640, '设备摄影：Daniel Lu（dllu） / Wikimedia Commons', 15, SUB)
+    p.text(1007, 640, '改编图版：CC BY-SA 4.0', 15, SUB, anchor='end')
+    return p
+
+
 def main():
-    args=argparse.ArgumentParser(description=__doc__)
-    args.add_argument('report',type=Path);args.add_argument('out',type=Path);opts=args.parse_args()
-    totals, groups=measured(opts.report);opts.out.mkdir(exist_ok=True,parents=True)
-    cover(totals).save(opts.out/'qkv-warm-cover.svg');detail(totals,groups).save(opts.out/'qkv-warm-detail.svg')
+    args = argparse.ArgumentParser(description=__doc__)
+    for name in ('reports', 'photo', 'out'):
+        args.add_argument(name, type=Path)
+    opts = args.parse_args(); opts.out.mkdir(exist_ok=True, parents=True)
+    totals, groups = measured(opts.reports/'stacked-bert-gb10.json')
+    qwen, glm = model_results(opts.reports)
+    overview(totals, qwen, glm, cutout(opts.photo)).save(opts.out/'sparkfuse-system.svg')
+    detail(totals, groups).save(opts.out/'qkv-warm-detail.svg')
 
 
 if __name__ == '__main__':
