@@ -3,7 +3,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PyTorch → CUDA 推理编译器 — EtherealBian 工程图志</title>
   <meta name="description" content="SparkFuse 在 DGX Spark 上把 PyTorch 子图编译成 CUDA C++。看四层 BERT 的 Q、K、V 投影如何合并，以及每次前向少启动了多少 GPU 内核。">
-  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/sparkfuse.css">
+  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/sparkfuse.css?v=warm1">
 </head><body class="dossier sf">
 <a class="skip" href="#sheet">跳至项目</a>
 <header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#spark-fuse">← 返回工程图集</a></div></header>
@@ -16,8 +16,8 @@
     </div>
     <figure class="sf-plate">
       <figcaption>同一层内，Q、K、V 共用一次 INT8 矩阵乘法，再分别写回 BF16。</figcaption>
-      <a class="sf-enlarge" href="../assets/plates/sparkfuse-qkv-atlas.webp" aria-label="放大 Q、K、V 工程剖面图，查看权重布局、CUDA 执行路径和内核计数">
-        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-qkv-atlas.webp" width="2520" height="1575" alt="左：三组 768 × 768 的权重沿列拼成 768 × 2304。右：INT32 累加后，经缩放和偏置分别写回 BF16；8 个请求的 8 个返回张量均与量化基线逐字节一致。下：四种实现分别启动 233、88、72、64 次 GPU 内核。">
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" aria-label="放大 Q、K、V 工程剖面图，查看权重布局、CUDA 执行路径和内核计数">
+        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-qkv-atlas.webp?v=warm1" width="2520" height="1575" alt="左：三组 768 × 768 的权重沿列拼成 768 × 2304。右：INT32 累加后，经缩放和偏置分别写回 BF16；8 个请求的 8 个返回张量均与量化基线逐字节一致。下：四种实现分别启动 233、88、72、64 次 GPU 内核。">
       </a>
     </figure>
   </header>

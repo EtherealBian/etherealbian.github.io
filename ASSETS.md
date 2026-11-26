@@ -40,4 +40,4 @@
 
 - `assets/plates/vcu118-rocket-boot.svg`：本站原创启动路径图。根据 VCU118 Rocket 工程的入口地址和流水级绘制，非板上实拍或实测时序。
 
-- `assets/plates/sparkfuse-qkv-card.webp`（首页）与 `assets/plates/sparkfuse-qkv-atlas.webp`（案例）：原创 Q/K/V 投影工程图。红、蓝、金分别追踪三个投影；权重网格表示分区，不代表权重数值。完整版另列 CUDA 后处理、输出校验与内核启动次数。参见[四层 BERT 的实测记录](https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert)。
+- `assets/plates/sparkfuse-qkv-card.webp`（首页）与 `assets/plates/sparkfuse-qkv-atlas.webp`（案例）：原创 Q/K/V 投影工程图。珊瑚、杏橙和香槟金分别标识 Q、K、V，标注的是列区间，不是权重数值。完整版另列 CUDA 后处理、输出校验与内核启动次数。用 `python tools/draw_sparkfuse.py <stacked-bert-gb10.json> <输出目录>` 可从同一实测报告重画两份 SVG。参见[四层 BERT 的实测记录](https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert)。
