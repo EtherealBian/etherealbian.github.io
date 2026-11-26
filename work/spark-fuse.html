@@ -31,7 +31,7 @@
           <p class="sf-verdict"><strong>反而多用约 0.30 秒。</strong>另一组为 4.715 → 5.015 秒。四条分支的完整分数均不同，其中一条在第 6 个 token 改变了输出。</p></div>
       </div>
     </fieldset>
-    <p class="sf-decision"><strong>项目保留从头计算作为默认。</strong>在已测的 8 个长输入配对中，给第一条分支计入准备成本，它还多用 14–34 毫秒；第二条才让两条合计省下 1.77–1.79 秒。短输入的 8 个配对无一回本。这里每条只生成 8 个 token，不据此推断任意提示的表现。<a href="https://github.com/EtherealBian/spark-fuse/blob/8f2596c28ac3dbed4093960bb36d1206dd0bf31a/docs/findings.md">核对分项计时 ↗</a></p>
+    <p class="sf-decision"><strong>仍默认从头计算。</strong>计入快照准备后，长输入的第一条分支多用 14–34 毫秒；两条合计省下 1.77–1.79 秒。短输入的 8 个配对无一回本。固定同一批长输入再测，六个共享切点都保持了完整分数一致：共享 511 和 1,536 个 token 时，最保守的分层节省率分别为 6.1% 和 19.0%。<a href="https://github.com/EtherealBian/spark-fuse/blob/d4a26646ed3bcbfeb463d6930d38c9adde925ace/docs/prefix32-closeout.md">核对六个切点与测试条件 ↗</a></p>
   </section>
   <section class="sf-rest" aria-labelledby="scales"><h2 id="scales">另外两种尺度</h2>
     <article id="timing"><h3>编译器删掉了哪些发射？</h3><p>四层 BERT 中，让 Q、K、V 共用每层输入的量化结果，再合并三个投影。一次前向的 CUDA kernel 发射由 <b>233 次减到 64 次</b>；八个返回值与量化 eager 逐字节一致。这里数的是发射次数，不代表耗时缩短相同比例。</p><a href="https://github.com/EtherealBian/spark-fuse/blob/c49cb29492a93af6d5cf70bd09ac6565df0a4608/docs/performance.md#stacked-bert">看编译与对照方法 ↗</a></article>
