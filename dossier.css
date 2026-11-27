@@ -44,7 +44,8 @@
   margin-top: 7px;
   line-height: 1.8;
 }
-.sheet-title > .spectrum-intro {
+.sheet-title > .spectrum-intro,
+.sheet-title > .lissajous-intro {
   max-width: none;
 }
 .exhibit-grid {

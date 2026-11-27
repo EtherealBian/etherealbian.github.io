@@ -20,7 +20,7 @@
 - 论文旁的点阵和扫描线是标为“概念示意”的视觉辅助，**不是荧光实验图或重建结果**。原站未提供论文原图、作者表或公开全文地址。
 - 太一量生品牌图仍链接回原站保留的品牌图来源。学校邮箱经本人确认，统一使用 `EtherealBian@njust.edu.cn`。
 
-记录页的 WebP 用作页内预览，放大链接指向保留在本地的对应原始文件：`wired-dpll.png`、`cnn-pipeline.png`、`fig_array_top.png` 和 `competition-app.jpg`。来源分别与上表四个项目链接一致。
+本地保留的 WebP 预览对应以下原始文件：`wired-dpll.png`、`cnn-pipeline.png`、`fig_array_top.png` 和 `competition-app.jpg`。来源分别与上表四个项目链接一致。
 
 ### Vitis 多面板图版
 
@@ -54,7 +54,7 @@
 
 | 图版 | 素材、数据与图示范围 |
 |---|---|
-| 03 李萨如 | `lissajous-hardware.jpg` 的实拍全景与示波器屏幕裁片。双通道曲线和 X–Y 轨迹来自同一对 1:2 正弦信号；相量与多帧轨迹是原理示意，不是波形采样。 |
+| 03 李萨如 | 工作台与示波器局部取自 `lissajous-hardware.jpg`。两路时域信号与主 X–Y 图采用同一对 1:2 正弦信号。其余波形、相量与连续帧为示意；控制流程依据同一版归档的 [DPLL RTL](https://github.com/EtherealBian/fpga-lissajous-controller/blob/d28a09db401a55449636eb1bcb8951629dd83aec/rtl/continuous_iq_dpll.sv) 与 [Jetson 视觉流程](https://github.com/EtherealBian/fpga-lissajous-controller/blob/d28a09db401a55449636eb1bcb8951629dd83aec/vision/README.md)。 |
 | 04 图像处理 | `elinx-competition-demo.png` 竞赛实拍；将屏幕中的同一裁片离线计算为 Sobel 梯度幅值，非板上截图。控制时序图只表达事件先后。 |
 | 05 超声阵列 | `n60-hardware.jpg` 实拍。换能器斜视图投影自 [N60 工程的 12 个局部坐标、5 个子阵朝向与碗面半径](https://github.com/EtherealBian/n60-ultrasonic-phased-array/blob/05a0002d54e6c3cd4d754f1168ba83c06418adcf/generate_n60_csv.py)，仅表示标称几何。PWM 波形为时序示意，非声场或电气测量。 |
 | 06 UAVCount | 原始 `assets/uavcount-pipeline.webp` / `assets/uavcount-pipeline.svg`，原样展示水岸检测与计数四步流程。水岸画面是合成示意；回归基于 156 段半合成视频。三帧判据另见 `uavcount-counting.svg`。 |

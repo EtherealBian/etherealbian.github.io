@@ -72,7 +72,8 @@ def page(n, word, title, sub, series, desc):
     t(d, 34, 61, word, 44, BLUE, 690, cls="serif")
     t(d, 34, 93, sub, 18, SLATE, 480)
     t(d, 1046, 58, title, 33, NAVY, 670, "end")
-    t(d, 1046, 91, f"{series}   /   {n:02d}", 15, GREEN, 600, "end", "mono")
+    if series:
+        t(d, 1046, 91, f"{series}   /   {n:02d}", 15, GREEN, 600, "end", "mono")
     d.path("M34 110H1046", NAVY, 1.6)
     return d
 
@@ -105,74 +106,114 @@ def phase():
     d = page(
         3,
         "Lissajous",
-        "从正交采样到李萨如轨迹",
-        "有线路径用相角校正 DDS；视觉路径从连续画面估计频率与相位。",
-        "Phase tracking",
-        "竞赛工作台和示波器实拍；相量、两轴波形与李萨如轨迹均为原理示意。",
+        "两种闭环，一幅李萨如图形",
+        "有线模式跟踪输入电压；无线模式观察屏幕轨迹。两种模式均由 FPGA 合成 Y 轴。",
+        None,
+        "工作台实拍、X–Y 示波原理与两条反馈通路：DPLL 以本振为参考，Jetson Nano 以摄像头为反馈。",
     )
-    section(d, 34, 145, "a", "竞赛工作台", BLUE)
-    photo(d, "lissajous-hardware.jpg", 34, 164, 278, 174, (0, 0, 1706, 1135))
-    # The magnified screen is the actual screen area in the source photograph.
-    d.rect(34, 343, 278, 79, "#eff3f4")
-    photo(d, "lissajous-hardware.jpg", 41, 349, 113, 67, (853, 95, 1138, 260))
-    t(d, 166, 375, "示波器实拍", 17, BLUE, 650)
-    t(d, 166, 403, "双环轨迹局部", 15, SLATE)
-    d.rect(331, 128, 715, 294, DARK, r=5)
-    grid(d, 351, 182, 674, 206, 26, 26, "#35585b")
-    t(d, 355, 160, "X–Y 显示原理", 22, WHITE, 630)
-    t(d, 1021, 159, "频率比   1 : 2", 18, MINT, 600, "end")
-    # Parametric time-domain components and the corresponding XY trajectory.
-    for i, (axis, f, col) in enumerate([("X", 1, GOLD), ("Y", 2, MINT)]):
-        yy = 235 + 93 * i
-        t(d, 357, yy + 6, axis, 23, col, 650, cls="serif")
-        d.path(f"M386 {yy}h195", "#70918d", 0.9)
-        line(d, [(388 + j * 1.06, yy - 24 * sin(2 * pi * f * j / 180)) for j in range(181)], col, 2.7)
-    d.path("M595 235h13v49h28m-41 44h13v-44", "#9cb3ab", 1.4)
-    poly(d, [(635, 280), (643, 284), (635, 288)], MINT)
-    d.path("M665 284h332M830 191v185", "#819d98", 1)
-    trace(d, 830, 284, 145, 79, 1, 2, 0, "#315952", 6)
-    trace(d, 830, 284, 145, 79, 1, 2, 0, MINT, 3)
-    t(d, 355, 407, "X：原始输入     Y：DDS 合成", 16, "#cee0d8")
-    t(d, 1021, 406, "理论轨迹 · 非采样数据", 15, "#bed4cf", 500, "end")
-    section(d, 34, 463, "b", "有线锁相：区分频偏和相位误差", BLUE)
-    cx, cy = 118, 558
-    d.circ(cx, cy, 59, "#eff4f7", "#aac0cd")
-    d.path("M47 558h142M118 490v137", "#96adba", 1)
-    for a, col in [(22, BLUE), (64, GREEN)]:
-        u, v = cx + 55 * cos(radians(a)), cy - 55 * sin(radians(a))
-        line(d, [(cx, cy), (u, v)], col, 2.6)
-        d.circ(u, v, 3.6, col)
-    d.path("M147 546A32 32 0 0 0 132 529", AMBER, 2)
-    t(d, 147, 529, "Δφ", 14, AMBER, 650)
-    t(d, 176, 551, "I", 15, SLATE)
-    t(d, 124, 497, "Q", 15, SLATE)
-    center(d, 118, 646, "相邻采样块的相量", 15, SLATE)
+    section(d, 34, 141, "a", "竞赛工作台", BLUE)
+    photo(d, "lissajous-hardware.jpg", 34, 156, 266, 150, (0, 0, 1706, 1135))
+    d.rect(34, 310, 266, 64, PALE)
+    photo(d, "lissajous-hardware.jpg", 40, 314, 99, 56, (853, 95, 1138, 260))
+    t(d, 153, 338, "示波器实拍", 18, BLUE, 650)
+    t(d, 153, 360, "屏幕局部放大", 15, SLATE)
+
+    # The two time series and the large XY trace share frequency ratio and phase.
+    d.rect(319, 125, 727, 249, DARK, r=5)
+    t(d, 339, 157, "示波器 · X–Y 显示", 22, WHITE, 630)
+    t(d, 1025, 156, "X 接信号源   /   Y 接 DAC1", 17, MINT, 580, "end")
+    grid(d, 338, 176, 490, 146, 21, 21, "#35585b")
+    for y, axis, f, col in [(214, "X(t)", 1, GOLD), (283, "Y(t)", 2, MINT)]:
+        t(d, 341, y + 5, axis, 17, col, 630, cls="mono")
+        d.path(f"M386 {y}h138", "#759591", 0.9)
+        line(d, [(386 + j, y - 20 * sin(2 * pi * f * j / 136)) for j in range(137)], col, 2.6)
+    d.path("M530 214h12v35h21m-33 34h12v-34", "#8faea5", 1.4)
+    poly(d, [(563, 245), (572, 249), (563, 253)], MINT)
+    d.path("M580 249h244M702 181v136", "#829f97", 1)
+    trace(d, 702, 249, 109, 55, 1, 2, 0, "#315952", 6)
+    trace(d, 702, 249, 109, 55, 1, 2, 0, MINT, 3)
+    t(d, 339, 351, "时域 · 同一段时间", 15, "#cee0d8")
+    center(d, 702, 351, "二倍频   /   X : Y = 1 : 2", 16, MINT, 580)
+    d.path("M848 177v174", "#51736e")
+    t(d, 867, 196, "同频时的轨迹", 17, WHITE, 620)
+    for y, phi, label in [(242, 0, "同相"), (313, pi / 2, "正交")]:
+        d.path(f"M866 {y}h58M895 {y - 25}v50", "#77958d", 0.8)
+        trace(d, 895, y, 19, 19, 1, 1, phi, GOLD, 2.1)
+        t(d, 940, y + 5, label, 17, "#e0ebe4", 600)
+
+    def node(x, width, title, detail, palette):
+        d.rect(x, 434, width, 61, palette[1], palette[2], 4)
+        center(d, x + width / 2, 459, title, 18, palette[0], 650)
+        center(d, x + width / 2, 482, detail, 15, SLATE)
+
+    def feedback(x1, x2, label, tone):
+        # Split the return wire so there is no line behind its label.
+        mid = (x1 + x2) / 2
+        gap = sum(7.5 if ch.isascii() else 15 for ch in label) / 2 + 10
+        d.path(f"M{x2} 495V523H{mid + gap}", tone, 1.5)
+        d.path(f"M{mid - gap} 523H{x1}V498", tone, 1.5, True)
+        center(d, mid, 528, label, 15, tone, 550)
+
+    d.path("M533 393V653", RULE)
+    section(d, 34, 409, "b", "有线模式 · 数字锁相", BLUE)
+    for x, w, name, detail in [
+        (34, 147, "ADC · I/Q 相关", "输入与本振分块相关"),
+        (205, 131, "CORDIC", "求每块相角"),
+        (360, 152, "48 位 DDS", "累加相位，正弦查表"),
+    ]:
+        node(x, w, name, detail, INDIGO)
+    d.wire("M183 465h18")
+    d.wire("M338 465h18")
+    feedback(108, 436, "本振正交参考", BLUE)
+
+    cx, cy = 91, 592
+    d.circ(cx, cy, 36, "#f1f5f8", "#b2c5d0")
+    d.path("M45 592h89M91 633v-82", "#92a9b5", 0.9)
+    for a, col in [(20, BLUE), (66, GREEN)]:
+        u, v = cx + 33 * cos(radians(a)), cy - 33 * sin(radians(a))
+        line(d, [(cx, cy), (u, v)], col, 2.2)
+        d.circ(u, v, 2.8, col)
+    d.path("M110 585A20 20 0 0 0 99 574", AMBER, 1.6)
+    t(d, 116, 572, "Δφ", 14, AMBER, 600)
+    center(d, cx, 652, "相邻块相量", 15, SLATE)
     for i, (label, detail) in enumerate(
         [
-            ("I/Q 相关", "由同相、正交分量求块相角"),
-            ("相邻块相角差", "估计频偏，先粗扫后细扫"),
-            ("绝对相位误差", "校正相位，驱动 48 位 DDS"),
+            ("捕获", "1 kHz 粗扫 → 100 Hz 细扫"),
+            ("跟踪", "块间相角差修正频率字"),
+            ("调相", "相位误差修正输出偏置"),
         ]
     ):
-        yy = 500 + 57 * i
-        d.circ(223, yy - 4, 4, [BLUE, GREEN, AMBER][i])
-        t(d, 239, yy, label, 18, NAVY, 640)
-        t(d, 239, yy + 23, detail, 16, SLATE)
-        if i < 2:
-            d.path(f"M223 {yy + 2}v47", RULE, 1.3)
-    d.path("M560 446V655", RULE)
-    section(d, 586, 463, "c", "视觉估计：从多帧轨迹回推参数", GREEN)
-    for i, p in enumerate([0.18, 0.65, 1.13]):
-        xx = 588 + 101 * i
-        d.rect(xx, 495, 87, 61, "#eef5f1", "#b3ccbe", 2)
-        trace(d, xx + 43, 525, 32, 21, 1, 2, p, GREEN, 1.6)
-        center(d, xx + 43, 579, ["t − 2", "t − 1", "t"][i], 15, SLATE, 520, "mono")
-    d.wire("M877 525h35")
-    t(d, 926, 522, "Jetson", 21, GREEN, 650)
-    t(d, 926, 547, "Nano", 20, GREEN, 650)
-    t(d, 587, 612, "多帧图像估计频率与相位", 20, NAVY, 600)
-    t(d, 587, 643, "经 UART 更新视觉方案的 DDS 控制字。", 17, SLATE)
-    footer(d, "平台：Mizar Z7 / XC7Z020", "相量与多帧图形为示意；左上两幅来自同一张实拍。")
+        y = 573 + 34 * i
+        t(d, 166, y, label, 17, BLUE, 650)
+        t(d, 219, y, detail, 17, NAVY)
+
+    section(d, 554, 409, "c", "无线模式 · 视觉反馈", GREEN)
+    for x, w, name, detail in [
+        (554, 113, "摄像头", "采集屏幕轨迹"),
+        (689, 149, "Jetson Nano", "八帧融合测频"),
+        (895, 151, "FPGA DDS", "更新频率与相位"),
+    ]:
+        node(x, w, name, detail, JADE)
+    d.wire("M669 465h16")
+    center(d, 866, 457, "UART", 14, GREEN, 650, "mono")
+    d.wire("M841 470h49")
+    feedback(610, 971, "DAC1 → 示波器 Y 轴 → 复拍", GREEN)
+    for i, p in enumerate([0.15, 0.7, 1.2]):
+        x = 554 + 48 * i
+        d.rect(x, 566, 45, 54, "#eff5f1", "#b3ccbe", 2)
+        trace(d, x + 22, 593, 17, 18, 1, 2, p, GREEN, 1.5)
+    center(d, 625, 651, "连续画面示意", 15, SLATE)
+    for i, (label, detail) in enumerate(
+        [
+            ("选档", "四档切换，提取包络折返点"),
+            ("精扫", "以 100 Hz 为步长双侧判图"),
+            ("调相", "改变相位后重新判读轨迹"),
+        ]
+    ):
+        y = 573 + 34 * i
+        t(d, 722, y, label, 17, GREEN, 650)
+        t(d, 771, y, detail, 17, NAVY)
+    footer(d, "Mizar Z7  /  XC7Z020", "左上为现场照片；波形、相量与轨迹均为原理示意。")
     d.save("atlas-03-phase.svg")
 
 

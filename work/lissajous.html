@@ -36,7 +36,7 @@
         </div>
         <h1 lang="en">Lissajous<b>.</b></h1>
         <h2>用相位在示波器上作图</h2>
-        <p>示波器 X 轴接原始信号，Y 轴接 FPGA 的 DDS 输出。调整两轴的相位和频率关系，就能改变屏上的图形。</p>
+        <p class="lissajous-intro">示波器 X 轴接原始信号，Y 轴接 FPGA 的 DDS 输出。调整两轴的相位和频率关系，就能改变屏上的图形。</p>
         <div class="honor-line">
           <strong>省一等奖</strong><span>2026 · 全国大学生电子设计竞赛 · 李萨如图形显示控制装置</span>
         </div>
@@ -86,19 +86,19 @@
           <i>/</i>
           READING NOTES
         </div>
-        <h2>同一套硬件如何画出三种轨迹？</h2>
+        <h2>两种模式如何跟踪同一个信号？</h2>
         <ol>
           <li>
-            <b>捕获频率</b>
-            <p>输入经预处理后进入 I/Q 相关器；数字锁相环先粗扫频率，再细扫并锁定。</p>
+            <b>有线：用 I/Q 相关捕获频率</b>
+            <p>ADC 样本与本振的正弦、余弦分块相关。DPLL 先以 1 kHz 步长粗扫，在相关幅值最高的频点附近以 100 Hz 步长细扫。</p>
           </li>
           <li>
-            <b>校正相位</b>
-            <p>用相邻块的相角变化估计频偏，用绝对相位误差校正相位。</p>
+            <b>有线：分开校正频偏与相位</b>
+            <p>CORDIC 求出每块的相角。块间相角差用于修正 DDS 频率字，相位误差用于修正输出偏置。48 位 DDS 据此合成 Y 轴波形。</p>
           </li>
           <li>
-            <b>回到示波器</b>
-            <p>DDS 重建 Y 轴，X 轴仍接原始输入。两轴的频比和相位共同决定图形。</p>
+            <b>无线：从屏幕轨迹闭环调节</b>
+            <p>摄像头拍摄示波器，Jetson Nano 融合八帧轨迹估计频率，再做双侧精扫。经 UART 更新 DDS 后，摄像头重新取景，判断是否还需调相。</p>
           </li>
         </ol>
       </section>
@@ -139,39 +139,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </section>
-      <section class="appendix">
-        <div class="section-label">
-          03
-          <i>/</i>
-          ORIGINAL MATERIAL
-        </div>
-        <h2>原始材料</h2>
-        <div class="supplements">
-          <figure class="evidence" id="fig-2">
-            <div class="plate-head">
-              <span>FIG. 03B</span>
-              <b>有线锁相架构</b>
-            </div>
-            <a
-              class="exhibit"
-              data-plate
-              href="../assets/plates/wired-dpll.png"
-              aria-label="查看有线锁相架构原图"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src="../assets/plates/dpll.webp"
-                alt="有线锁相架构：从输入相关器跟到 DPLL，再沿相位与频率校正支路找到 DDS 和 DAC 输出。"
-              />
-            </a>
-            <figcaption>
-              <span>从输入相关器跟到 DPLL，再沿相位与频率校正支路找到 DDS 和 DAC 输出。</span>
-              <a href="../assets/plates/wired-dpll.png" data-plate>放大图版 ↗</a>
-            </figcaption>
-          </figure>
         </div>
       </section>
       <nav class="sheet-end" aria-label="相邻项目">

@@ -392,8 +392,8 @@
                 <span class="catalog-number">03</span>
                 <span>Digital Phase Tracking</span>
               </div>
-              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-03-phase.svg?v=2" aria-label="放大工程图：从正交采样到李萨如轨迹">
-                <img loading="lazy" decoding="async" src="assets/plates/atlas-03-phase.svg?v=2" width="1080" height="720" alt="竞赛工作台和示波器实拍；相量、两轴波形与李萨如轨迹均为原理示意。">
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-03-phase.svg?v=3" aria-label="放大工程图：有线 DPLL 与无线视觉反馈">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-03-phase.svg?v=3" width="1080" height="720" alt="工作台和示波器实拍；有线模式由 I/Q 锁相驱动 DDS，无线模式由 Jetson Nano 观察屏幕轨迹并经 UART 调整 DDS。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -406,7 +406,7 @@
                 <div class="honor-line">
                   <strong>省一等奖</strong><span>2026 · 全国大学生电子设计竞赛 · 李萨如图形显示控制装置</span>
                 </div>
-                <p class="project-summary">有线<span data-room="1">模式以数字</span>锁相<span data-room="1">环跟踪输入<span data-room="3">频率与相位</span>，</span>驱动 <strong>48 位 DDS</strong><span data-room="2"> 合成 Y 轴波形</span><span data-room="5">，与 X 轴输入形成李萨如图形</span>。<span data-room="2">视觉模式下，</span>Jetson Nano 从<span data-room="4">摄像头记录的多帧</span>轨迹<strong>估计频率与相位</strong><span data-room="3">，<span data-room="4">经 UART </span>更新 DDS 频率和相位</span>。</p>
+                <p class="project-summary"><strong>有线模式</strong> ｜ 通过 DPLL 闭环锁定输入频率与相位，驱动 48 位 DDS 合成 Y 轴波形。<br><strong>无线模式</strong> ｜ 上位机 Jetson Nano 基于多帧轨迹解算信号参数，经 UART 更新 DDS 频率与相位，形成视觉闭环。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en">
                   <li data-technology="SystemVerilog">SystemVerilog</li>
                   <li>OpenCV</li>
