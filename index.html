@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=research-focus-6" />
+    <link rel="stylesheet" href="style.css?v=cxp-notes-7" />
     <script src="portfolio.js" defer></script>
     <script src="viewer.js?v=projects-1" defer></script>
   </head>
@@ -197,10 +197,10 @@
                   <span class="work-index" aria-hidden="true">01</span>
                   <div>
                     <h4 lang="en">CXP Data Acquisition &amp; Display</h4>
-                    <p>在 <strong>ZCU216</strong> 上实现两版 CXP 采集与显示系统，分别对接滨松 C15550-22UP 相机和星测电子 PCIe-1005 CXP 模拟卡。</p>
-                    <dl>
-                      <div><dt>采集</dt><dd>将 CXP 数据转为 <strong>AXI-Stream</strong>，用 FIFO 缓冲数据并处理下游背压；先由 SGDMA 写入 PL DDR，再由 CDMA 搬运至 PS DDR。备选路径由 AXI DMA 直写 PS DDR。</dd></div>
-                      <div><dt>回显</dt><dd>在 <strong>PetaLinux</strong> 下通过 UDP 回显图像。</dd></div>
+                    <p>在 <strong>ZCU216（Zynq UltraScale+ RFSoC）</strong>上开发 CoaXPress 图像采集与显示系统，分别对接滨松 C15550-22UP 相机和星测电子 PCIe-1005 CXP 模拟卡。</p>
+                    <dl class="cxp-notes">
+                      <div><dt>采集通路</dt><dd>将 CXP 像素流接入 AXI4-Stream，由 SGDMA 写入 PL DDR 的四槽帧缓冲，再由 CDMA 分块传至 PS DDR。</dd></div>
+                      <div><dt>PetaLinux 开发</dt><dd>编写采集驱动和设备树，处理 DMA 中断与缓存同步，读完整帧后才归还缓冲槽。用户态程序控制相机曝光与触发，并通过 UDP 将图像回传至上位机显示。</dd></div>
                     </dl>
                   </div>
                 </li>
