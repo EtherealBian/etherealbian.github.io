@@ -573,7 +573,7 @@
               </a>
               <div class="project-body"><div class="project-heading"><h3 id="rtl-witness-title" lang="en"><a href="work/rtl-witness.html">RTL Witness: Verilog Generation<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
                 <div class="project-links" lang="en"><a class="entry-link" href="work/rtl-witness.html" aria-label="Case study: RTL Witness">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a><a class="source-link" href="https://github.com/EtherealBian/rtl-witness" aria-label="GitHub: RTL Witness">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a></div></div>
-                <p class="project-summary">在 DGX Spark 上用 <strong>Qwen2.5-72B</strong> 生成并修复 AXI-Stream 状态转移。三个新种子均在三轮内得到同一份寄存器切片，用 <strong>SAT 归纳证明</strong>握手、数据次序和包尾正确。</p>
+                <p class="project-summary">在 DGX Spark 上生成并验证 AXI-Stream RTL。72B 生成的状态转移组合成通过<strong>归纳证明</strong>的寄存器切片；Coder-32B 的 FIFO 首稿经工具局部修复，通过 <strong>20,232 拍</strong>独立回放。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en"><li>Verilog</li><li>Icarus Verilog</li><li>Yosys</li><li>DGX Spark</li></ul></div>
             </article>
           </div>
