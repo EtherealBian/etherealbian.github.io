@@ -16,8 +16,8 @@
     </div>
     <figure class="sf-plate">
       <figcaption>同一台 DGX Spark：上半图是 BERT 编译实验，下半图是两项独立的整模型推理实验。</figcaption>
-      <a class="sf-enlarge" href="../assets/plates/sparkfuse-system-full.webp?v=2" aria-label="放大 DGX Spark 实测总览">
-        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-system.webp?v=2" srcset="../assets/plates/sparkfuse-system.webp?v=2 1200w, ../assets/plates/sparkfuse-system-full.webp?v=2 2080w" sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1240px) 94vw, 1160px" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。">
+      <a class="sf-enlarge" href="../assets/plates/sparkfuse-system-full.webp?v=3" aria-label="放大 DGX Spark 实测总览">
+        <span>放大看原图 ↗</span><img src="../assets/plates/sparkfuse-system.webp?v=3" srcset="../assets/plates/sparkfuse-system.webp?v=3 1200w, ../assets/plates/sparkfuse-system-full.webp?v=3 2080w" sizes="(max-width: 760px) calc(100vw - 36px), (max-width: 1240px) 94vw, 1160px" width="1200" height="750" alt="torch.export 导出计算图，可融合子图生成 CUDA C++，其余算子由 PyTorch 执行。四层 BERT 内核启动逐步从 233 降至 88、72、64 次。另两项独立实测：Qwen2.5-32B 两请求共享 1,536 个前缀 token，耗时从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 输入 128、生成 16 个 token，本机请求耗时中位数为 2.588 秒。">
       </a>
     </figure>
   </header>

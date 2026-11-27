@@ -527,8 +527,8 @@
                 <span class="catalog-number">08</span>
                 <span>AI Inference Systems</span>
               </div>
-              <a class="plate diagram" data-plate href="assets/plates/sparkfuse-system-full.webp" aria-label="放大 DGX Spark 推理编译器与单机实测原图">
-                <img loading="lazy" decoding="async" src="assets/plates/sparkfuse-system.webp?v=2" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 的内核启动从 233 减至 64 次；Qwen2.5-32B 双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的本机请求耗时中位数为 2.588 秒。">
+              <a class="plate diagram" data-plate href="assets/plates/sparkfuse-system-full.webp?v=3" aria-label="放大 DGX Spark 推理编译器与单机实测原图">
+                <img loading="lazy" decoding="async" src="assets/plates/sparkfuse-system.webp?v=3" width="1200" height="750" alt="DGX Spark 上的 PyTorch 子图编译与四层 BERT 的 Q/K/V 投影打包；下方分别展示 Qwen2.5-32B 的共享前缀和量化 GLM-4.5 355B 的单机请求计时。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -538,7 +538,7 @@
                     <a class="source-link" href="https://github.com/EtherealBian/spark-fuse" aria-label="GitHub: SparkFuse">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
                   </div>
                 </div>
-                <p class="project-summary"><span data-room="2">在 DGX Spark 上</span><span data-room="4">将 PyTorch 子图编译成 CUDA C++</span><span data-room="2">，</span>四层 BERT 内核启动 <strong>233 → 64 次</strong>。<br><span data-room="2">Qwen<span data-room="3">2.5</span>-</span>32B <span data-room="2">长</span><span data-room="1">前缀</span>复用省时<span data-room="4">约</span> 19%；<span data-room="4">量化 </span><span data-room="2">GLM<span data-room="3">-4.5</span> </span>355B <span data-room="4">单机</span>请求<span data-room="4">耗时</span><span data-room="3">中位数</span> 2.588 秒。</p>
+                <p class="project-summary">基于 DGX Spark 构建 PyTorch 到 CUDA C++ 的图编译管线。四层 BERT 内核启动 <strong>233 → 64 次</strong>；Qwen2.5-32B 长前缀复用省时 <strong>19%</strong>；GLM-4.5 355B 量化单机耗时中位数 <strong>2.588s</strong>。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en">
                   <li>torch.export</li>
                   <li data-technology="CUDA">CUDA C++</li>

@@ -202,56 +202,99 @@ def model_results(root):
     g = read('glm45-355b/timing.json'); ckpt = read('glm45-355b/checkpoint.json')
     assert ckpt['model'] == 'unsloth/GLM-4.5-GGUF' and ckpt['format'] == 'UD-IQ1_S'
     assert read('glm45-355b/runtime.json')['device'] == 'NVIDIA GB10' and g['output_per_request'] == 16
-    return [f"{q['median_wave_ms'][arm]/1000:.3f}" for arm in ('cold', 'snapshot')], f"{g['cases']['128']['wall_ms']/1000:.3f}"
+    assert len(ckpt['files']) == 2 and q['owned_kv_bytes'] % (1 << 20) == 0
+    wave = q['median_wave_ms']
+    qwen = dict(cold=wave['cold']/1000, reuse=wave['snapshot']/1000,
+                saved=round(100*(1-wave['snapshot']/wave['cold'])), prefix=q['prefix_tokens'],
+                suffix=q['length']-q['prefix_tokens'], mib=q['owned_kv_bytes'] >> 20)
+    case = g['cases']['128']
+    glm = {name: case[name+'_ms']/1000 for name in ('wall', 'prompt', 'decode')}
+    glm.update(generated=g['output_per_request'], quant=ckpt['format'])
+    return qwen, glm
 
 
 def overview(totals, qwen, glm, photo):
-    p = Plate(1040, 650, 'DGX Spark：编译器与整模型推理实测',
-              '上：Daniel Lu 摄影的 DGX Spark 与四层 BERT 的 QKV 打包。下：Qwen 长前缀双请求和量化 GLM 单机 HTTP 请求，分别计时。摄影与改编图版：CC BY-SA 4.0。')
-    chalk, walnut = '#FEFAF2', '#553A2B'
-    p.put('''<defs>
-    <linearGradient id="bench" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#F6EEDD"/><stop offset="1" stop-color="#EFDFC7"/></linearGradient>
-    <filter id="shade" x="-25%" y="-80%" width="150%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
-    </defs>''')
-    p.box(0, 0, 288, 284, 'url(#bench)')
-    p.text(25, 54, 'DGX Spark', 45, walnut, 650, DIN)
-    p.text(26, 85, '单机实验平台 / NVIDIA GB10', 17, SUB, 550)
-    p.put('<path d="M38 183 175 144 269 211 122 267Z" fill="#70563D" opacity=".22" filter="url(#shade)"/>')
-    p.put(f'<image xmlns:xlink="http://www.w3.org/1999/xlink" x="28" y="98" width="232" height="170" xlink:href="data:image/png;base64,{photo}"/>')
-    # Reuse the same three-stage geometry as the full BERT engineering plate.
-    p.text(310, 47, 'Q、K、V 共用一次矩阵乘法', 33, weight=700)
-    p.box(894, 17, 119, 35, PANEL, 17)
-    p.text(953, 41, 'BERT × 4', 21, RUST, 600, DIN, 'middle')
-    diagram(p, 313, 54, .78)
+    p = Plate(1280, 800, 'PyTorch → CUDA C++：子图编译与单机推理',
+              '四层 BERT 的图分区、QKV 打包和四种实现的启动次数；下方是独立的双请求 KV 复用和量化模型 HTTP 请求。DGX Spark 型号照片：Daniel Lu；改编图版 CC BY-SA 4.0。')
+    p.put('<metadata>Photo: Daniel Lu (dllu), Nvidia DGX Spark oblique view dllu, Wikimedia Commons. Cut out and resized. Composition: EtherealBian, CC BY-SA 4.0. https://creativecommons.org/licenses/by-sa/4.0/</metadata>')
+    p.text(30, 54, 'PyTorch → CUDA C++', 47, INK, 660, DIN)
+    p.text(1250, 49, '四层 BERT  ·  batch 1  ·  33 tokens', 22, SUB, 550, anchor='end')
+    p.line('M30 74H1250', HAIR)
 
-    # One visual band for one within-workload comparison; no speed comparison between models.
-    p.box(0, 290, 1040, 69, '#EFE4D5'); p.line('M0 290h1040', '#DECEB9', 1)
-    p.text(25, 334, 'GPU 内核启动次数', 27, weight=700)
-    p.text(270, 333, '33 tokens · 一次前向', 19, SUB)
-    p.text(589, 330, '量化 eager', 17, SUB); p.text(682, 342, totals[0], 49, walnut, 600, DIN)
-    arrow(p, 785, 324, 41)
-    p.box(855, 298, 159, 52, RUST, 10); p.text(868, 330, '每层打包', 16, chalk)
-    p.text(1002, 339, totals[-1], 43, chalk, 650, DIN, 'end')
+    # The split is a compiler decision: unsupported operators stay in PyTorch.
+    p.box(30, 87, 323, 103, '#F4EADC', 10)
+    p.put(f'<image xmlns:xlink="http://www.w3.org/1999/xlink" x="41" y="94" width="120" height="86" xlink:href="data:image/png;base64,{photo}"/>')
+    p.text(172, 133, 'DGX Spark', 31, INK, 650, DIN)
+    p.text(173, 163, 'NVIDIA GB10', 20, SUB, 530, DIN)
+    p.text(30, 223, '从导出图选择子图', 24, INK, 660)
+    p.box(30, 240, 159, 36, PANEL, 7)
+    p.text(109, 264, 'torch.export', 19, INK, 600, MONO, 'middle')
+    p.line('M190 258h31m-6-5 6 5-6 5', RULE, 2)
+    p.text(234, 265, '划分子图', 20, INK, 620)
+    p.line('M278 279v10H49v56m0-28h19m-19 28h19', RULE, 1.7)
+    p.dot(49, 317, 3, RULE)
+    p.text(78, 323, '可融合 → 生成 CUDA C++', 19, RUST, 620)
+    p.text(78, 352, '其余算子 → PyTorch 执行', 19, SUB, 540)
+    p.line('M378 93V352', HAIR)
 
-    p.box(0, 359, 1040, 291, '#F9F4EC'); p.box(514, 359, 526, 291, '#F4E7D8')
-    p.group('translate(0 16)')
-    p.line('M514 370v230', '#D8C6AF')
-    p.text(30, 391, '长前缀复用', 23, RUST, 650)
-    p.text(479, 391, 'BF16', 22, SUB, 550, DIN, 'end')
-    p.text(30, 443, 'Qwen2.5-32B', 45, weight=650, font=DIN)
-    p.text(543, 391, '单机量化推理', 23, RUST, 650)
-    p.text(1007, 391, 'UD-IQ1_S', 22, SUB, 550, DIN, 'end')
-    p.text(543, 443, 'GLM-4.5 355B', 45, weight=650, font=DIN)
-    # The two distinct metrics deliberately share neither an axis nor a speedup bar.
-    p.text(29, 520, qwen[0], 53, '#715B4B', 550, DIN)
-    arrow(p, 191, 502, 37)
-    p.text(249, 520, qwen[1]+' s', 55, RUST, 650, DIN)
-    p.text(542, 520, glm+' s', 60, RUST, 650, DIN)
-    p.text(30, 557, '两请求总耗时中位数（含快照准备）', 22, INK, 550)
-    p.text(30, 592, '每条 2,048 输入，共享 1,536，各生成 8', 20, SUB)
-    p.text(543, 557, '本机 HTTP 请求耗时中位数', 22, INK, 550)
-    p.text(543, 592, 'llama.cpp CUDA · 已加载 · 128 入 / 16 出', 20, SUB)
-    p.end()
+    # The warm Q/K/V arrangement is shared with the original, larger detail plate.
+    p.text(406, 115, '同一层的 Q、K、V 共用一次矩阵乘法', 30, INK, 680)
+    diagram(p, 408, 123, .80)
+    p.text(1247, 191, '输入只量化一次', 17, RUST, 600, anchor='end')
+    p.text(1247, 216, '33 × 768', 19, SUB, 540, MONO, 'end')
+    p.text(1247, 271, 'INT32 累加', 18, INK, 590, anchor='end')
+    p.text(1247, 301, '缩放 + 偏置', 17, SUB, 540, anchor='end')
+
+    # Equal scales within this band only: counts are for the complete forward pass.
+    p.box(0, 373, 1280, 112, '#F0E5D5')
+    p.text(30, 417, 'GPU 内核启动次数', 28, INK, 680)
+    p.text(30, 451, '一次完整前向 · 同一输入', 18, SUB)
+    for i, (title, n) in enumerate(zip(('量化 eager', '独立量化', '共享量化', '每层打包'), totals)):
+        x = 350 + 235*i
+        color = RUST if i == 3 else '#836953'
+        p.text(x, 405, title, 17, SUB, 580)
+        p.text(x, 451, n, 46, color, 650, DIN)
+        p.box(x, 462, 140, 6, '#DFD1BD', 3)
+        p.box(x, 462, 140*n/totals[0], 6, color, 3)
+        if i < 3: p.line(f'M{x+157} 434h26m-6-5 6 5-6 5', RULE, 1.7)
+
+    p.box(0, 485, 1280, 315, '#FAF6EF')
+    p.box(648, 485, 632, 315, '#F5EADC')
+    p.text(30, 518, '独立整模型实验  /  共享 KV 快照', 17, RUST, 610)
+    p.text(678, 518, '独立整模型实验  /  llama.cpp CUDA', 17, RUST, 610)
+    p.text(30, 561, 'Qwen2.5-32B', 40, INK, 670, DIN)
+    p.text(614, 557, 'BF16', 23, SUB, 600, DIN, 'end')
+    p.text(678, 561, 'GLM-4.5 355B', 40, INK, 670, DIN)
+    p.text(1249, 557, glm['quant'], 23, SUB, 600, DIN, 'end')
+
+    # One prefill snapshot feeds two suffixes; boxes express dependencies, not time.
+    p.box(30, 585, 201, 73, '#EFDCCA', 8)
+    p.text(43, 614, f"共享 {qwen['prefix']:,} tokens", 20, INK, 620)
+    p.text(43, 642, f"KV 快照 · {qwen['mib']} MiB", 17, SUB)
+    p.line('M231 622h16m0 0v-21h18m-18 21v21h18', RULE, 2)
+    p.dot(247, 622, 3, RUST)
+    for i, branch in enumerate(('A', 'B')):
+        y = 583 + 42*i
+        p.box(268, y, 347, 35, '#F4ECE0', 7, HAIR)
+        p.text(280, y+24, f"后缀 {branch} · {qwen['suffix']} tokens", 17, INK, 550)
+        p.text(600, y+24, '→ 生成 8 tokens', 17, SUB, 540, anchor='end')
+    p.text(30, 723, f"{qwen['cold']:.3f} → {qwen['reuse']:.3f} s", 47, INK, 620, DIN)
+    p.box(477, 678, 138, 50, RUST, 9)
+    p.text(546, 712, f"省时 {qwen['saved']}%", 24, WHITE, 650, anchor='middle')
+    p.text(30, 761, '两条请求总耗时中位数，含快照准备。', 20, SUB)
+
+    # Timings below are server-side phase medians, not components forced to sum to HTTP wall time.
+    for i, (title, amount) in enumerate([
+        ('处理 128 个输入 token', glm['prompt']),
+        (f"生成 {glm['generated']} 个 token", glm['decode']),
+    ]):
+        x = 678 + i*296
+        p.box(x, 583, 274, 77, '#FBF5EC', 8, '#DECDB7')
+        p.text(x+14, 610, title, 17, SUB, 540)
+        p.text(x+14, 644, f'{amount:.3f} s', 29, INK, 620, DIN)
+    p.text(678, 723, f"{glm['wall']:.3f} s", 53, RUST, 660, DIN)
+    p.text(1248, 714, '本机 HTTP 请求耗时中位数', 21, INK, 600, anchor='end')
+    p.text(678, 761, '模型已加载；计时不含权重载入。', 20, SUB)
     return p
 
 
