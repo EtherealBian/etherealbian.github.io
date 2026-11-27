@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=cxp-notes-7" />
+    <link rel="stylesheet" href="style.css?v=detector-notes-8" />
     <script src="portfolio.js" defer></script>
     <script src="viewer.js?v=projects-1" defer></script>
   </head>
@@ -208,9 +208,9 @@
                   <span class="work-index" aria-hidden="true">02</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Detection</h4>
-                    <p>按行将数据分到 4 个 bank，在 <strong>DATAFLOW</strong> 流水线中完成窗口提取与乘加。</p>
-                    <dl>
-                      <div><dt>实现</dt><dd>用三副本行缓存和仲裁处理多读口冲突；用二分法预计算判决边界，以整数判决替代实时浮点比较。</dd></div>
+                    <p>使用 <strong>Vitis HLS</strong> 开发原子占据检测核：对 <strong>40 × 40 阵列</strong>的各个位点做 31 × 31 模板匹配，生成占据位图。</p>
+                    <dl class="detector-notes">
+                      <div><dt>流水线</dt><dd>图像按行分给四个并行处理单元。每路将像素交错存入三组 BRAM，使窗口提取与定点乘加流水执行。</dd></div>
                       <div><dt>延迟</dt><dd>在 300 MHz 下，单帧延迟为 <strong class="metric">0.268 ms</strong>。</dd></div>
                     </dl>
                   </div>
