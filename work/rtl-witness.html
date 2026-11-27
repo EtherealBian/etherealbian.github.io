@@ -19,7 +19,7 @@
 </div>
 <section class="rocket-boot" style="margin-top:clamp(28px,4vw,55px)" aria-labelledby="refill-heading"><h2 id="refill-heading">发出最后一个字节的同时，能接收下一字吗？</h2><p>72B 写的 32→8 位转换器修正位选语法后，在第 5 拍仍拒收下一字。工具保留数据通路，用四条失败轨迹把 116 个局部改法筛到 2 个。按预定顺序选中的电路通过 <strong>6,524 拍独立回放</strong>；即使让网表里八个未定义位每拍任意变化，它仍满足全部八项端口安全性质。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/unpack-local-search.md">看四轮筛选、冻结的 RTL 与逐位证明 ↗</a></section>
 <div class="rocket-comparisons">
-  <section aria-labelledby="adapter-heading"><h2 id="adapter-heading">32B 输出层适配器</h2><p>用 18 个电路训练两版输出层适配器。在提交寄存器上，第一版改变了电路行为：同拍写入与发布时，基座给出旧值，适配版给出新值。六个留出配置的逐拍验收由 <strong>4/6 到 5/6</strong>；加查同步复位后，两组原答都未通过。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/d862bce/docs/q4-output-readout.md">对照同一规格生成的两份 RTL ↗</a></section>
+  <section aria-labelledby="adapter-heading"><h2 id="adapter-heading">32B 输出层适配器</h2><p>用 18 个电路训练两版适配器。第一版写对了同拍写入与发布：六份首稿的逐拍验收从 <strong>4/6 到 5/6</strong>，加查同步复位后均为 0/6。给出坏代码与反例，让模型重写时，开关适配器的六份回复逐 token 相同，各修好四份。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/b240f5b/docs/q4-output-readout.md">对照首稿与反例修复 ↗</a></section>
   <section aria-labelledby="reset-heading"><h2 id="reset-heading">时钟没动，计数器为什么清零？</h2><p>32B 写的看门狗应在时钟上升沿复位，仿真却捕捉到计数器提前从 7 变为 0。工具按反例修正复位时序后，六份基座首稿中有四份通过脉冲检查与另外 <strong>514 拍</strong>的 RTL、网表回放。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/25a1aec/docs/synchronous-reset-witness.md">对照模型原答与工具修复 ↗</a></section>
 </div>
 </main></body></html>
