@@ -208,7 +208,7 @@
                   <span class="work-index" aria-hidden="true">02</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Detection</h4>
-                    <p>用 <strong>HLS</strong> 开发原子占据检测核：对 <strong>40 × 40 阵列</strong>的各个位点做 31 × 31 模板匹配，生成占据位图。</p>
+                    <p><strong>HLS 原子检测核</strong>：针对 40 × 40 阵列位点执行 31 × 31 模板匹配，输出原子占据状态位图。</p>
                     <dl class="detector-notes">
                       <div><dt>流水线</dt><dd>采用行级并行架构，将图像分发至四路处理单元。各路将像素交错映射至三组 BRAM，化解访存冲突，支撑窗口提取与定点乘加的<strong>全流水</strong>执行。</dd></div>
                       <div><dt>延迟</dt><dd>在 300 MHz 主频下，单帧检测延迟仅 <strong class="metric">0.268 ms</strong>。</dd></div>
@@ -219,7 +219,7 @@
                   <span class="work-index" aria-hidden="true">03</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Rearrangement</h4>
-                    <p>用 <strong>HLS</strong> 开发原子重排核：根据检测生成的占据位图，生成填满阵列中心的搬运方案。</p>
+                    <p><strong>HLS 原子重排核</strong>：基于占据位图评估阵列状态，生成向阵列中心填补的原子重排指令。</p>
                     <dl>
                       <div><dt>规划</dt><dd>采用 40 位掩码提取行列占据特征。路径规划引入自适应分支策略：优先单轴压紧，容量受限时降级为“分配-压紧”两步重排，有效化解阵列拥塞。</dd></div>
                       <div><dt>延迟</dt><dd>250 MHz 主频下，单帧规划耗时 <strong class="metric">13.57 μs</strong>。</dd></div>
