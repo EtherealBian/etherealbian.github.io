@@ -135,5 +135,4 @@
 <text x="771" y="641" font-size="17" font-weight="500" fill="#203f58" text-anchor="start" class="">改变相位后重新判读轨迹</text>
 <path d="M34 677H1046" fill="none" stroke="#cad6d7" stroke-width="1" stroke-linejoin="round"/>
 <text x="34" y="703" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">Mizar Z7  /  XC7Z020</text>
-<text x="1046" y="703" font-size="15" font-weight="520" fill="#475e6c" text-anchor="end" class="">左上为现场照片；波形、相量与轨迹均为原理示意。</text>
 </svg>

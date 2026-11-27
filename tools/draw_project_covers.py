@@ -84,10 +84,11 @@ def section(d, x, y, letter, title, tone=GREEN):
     t(d, x + 35, y + 1, title, 21, tone, 650)
 
 
-def footer(d, left, right):
+def footer(d, left, right=None):
     d.path("M34 677H1046", RULE)
     t(d, 34, 703, left, 15, SLATE)
-    t(d, 1046, 703, right, 15, SLATE, 520, "end")
+    if right:
+        t(d, 1046, 703, right, 15, SLATE, 520, "end")
 
 
 def trace(d, cx, cy, rx, ry, fx, fy, phase, color, w=2.5):
@@ -213,7 +214,7 @@ def phase():
         y = 573 + 34 * i
         t(d, 722, y, label, 17, GREEN, 650)
         t(d, 771, y, detail, 17, NAVY)
-    footer(d, "Mizar Z7  /  XC7Z020", "左上为现场照片；波形、相量与轨迹均为原理示意。")
+    footer(d, "Mizar Z7  /  XC7Z020")
     d.save("atlas-03-phase.svg")
 
 
