@@ -83,7 +83,7 @@
 <rect x="901" y="524" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
 <text x="954" y="545" class="mono" font-size="22" font-weight="650" style="fill:#213e42">8/8</text>
 <text x="554" y="600" class="mono" font-size="32" font-weight="650" style="fill:#2e6755">22,176 拍</text>
-<text x="772" y="598" class="" font-size="24" font-weight="650" style="fill:#213e42">12 步有界 SAT</text>
+<text x="772" y="598" class="" font-size="24" font-weight="650" style="fill:#213e42">SAT 归纳证明</text>
 <text x="554" y="637" class="" font-size="18" font-weight="400" style="fill:#213e42">同一份组合 RTL；三份原稿各自仿真均失败。</text>
 <path d="M44 683 L1036 683" stroke="#c6d4d0" stroke-width="1" fill="none"/>
 <text x="44" y="705" class="mono" font-size="14" font-weight="500" style="fill:#667c76">AXI4-STREAM   /   COUNTEREXAMPLE REPLAY</text>
