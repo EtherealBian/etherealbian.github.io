@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720" role="img" aria-labelledby="title desc"><title id="title">RTL Witness · 帧 FIFO 反例</title><desc id="desc">上方是规格到验证的路径；左下重放模型生成 RTL 的首次失败，右下对照参考 RTL 的块 RAM 映射。</desc><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif;fill:#213e42}.serif{font-family:Georgia,serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style><defs><pattern id="lines" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M0 9L9 0" stroke="#c7dcd3"/></pattern></defs><rect width="1080" height="720" fill="#fff"/>
+<text x="44" y="49" class="mono" font-size="17" font-weight="650" style="fill:#52746c">ENGINEERING ATLAS   /   RTL GENERATION</text>
+<text x="43" y="116" class="serif" font-size="66" font-weight="400" style="fill:#213e42">RTL Witness</text>
+<text x="44" y="157" class="" font-size="27" font-weight="600" style="fill:#213e42">从 Verilog 规格到第一个失败时钟沿</text>
+<path d="M44 178 L1036 178" stroke="#c6d4d0" stroke-width="1" fill="none"/>
+<text x="44" y="212" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">A</text>
+<text x="78" y="212" class="" font-size="22" font-weight="650" style="fill:#213e42">生成与验收路径</text>
+<rect x="44" y="230" width="233" height="99" fill="#eff4f1" stroke="none"/>
+<text x="58" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">01  SPEC</text>
+<text x="58" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">512 × 33 bit</text>
+<text x="58" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">数据与 TLAST</text>
+<path d="M277 280 L294 280" stroke="#476960" stroke-width="2" fill="none"/>
+<rect x="295" y="230" width="233" height="99" fill="#f0f4f6" stroke="none"/>
+<text x="309" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">02  MODEL</text>
+<text x="309" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Qwen2.5-72B</text>
+<text x="309" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">DGX Spark · Q4_K_M</text>
+<path d="M528 280 L545 280" stroke="#476960" stroke-width="2" fill="none"/>
+<rect x="546" y="230" width="233" height="99" fill="#eff4f1" stroke="none"/>
+<text x="560" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">03  SIM</text>
+<text x="560" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Icarus Verilog</text>
+<text x="560" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">握手与逐拍记分板</text>
+<path d="M779 280 L796 280" stroke="#476960" stroke-width="2" fill="none"/>
+<rect x="797" y="230" width="233" height="99" fill="#f0f4f6" stroke="none"/>
+<text x="811" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">04  MAP</text>
+<text x="811" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Yosys · UltraScale+</text>
+<text x="811" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">检查 RAMB 原语</text>
+<path d="M44 352 L1036 352" stroke="#c6d4d0" stroke-width="1" fill="none"/>
+<text x="44" y="388" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">B</text>
+<text x="78" y="388" class="" font-size="22" font-weight="650" style="fill:#213e42">生成 RTL：首拍被接收，输出有效位未拉高</text>
+<text x="693" y="388" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">C</text>
+<text x="727" y="388" class="" font-size="22" font-weight="650" style="fill:#213e42">参考 RTL：块 RAM 映射</text>
+<path d="M668 380 L668 675" stroke="#c6d4d0" stroke-width="1" fill="none"/>
+<text x="44" y="422" class="" font-size="17" font-weight="400" style="fill:#546e68">首个反例 / 上升沿前采样</text>
+<path d="M213 442 L213 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
+<text x="221" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t1</text>
+<path d="M313 442 L313 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
+<text x="321" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t2</text>
+<path d="M413 442 L413 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
+<text x="421" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t3</text>
+<path d="M513 442 L513 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
+<text x="521" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t4</text>
+<text x="45" y="490" class="mono" font-size="19" font-weight="400" style="fill:#213e42">s_valid</text>
+<path d="M213 487 H313 V475 H413 V487 H513 V487 H613" fill="none" stroke="#276952" stroke-width="3"/>
+<text x="45" y="527" class="mono" font-size="19" font-weight="400" style="fill:#213e42">s_ready</text>
+<path d="M213 512 H313 V512 H413 V512 H513 V512 H613" fill="none" stroke="#276952" stroke-width="3"/>
+<text x="45" y="564" class="mono" font-size="19" font-weight="400" style="fill:#213e42">m_valid</text>
+<path d="M213 561 H313 V561 H413 V561 H513 V561 H613" fill="none" stroke="#ac5b43" stroke-width="3"/>
+<text x="45" y="601" class="mono" font-size="19" font-weight="400" style="fill:#213e42">m_ready</text>
+<path d="M213 598 H313 V598 H413 V598 H513 V598 H613" fill="none" stroke="#276952" stroke-width="3"/>
+<text x="44" y="654" class="" font-size="20" font-weight="400" style="fill:#213e42">第 2 拍握手；到第 5 拍检查时，m_valid 仍为 0。</text>
+<text x="693" y="430" class="mono" font-size="20" font-weight="400" style="fill:#213e42">512 words × 33 bits</text>
+<rect x="695" y="450" width="305" height="59" fill="url(#lines)" stroke="#9fb8ac"/>
+<rect x="705" y="462" width="285" height="35" fill="#e2ece6" stroke="none"/>
+<text x="741" y="487" class="mono" font-size="21" font-weight="600" style="fill:#213e42">{ TLAST, TDATA }</text>
+<path d="M847 509 L847 542" stroke="#40705e" stroke-width="2" fill="none"/>
+<text x="695" y="570" class="mono" font-size="34" font-weight="650" style="fill:#2e6755">1 × RAMB18E2</text>
+<text x="695" y="609" class="" font-size="18" font-weight="400" style="fill:#213e42">同一规格的人工参考实现</text>
+<text x="695" y="635" class="" font-size="18" font-weight="400" style="fill:#213e42">Yosys 综合映射，非上板测量。</text>
+<path d="M44 683 L1036 683" stroke="#c6d4d0" stroke-width="1" fill="none"/>
+<text x="44" y="705" class="mono" font-size="14" font-weight="500" style="fill:#667c76">AXI4-STREAM   /   COUNTEREXAMPLE REPLAY</text>
+</svg>
