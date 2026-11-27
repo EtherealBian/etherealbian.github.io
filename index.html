@@ -197,10 +197,10 @@
                   <span class="work-index" aria-hidden="true">01</span>
                   <div>
                     <h4 lang="en">CXP Data Acquisition &amp; Display</h4>
-                    <p><strong>基于 ZCU216（Zynq UltraScale+ RFSoC）构建 CoaXPress 采集回显系统，完成对滨松 C15550-22UP 相机与星测 PCIe-1005 CXP 模拟卡的硬件对接。</strong></p>
+                    <p>基于 <strong>ZCU216</strong>（Zynq UltraScale+ RFSoC）构建 <strong>CoaXPress 采集回显系统</strong>，完成对滨松 C15550-22UP 相机与星测 PCIe-1005 CXP 模拟卡的硬件对接。</p>
                     <dl class="cxp-notes">
-                      <div><dt>采集通路</dt><dd>CXP 像素流经 AXI4-Stream 接入，由 SGDMA 写入 PL 端四槽帧缓冲，再经 CDMA 分块搬运至 PS DDR，实现高速跨域传输。</dd></div>
-                      <div><dt>系统集成</dt><dd>开发 PetaLinux 驱动与设备树，处理 DMA 中断与缓存同步。采用“整帧读取后归还”机制防数据撕裂，用户态程序控制曝光触发，通过 UDP 实时回传显示。</dd></div>
+                      <div><dt>采集通路</dt><dd>CXP 像素流经 AXI4-Stream 接入，由 SGDMA 写入 PL 端<strong>四槽帧缓冲</strong>，再经 CDMA 分块搬运至 PS DDR，实现高速跨域传输。</dd></div>
+                      <div><dt>系统集成</dt><dd>开发 <strong>PetaLinux 驱动与设备树</strong>，处理 DMA 中断与缓存同步。采用“整帧读取后归还”机制防数据撕裂，用户态程序控制曝光触发，通过 UDP 实时回传显示。</dd></div>
                     </dl>
                   </div>
                 </li>
@@ -208,9 +208,9 @@
                   <span class="work-index" aria-hidden="true">02</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Detection</h4>
-                    <p><strong>HLS 原子检测核</strong>：针对 40 × 40 阵列位点执行 31 × 31 模板匹配，输出原子占据状态位图。</p>
+                    <p>HLS 原子检测核：针对 40 × 40 阵列位点执行 <strong>31 × 31 模板匹配</strong>，输出原子占据状态位图。</p>
                     <dl class="detector-notes">
-                      <div><dt>流水线</dt><dd>采用行级并行架构，将图像分发至四路处理单元。各路将像素交错映射至三组 BRAM，化解访存冲突，支撑窗口提取与定点乘加的<strong>全流水</strong>执行。</dd></div>
+                      <div><dt>流水线</dt><dd>采用行级并行架构，将图像分发至<strong>四路处理单元</strong>。各路将像素交错映射至三组 BRAM，化解访存冲突，支撑窗口提取与定点乘加的全流水执行。</dd></div>
                       <div><dt>延迟</dt><dd>在 300 MHz 主频下，单帧检测延迟仅 <strong class="metric">0.268 ms</strong>。</dd></div>
                     </dl>
                   </div>
@@ -219,11 +219,11 @@
                   <span class="work-index" aria-hidden="true">03</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Rearrangement</h4>
-                    <p><strong>HLS 原子重排核</strong>：基于占据位图评估阵列状态，生成向阵列中心填补的原子重排指令。</p>
+                    <p>HLS 原子重排核：基于占据位图评估阵列状态，生成向阵列中心填补的<strong>原子重排指令</strong>。</p>
                     <dl>
-                      <div><dt>规划</dt><dd>采用 40 位掩码提取行列占据特征。路径规划引入自适应分支策略：优先单轴压紧，容量受限时降级为“分配-压紧”两步重排，有效化解阵列拥塞。</dd></div>
+                      <div><dt>规划</dt><dd>采用 <strong>40 位掩码</strong>提取行列占据特征。路径规划引入自适应分支策略：优先单轴压紧，容量受限时降级为“分配-压紧”两步重排，有效化解阵列拥塞。</dd></div>
                       <div><dt>延迟</dt><dd>250 MHz 主频下，单帧规划耗时 <strong class="metric">13.57 μs</strong>。</dd></div>
-                      <div><dt>资源</dt><dd>仅消耗 5,077 LUT 与 4,388 FF；<strong class="metric">0 BRAM</strong>、<strong class="metric">0 DSP</strong>。</dd></div>
+                      <div><dt>资源</dt><dd>仅消耗 5,077 LUT 与 4,388 FF；<strong>0 BRAM、0 DSP</strong>。</dd></div>
                     </dl>
                   </div>
                 </li>
