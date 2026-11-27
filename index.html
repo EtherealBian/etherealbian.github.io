@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=project-filters-1" />
+    <link rel="stylesheet" href="style.css?v=project-topics-1" />
     <script src="portfolio.js?v=project-filters-1" defer></script>
     <script src="viewer.js?v=projects-1" defer></script>
   </head>
@@ -314,11 +314,8 @@
           <div class="projects" id="project-list">
             <article class="project logic" data-group="eda" id="yosys-pmux" aria-labelledby="yosys-pmux-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>01</b>
-                  / Logic synthesis
-                </span>
-                <span>Diagram</span>
+                <span class="catalog-number">01</span>
+                <span>Logic Synthesis</span>
               </div>
               <a
                 class="plate diagram"
@@ -354,11 +351,8 @@
             </article>
             <article class="project hardware" data-group="fpga" id="spectrum" aria-labelledby="spectrum-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>02</b>
-                  / Signal processing
-                </span>
-                <span>Diagram</span>
+                <span class="catalog-number">02</span>
+                <span>HLS Acceleration</span>
               </div>
               <a
                 class="plate diagram"
@@ -394,11 +388,8 @@
             </article>
             <article class="project hardware" data-group="fpga" id="lissajous" aria-labelledby="lissajous-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>03</b>
-                  / Signal tracking
-                </span>
-                <span>Hardware photo</span>
+                <span class="catalog-number">03</span>
+                <span>Digital Phase Tracking</span>
               </div>
               <a
                 class="plate photo"
@@ -434,11 +425,8 @@
             </article>
             <article class="project vision" data-group="fpga vision" id="vision" aria-labelledby="vision-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>04</b>
-                  / Image processing
-                </span>
-                <span>Hardware photo</span>
+                <span class="catalog-number">04</span>
+                <span>FPGA Image Processing</span>
               </div>
               <a
                 class="plate photo"
@@ -475,11 +463,8 @@
             </article>
             <article class="project hardware" data-group="fpga" id="n60" aria-labelledby="n60-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>05</b>
-                  / Ultrasonic beamforming
-                </span>
-                <span>Hardware photo</span>
+                <span class="catalog-number">05</span>
+                <span>Ultrasonic Beamforming</span>
               </div>
               <a
                 class="plate photo"
@@ -513,11 +498,8 @@
             </article>
             <article class="project vision" data-group="vision" id="uavcount" aria-labelledby="uavcount-title">
               <div class="catalog-meta" lang="en">
-                <span>
-                  <b>06</b>
-                  / Object tracking
-                </span>
-                <span>Diagram</span>
+                <span class="catalog-number">06</span>
+                <span>Multi-Object Tracking</span>
               </div>
               <a
                 class="plate diagram"
@@ -550,7 +532,10 @@
               </div>
             </article>
             <article class="project vision" data-group="vision" id="cone-fdk" aria-labelledby="cone-fdk-title">
-              <div class="catalog-meta" lang="en"><span><b>07</b> / Computed tomography</span><span>CT slices</span></div>
+              <div class="catalog-meta" lang="en">
+                <span class="catalog-number">07</span>
+                <span>CT Reconstruction</span>
+              </div>
               <a class="plate ct-sweep" href="work/cone-fdk.html" aria-label="查看 ConeFDK 核桃 CT 重建记录"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif"><img loading="lazy" decoding="async" src="assets/conefdk-walnut.png" alt="CT 扫层展示核桃的壳、隔膜与核仁；静态替代图为三个正交断面。"></picture></a>
               <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
               <div class="project-body">
@@ -571,7 +556,10 @@
               </div>
             </article>
             <article class="project infra" data-group="infra" id="spark-fuse" aria-labelledby="spark-fuse-title">
-              <div class="catalog-meta" lang="en"><span><b>08</b> / AI Infrastructure</span><span>Inference systems</span></div>
+              <div class="catalog-meta" lang="en">
+                <span class="catalog-number">08</span>
+                <span>AI Inference Systems</span>
+              </div>
               <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 DGX Spark 上的编译优化与整模型推理实测"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-system.webp?v=2" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。"></a>
               <div class="project-body">
                 <div class="project-heading">
@@ -586,7 +574,10 @@
               </div>
             </article>
             <article class="project hardware" data-group="fpga" id="vcu118-rocket" aria-labelledby="vcu118-rocket-title">
-              <div class="catalog-meta" lang="en"><span><b>09</b> / Digital Hardware</span><span>RISC-V SoC</span></div>
+              <div class="catalog-meta" lang="en">
+                <span class="catalog-number">09</span>
+                <span>RISC-V SoC</span>
+              </div>
               <a class="plate diagram" href="work/vcu118-rocket.html" aria-label="查看 VCU118 Rocket 的启动路径与验证记录"><img loading="lazy" decoding="async" src="assets/plates/vcu118-rocket-boot.svg" width="800" height="500" alt="五级 Rocket 流水线，以及从 Boot ROM 经 OpenSBI 进入 Linux 的设计路径。"></a>
               <div class="project-body"><div class="project-heading">
                 <h3 id="vcu118-rocket-title" lang="en"><a href="work/vcu118-rocket.html">VCU118: Rocket Linux SoC<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
