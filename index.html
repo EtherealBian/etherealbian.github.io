@@ -218,11 +218,10 @@
                   <span class="work-index" aria-hidden="true">03</span>
                   <div>
                     <h4 lang="en">HLS-based Atom Rearrangement</h4>
-                    <p>用 <strong>40 位行列掩码</strong>设计双轴重排流水线，通过分配、压缩和按需均衡填充中心目标区。</p>
+                    <p>用 <strong>HLS</strong> 开发原子重排核：根据检测得到的 40 × 40 占据位图，生成填满阵列中心 <strong>20 × 16 个位点</strong>的搬运方案。</p>
                     <dl>
-                      <div><dt>接口</dt><dd>通过 <strong>256 位 AXI4-Stream</strong> 在一拍内输出一条搬运指令，最多包含 16 对源与目的坐标。</dd></div>
-                      <div><dt>性能</dt><dd>在 250 MHz 下，对 500 原子基准帧进行板上实测，规划耗时 <strong class="metric">13.57 μs</strong>。</dd></div>
-                      <div><dt>资源</dt><dd>重排核布线后占用 5,077 LUT、4,388 FF；<strong class="metric">0 BRAM</strong>，<strong class="metric">0 DSP</strong>。</dd></div>
+                      <div><dt>规划</dt><dd>用 40 位掩码统计各行、各列的原子数。若各目标行或各目标列均有足够原子，直接沿对应方向压紧；否则沿一轴分配原子，再沿另一轴压紧。在 250 MHz 下，板上实测单帧规划耗时为 <strong class="metric">13.57 μs</strong>（500 个原子的基准帧）。</dd></div>
+                      <div><dt>资源</dt><dd>布线后占用 5,077 LUT、4,388 FF，未使用 BRAM 或 DSP。</dd></div>
                     </dl>
                   </div>
                 </li>
