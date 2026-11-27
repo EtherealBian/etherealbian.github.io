@@ -493,7 +493,7 @@ details[open] > summary .icon {
   grid-template-rows: 1fr auto 1fr;
   gap: 0 clamp(16px, 3vw, 48px);
   align-items: center;
-  padding-block: clamp(24px, 3.5vw, 54px);
+  padding-block: clamp(5px, .7vw, 14px) clamp(20px, 2.4vw, 36px);
   border-bottom: 1px solid var(--rule);
 }
 .ring-cover h1 {
@@ -535,12 +535,6 @@ details[open] > summary .icon {
   }
   .ring-toggle:focus-visible + picture { outline: 2px solid var(--blue); outline-offset: -3px; }
   .ring-toggle:checked + picture img { animation-play-state: paused; }
-}
-@media (min-width: 681px) {
-  .ring-cover h1, .ring-cover .cover-focus {
-    position: relative;
-    bottom: clamp(18px, 2.8vw, 40px);
-  }
 }
 .cover-focus {
   align-self: start;
@@ -605,7 +599,7 @@ details[open] > summary .icon {
     grid-template-columns: minmax(0, 1.17fr) minmax(0, .83fr);
     grid-template-rows: auto auto;
     gap: 14px 8px;
-    padding-block: clamp(25px, 5vw, 38px);
+    padding-block: clamp(25px, 5vw, 38px) 18px;
   }
   .ring-cover h1 {
     grid-area: 1 / 1;
@@ -621,6 +615,7 @@ details[open] > summary .icon {
   .cover-topics dt { font-size: 1.18em; }
 }
 /* About：左栏是个人与教育经历，右栏用浅色卡片列出研究方向。 */
+#about { padding-block-start: clamp(28px, 3vw, 44px); }
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
