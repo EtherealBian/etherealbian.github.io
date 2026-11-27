@@ -1564,3 +1564,11 @@ details[open] > summary .icon {
 .project .ct-sweep img,.evidence .ct-sweep img {width:100%;height:100%;object-fit:contain;max-height:22rem}
 .ct-controls {display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;padding:.45rem .8rem;font: .75rem/1.5 ui-monospace,monospace}
 .ct-controls button {font:inherit;color:inherit;background:transparent;border:1px solid currentColor;padding:.15rem .6rem;cursor:pointer}
+
+/* Plates 03–09 use one viewBox. The live CT window is registered to its
+   static SVG slice (95,164,230,230 in 1080 × 720), including with JS off. */
+.project .atlas-cover {aspect-ratio:3/2;box-sizing:content-box;height:auto}
+.project .atlas-cover.ct-sweep {display:block;background:#fff}
+.project .atlas-cover > img {display:block;max-height:none}
+.project .atlas-cover > .atlas-slice {position:absolute;left:8.796296%;top:22.777778%;width:21.296296%;height:auto;aspect-ratio:1;pointer-events:none}
+.project .atlas-cover > .atlas-slice img {display:block;width:100%;height:100%;max-height:none}

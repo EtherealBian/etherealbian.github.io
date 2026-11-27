@@ -19,7 +19,7 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=project-topics-1" />
+    <link rel="stylesheet" href="style.css?v=engineering-plates-1" />
     <script src="portfolio.js?v=project-filters-1" defer></script>
     <script src="viewer.js?v=projects-1" defer></script>
   </head>
@@ -392,18 +392,8 @@
                 <span class="catalog-number">03</span>
                 <span>Digital Phase Tracking</span>
               </div>
-              <a
-                class="plate photo"
-                data-plate
-                href="assets/lissajous-hardware.jpg"
-                aria-label="查看FPGA 李萨如图形显示控制装置：竞赛工作台"
-              >
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src="assets/plates/scope.webp"
-                  alt="竞赛工作台：示波器上的轨迹是两路电压的 X–Y 关系，不是单路信号随时间变化的波形。"
-                />
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-03-phase.svg" aria-label="放大工程图：让两路信号在示波器上成图">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-03-phase.svg" width="1080" height="720" alt="有线 DPLL 与视觉估计两条通路。下方三条理论轨迹旁是示波器实拍，屏上可见双环。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -429,18 +419,8 @@
                 <span class="catalog-number">04</span>
                 <span>FPGA Image Processing</span>
               </div>
-              <a
-                class="plate photo"
-                data-plate
-                href="assets/elinx-competition-demo.png"
-                aria-label="查看 FPGA 实时图像处理竞赛实拍"
-              >
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src="assets/plates/vision.webp"
-                  alt="竞赛实拍：同一张照片里可以对照开发板、本地显示器和上位机控制界面。"
-                />
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-04-vision.svg" aria-label="放大工程图：从摄像头像素到双路显示">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-04-vision.svg" width="1080" height="720" alt="竞赛实拍及基础版视频路径：帧缓存、像素处理、HDMI 与 UDP 输出。时序图示意在帧边界切换算法。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -467,18 +447,8 @@
                 <span class="catalog-number">05</span>
                 <span>Ultrasonic Beamforming</span>
               </div>
-              <a
-                class="plate photo"
-                data-plate
-                href="assets/n60-hardware.jpg"
-                aria-label="查看基于 FPGA 的 60 阵元超声定向传声系统：阵列与控制硬件"
-              >
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src="assets/plates/array.webp"
-                  alt="阵列与控制硬件：先在实物上辨认五组阵元，再与阵元分布图的分组对照。"
-                />
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-05-array.svg" aria-label="放大工程图：一套音频输入，五组超声子阵">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-05-array.svg" width="1080" height="720" alt="实拍阵列、上位机控制与板端音频通路；五组各十二个通道的分组示意。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -502,18 +472,8 @@
                 <span class="catalog-number">06</span>
                 <span>Multi-Object Tracking</span>
               </div>
-              <a
-                class="plate diagram"
-                data-plate
-                href="assets/plates/uavcount-counting.svg"
-                aria-label="放大 UAVCount 三帧计数示意图"
-              >
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src="assets/plates/uavcount-counting.svg"
-                  alt="三帧计数示意：新目标连续出现三帧计一次，已计目标短时漏检后不重复计数，孤立候选不计数。"
-                />
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-06-tracking.svg" aria-label="放大工程图：同一目标，只在首次确认时计数">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-06-tracking.svg" width="1080" height="720" alt="左侧是水岸合成示意；右侧按身份跟踪三帧；下方单列半合成视频留出集的真实判读结果。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -536,7 +496,13 @@
                 <span class="catalog-number">07</span>
                 <span>CT Reconstruction</span>
               </div>
-              <a class="plate ct-sweep" href="work/cone-fdk.html" aria-label="查看 ConeFDK 核桃 CT 重建记录"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif"><img loading="lazy" decoding="async" src="assets/conefdk-walnut.png" alt="CT 扫层展示核桃的壳、隔膜与核仁；静态替代图为三个正交断面。"></picture></a>
+              <a class="plate diagram atlas-cover ct-sweep" data-plate href="assets/plates/atlas-07-ct.svg" aria-label="放大工程图：从 720 幅投影重建一颗核桃">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-07-ct.svg" width="1080" height="720" alt="真实核桃重建切片；CUDA 投影行滤波与按列反投影；512³ 体素与 ASTRA 的相对 L2 差异为 0.02899%。">
+                <picture class="atlas-slice" aria-hidden="true">
+                  <source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif">
+                  <img loading="lazy" decoding="async" src="assets/plates/atlas-07-still.webp" width="276" height="276" alt="">
+                </picture>
+              </a>
               <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
               <div class="project-body">
                 <div class="project-heading">
@@ -559,7 +525,9 @@
                 <span class="catalog-number">08</span>
                 <span>AI Inference Systems</span>
               </div>
-              <a class="plate diagram" href="work/spark-fuse.html" aria-label="查看 DGX Spark 上的编译优化与整模型推理实测"><img loading="lazy" decoding="async" src="assets/plates/sparkfuse-system.webp?v=2" width="1200" height="750" alt="DGX Spark 实物与三项实测：四层 BERT 将 Q/K/V 按列打包，内核启动从 233 减至 64 次；Qwen2.5-32B 长前缀双请求从 9.443 降至 7.659 秒；量化 GLM-4.5 355B 的 128 入、16 出本机请求为 2.588 秒（中位数）。"></a>
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-08-compiler.svg" aria-label="放大工程图：把 PyTorch 子图编译成 CUDA">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-08-compiler.svg" width="1080" height="720" alt="DGX Spark 型号照片；单层 Q/K/V 共用 INT8 GEMM，四层 BERT 前向从 233 次内核启动减至 64 次。32B 与 355B 为独立整模型实验。">
+              </a>
               <div class="project-body">
                 <div class="project-heading">
                   <h3 id="spark-fuse-title"><a href="work/spark-fuse.html"><span lang="en">PyTorch → CUDA</span> <span class="sf-title-word">推理编译器</span><span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
@@ -581,7 +549,9 @@
                 <span class="catalog-number">09</span>
                 <span>RISC-V SoC</span>
               </div>
-              <a class="plate diagram" href="work/vcu118-rocket.html" aria-label="查看 VCU118 Rocket 的启动路径与验证记录"><img loading="lazy" decoding="async" src="assets/plates/vcu118-rocket-boot.svg" width="800" height="500" alt="五级 Rocket 流水线，以及从 Boot ROM 经 OpenSBI 进入 Linux 的设计路径。"></a>
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-09-rocket.svg" aria-label="放大工程图：在 VCU118 上启动 Rocket Linux">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-09-rocket.svg" width="1080" height="720" alt="左侧是板上验收 JSON 的字段摘录，不是串口屏幕截图。JTAG 配置与 UART 固件装载分开。底部为独立的一对端到端计时。">
+              </a>
               <div class="project-body"><div class="project-heading">
                 <h3 id="vcu118-rocket-title" lang="en"><a href="work/vcu118-rocket.html">VCU118: Rocket Linux SoC<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
                 <div class="project-links" lang="en"><a class="entry-link" href="work/vcu118-rocket.html" aria-label="Case study: VCU118 Rocket">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>

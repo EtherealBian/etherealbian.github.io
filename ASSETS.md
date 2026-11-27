@@ -47,3 +47,17 @@
 - `assets/plates/sparkfuse-system.webp`（1200 × 750）与 `assets/plates/sparkfuse-system-full.webp`（2080 × 1300）是同一张总览。实物照片：[Nvidia DGX Spark oblique view dllu](https://commons.wikimedia.org/wiki/File:Nvidia_DGX_Spark_oblique_view_dllu.jpg)，Daniel Lu（dllu），Wikimedia Commons，[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。改动：去除桌面背景、缩放、添加投影和实验图解。合成图版由 EtherealBian 按同一许可发布。照片用于识别设备型号，不是本次实验现场照。
 - `assets/plates/sparkfuse-qkv-atlas.webp` 是原创 CUDA 工程剖面图。颜色区分 Q/K/V 三组权重，区间标的是列索引。总览与剖面共用一套绘图代码。数据分别来自[四层 BERT](https://github.com/EtherealBian/spark-fuse/blob/dcc775fb960986ed85d16b217ec17e3d295a058b/reports/stacked-bert-gb10.json)、[Qwen 双请求](https://github.com/EtherealBian/spark-fuse/blob/dcc775fb960986ed85d16b217ec17e3d295a058b/reports/qwen32b-fork/timing.json)和[GLM 固定长度请求](https://github.com/EtherealBian/spark-fuse/blob/dcc775fb960986ed85d16b217ec17e3d295a058b/reports/glm45-355b/timing.json)。
 - 重绘：安装 Pillow 后，运行 `python tools/draw_sparkfuse.py <上述提交的reports目录> <原始照片.jpg> <输出目录>`。使用照片页 2026-05-19 20:07 UTC 版的原尺寸文件（SHA-256 `6c0e2a9efe3a29fafc07a34d71e7e31903b7b4d4d2a55368b34182a39dc7005a`）。生成器校验照片和报告，输出含照片的 `sparkfuse-system.svg` 与独立的 `qkv-warm-detail.svg`。在已安装 Noto Sans SC、Bahnschrift、Consolas 的环境，使用 Sharp 以 180 dpi 读取总览 SVG，先渲染为 2080 × 1300，再分别按两档宽度导出 WebP（quality 91、smartSubsample、effort 6）。
+
+### 首页工程图版 03–09
+
+安装 Pillow 后运行 `python -B tools/draw_project_covers.py`，即可从本站已归档的素材重建这七张独立 SVG 和扫层静帧。01、02 是视觉参照，未替换。详情页仍保留工作台原图和完整实验记录。
+
+| 图版 | 左上素材与读图边界 |
+|---|---|
+| 03 李萨如 | `lissajous-hardware.jpg` 竞赛工作台实拍；下方三条曲线按频比与相位绘制，非示波器采样。 |
+| 04 图像处理 | `elinx-competition-demo.png` 竞赛实拍；右侧只画基础版视频流，时序图说明控制字在帧边界生效。 |
+| 05 超声阵列 | `n60-hardware.jpg` 实拍。下方五组圆点表示通道分组，不表示实物位置或声场强度。 |
+| 06 UAVCount | 使用本站 `uavcount-pipeline.svg` 内的水岸与目标素材组合示意，不是测试帧；167/184 是留出判读窗口的计数结果。 |
+| 07 ConeFDK | 上述 Helsinki 核桃数据（Alexander Meaney，CC BY 4.0）经重建得到的轴向切片；静帧取自 `conefdk-sweep.gif`。折线保留 `conefdk-walnut-peak.svg` 的全部 512 个点，纵量是重建强度差。 |
+| 08 推理编译器 | 从上述 Daniel Lu 照片的合成图再次裁取设备，未作实验现场照使用。新合成图 `atlas-08-compiler.svg` 由 EtherealBian 按 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 发布，署名、来源与改动也嵌入 SVG。三组实验来源见前节。 |
+| 09 Rocket Linux | 按[实板验收 JSON](https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json)摘录四项字段，非终端截图。下方两条计时是[另一组配对启动记录](work/vcu118-rocket.html)，不含 JTAG 配置。 |

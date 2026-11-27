@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720" role="img" aria-labelledby="title desc">
+<title id="title">在 VCU118 上启动 Rocket Linux</title><desc id="desc">左侧是板上验收 JSON 的字段摘录，不是串口屏幕截图。JTAG 配置与 UART 固件装载分开。底部为独立的一对端到端计时。</desc>
+<defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
+<rect x="0" y="0" width="1080" height="720" rx="0" fill="#ffffff" stroke="none"/>
+<text x="32" y="67" font-size="39" font-weight="680" fill="#203f58" text-anchor="start" class="">在 VCU118 上启动 Rocket Linux</text>
+<text x="1048" y="38" font-size="16" font-weight="600" fill="#21695a" text-anchor="end" class="mono">ENGINEERING PLATE   /   09</text>
+<text x="1048" y="67" font-size="19" font-weight="500" fill="#475e6c" text-anchor="end" class="serif">FPGA configuration to a BusyBox shell</text>
+<path d="M32 86H1048" fill="none" stroke="#203f58" stroke-width="2" stroke-linejoin="round"/>
+<rect x="32" y="105" width="356" height="331" rx="3" fill="#ffffff" stroke="#abc4d9"/>
+<rect x="32" y="105" width="356" height="4" rx="0" fill="#265b8b" stroke="none"/>
+<rect x="48" y="122" width="28" height="28" rx="3" fill="#265b8b" stroke="none"/>
+<text x="62" y="142" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">a</text>
+<text x="88" y="145" font-size="24" font-weight="650" fill="#265b8b" text-anchor="start" class="">板上验收记录</text>
+<rect x="404" y="105" width="644" height="331" rx="3" fill="#ffffff" stroke="#aacdbd"/>
+<rect x="404" y="105" width="644" height="4" rx="0" fill="#21695a" stroke="none"/>
+<rect x="420" y="122" width="28" height="28" rx="3" fill="#21695a" stroke="none"/>
+<text x="434" y="142" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">b</text>
+<text x="460" y="145" font-size="24" font-weight="650" fill="#21695a" text-anchor="start" class="">从易失配置到 Linux 用户态</text>
+<rect x="50" y="173" width="320" height="189" rx="3" fill="#f2f6f6" stroke="#abc4d9"/>
+<rect x="50" y="173" width="320" height="33" rx="3" fill="#eaf2fa" stroke="#abc4d9"/>
+<text x="62" y="196" font-size="17" font-weight="600" fill="#265b8b" text-anchor="start" class="">linux-oscheck  /  JSON 字段摘录</text>
+<text x="62" y="233" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">uart</text>
+<text x="359" y="233" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">115200 8N1</text>
+<text x="62" y="269" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">slr_done</text>
+<text x="359" y="269" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">[1, 1, 1]</text>
+<text x="62" y="305" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">slr_crc_error</text>
+<text x="359" y="305" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">[0, 0, 0]</text>
+<text x="62" y="341" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">shell_challenge_verified</text>
+<text x="359" y="341" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">true</text>
+<text x="50" y="394" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">三个 SLR 配置完成；</text>
+<text x="50" y="419" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">BusyBox 正确回答现场命令。</text>
+<text x="426" y="186" font-size="19" font-weight="630" fill="#265b8b" text-anchor="start" class="">配置通路</text>
+<rect x="426" y="200" width="195" height="60" rx="4" fill="#eaf2fa" stroke="#abc4d9"/>
+<text x="523.5" y="238.0" font-size="22" font-weight="630" fill="#265b8b" text-anchor="middle" class="">J106 / JTAG</text>
+<path d="M621 230h39" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="665" y="200" width="353" height="60" rx="4" fill="#eaf2fa" stroke="#abc4d9"/>
+<text x="841.5" y="238.0" font-size="22" font-weight="630" fill="#265b8b" text-anchor="middle" class="">FPGA · 100 MHz 五级 Rocket</text>
+<text x="426" y="297" font-size="19" font-weight="630" fill="#21695a" text-anchor="start" class="">固件与软件启动</text>
+<rect x="426" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
+<text x="517.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">J4 UART</text>
+<text x="517.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">Boot ROM</text>
+<path d="M609 353h17" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="630" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
+<text x="721.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">DDR4</text>
+<text x="721.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">固件 / OpenSBI</text>
+<path d="M813 353h17" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="834" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
+<text x="925.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">Linux 6.6.65</text>
+<text x="925.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">BusyBox</text>
+<rect x="32" y="456" width="1016" height="235" rx="3" fill="#ffffff" stroke="#d4be9c"/>
+<rect x="32" y="456" width="1016" height="4" rx="0" fill="#885a27" stroke="none"/>
+<rect x="48" y="473" width="28" height="28" rx="3" fill="#885a27" stroke="none"/>
+<text x="62" y="493" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">c</text>
+<text x="88" y="496" font-size="24" font-weight="650" fill="#885a27" text-anchor="start" class="">同一固件两种传法：从串口开始发送，到 shell 回答</text>
+<text x="54" y="562" font-size="22" font-weight="630" fill="#265b8b" text-anchor="start" class="">原始固件</text>
+<rect x="202" y="540" width="400" height="26" rx="3" fill="#eaf2fa" stroke="#abc4d9"/>
+<rect x="202" y="540" width="5" height="26" rx="0" fill="#265b8b" stroke="none"/>
+<text x="619" y="563" font-size="25" font-weight="650" fill="#265b8b" text-anchor="start" class="mono">495.050 s</text>
+<text x="54" y="625" font-size="22" font-weight="630" fill="#21695a" text-anchor="start" class="">自解压固件</text>
+<rect x="202" y="603" width="157" height="26" rx="3" fill="#eaf4ef" stroke="#aacdbd"/>
+<rect x="202" y="603" width="5" height="26" rx="0" fill="#21695a" stroke="none"/>
+<text x="376" y="626" font-size="25" font-weight="650" fill="#21695a" text-anchor="start" class="mono">194.469 s</text>
+<path d="M765 522v145" fill="none" stroke="#c4d1d4" stroke-width="1" stroke-linejoin="round"/>
+<text x="787" y="555" font-size="21" font-weight="650" fill="#203f58" text-anchor="start" class="">对照条件</text>
+<text x="787" y="592" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">同板、同一 bitstream</text>
+<text x="787" y="625" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">不含 JTAG 配置时间</text>
+<metadata>Record excerpt: https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json . Timing bars are a distinct paired experiment reported on work/vcu118-rocket.html.</metadata>
+</svg>
