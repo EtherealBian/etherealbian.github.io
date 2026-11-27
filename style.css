@@ -783,7 +783,7 @@ details[open] > summary .icon {
 .work-notes dl { display: grid; gap: 4px; }
 .work-notes dl > div { display: grid; grid-template-columns: 2em minmax(0, 1fr); gap: 12px; }
 .work-notes .detector-notes > div { grid-template-columns: 3em minmax(0, 1fr); }
-.work-notes .cxp-notes > div { grid-template-columns: 7.25em minmax(0, 1fr); }
+.work-notes .cxp-notes > div { grid-template-columns: max-content minmax(0, 1fr); column-gap: .55em; }
 @media (max-width: 680px) {
   .work-notes .cxp-notes { gap: 9px; }
   .work-notes .cxp-notes > div { grid-template-columns: 1fr; gap: 0; }
