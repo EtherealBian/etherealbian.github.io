@@ -568,12 +568,12 @@
             </article>
             <article class="project logic" data-group="eda fpga infra" id="rtl-witness" aria-labelledby="rtl-witness-title">
               <div class="catalog-meta" lang="en"><span class="catalog-number">10</span><span>AI for RTL</span></div>
-              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-10-rtl-witness.svg" aria-label="放大工程图：FIFO 时序反例与寄存器切片修复">
-                <img loading="lazy" decoding="async" src="assets/plates/atlas-10-rtl-witness.svg" width="1080" height="720" alt="左：帧 FIFO 在复位后未能发出第一拍；右：三稿各自失败，正确的状态转移逐步覆盖八种收发情形。">
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-10-rtl-witness.svg" aria-label="放大工程图：位宽转换器的反例修复">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-10-rtl-witness.svg" width="1080" height="720" alt="左侧对照第 2 拍修复前后的就绪信号；右侧显示 116 个局部改法如何由四条反例筛到 2 个。">
               </a>
               <div class="project-body"><div class="project-heading"><h3 id="rtl-witness-title" lang="en"><a href="work/rtl-witness.html">RTL Witness: Verilog Generation<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
                 <div class="project-links" lang="en"><a class="entry-link" href="work/rtl-witness.html" aria-label="Case study: RTL Witness">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a><a class="source-link" href="https://github.com/EtherealBian/rtl-witness" aria-label="GitHub: RTL Witness">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a></div></div>
-                <p class="project-summary">在 DGX Spark 上生成并验证 AXI-Stream RTL。72B 生成的状态转移组合成通过<strong>归纳证明</strong>的寄存器切片；Coder-32B 的 FIFO 首稿经工具局部修复，通过 <strong>20,232 拍</strong>独立回放。</p>
+                <p class="project-summary">在 DGX Spark 上用 32B、72B 模型生成 AXI-Stream RTL。工具用四条反例修复 72B 位宽转换器首稿，通过 <strong>6,524 拍独立回放</strong>与<strong>八项端口安全性质证明</strong>。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en"><li>Verilog</li><li>Icarus Verilog</li><li>Yosys</li><li>DGX Spark</li></ul></div>
             </article>
           </div>

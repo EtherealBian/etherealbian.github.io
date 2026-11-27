@@ -1,90 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720" role="img" aria-labelledby="title desc"><title id="title">RTL Witness · FIFO 反例与切片修复</title><desc id="desc">上方是规格到验证的路径；左下重放模型生成 RTL 的首次失败，右下显示三份状态表依次补齐八种收发转移。</desc><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif;fill:#213e42}.serif{font-family:Georgia,serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style><defs><pattern id="lines" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M0 9L9 0" stroke="#c7dcd3"/></pattern></defs><rect width="1080" height="720" fill="#fff"/>
-<text x="44" y="49" class="mono" font-size="17" font-weight="650" style="fill:#52746c">ENGINEERING ATLAS   /   RTL GENERATION</text>
-<text x="43" y="116" class="serif" font-size="66" font-weight="400" style="fill:#213e42">RTL Witness</text>
-<text x="44" y="157" class="" font-size="27" font-weight="600" style="fill:#213e42">用时序反例定位故障，逐行修复寄存器切片</text>
-<path d="M44 178 L1036 178" stroke="#c6d4d0" stroke-width="1" fill="none"/>
-<text x="44" y="212" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">A</text>
-<text x="78" y="212" class="" font-size="22" font-weight="650" style="fill:#213e42">生成与验收路径</text>
-<rect x="44" y="230" width="233" height="99" fill="#eff4f1" stroke="none"/>
-<text x="58" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">01  SPEC</text>
-<text x="58" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">AXI4-Stream</text>
-<text x="58" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">容量、握手与包尾</text>
-<path d="M277 280 L294 280" stroke="#476960" stroke-width="2" fill="none"/>
-<rect x="295" y="230" width="233" height="99" fill="#f0f4f6" stroke="none"/>
-<text x="309" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">02  MODEL</text>
-<text x="309" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Qwen2.5-72B</text>
-<text x="309" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">DGX Spark · Q4_K_M</text>
-<path d="M528 280 L545 280" stroke="#476960" stroke-width="2" fill="none"/>
-<rect x="546" y="230" width="233" height="99" fill="#eff4f1" stroke="none"/>
-<text x="560" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">03  SIM</text>
-<text x="560" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Icarus Verilog</text>
-<text x="560" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">握手与逐拍记分板</text>
-<path d="M779 280 L796 280" stroke="#476960" stroke-width="2" fill="none"/>
-<rect x="797" y="230" width="233" height="99" fill="#f0f4f6" stroke="none"/>
-<text x="811" y="254" class="mono" font-size="15" font-weight="650" style="fill:#577467">04  CHECK</text>
-<text x="811" y="286" class="" font-size="22" font-weight="650" style="fill:#213e42">Yosys</text>
-<text x="811" y="313" class="" font-size="17" font-weight="400" style="fill:#213e42">网表隔离与有界 SAT</text>
-<path d="M44 352 L1036 352" stroke="#c6d4d0" stroke-width="1" fill="none"/>
-<text x="44" y="388" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">B</text>
-<text x="78" y="388" class="" font-size="22" font-weight="650" style="fill:#213e42">帧 FIFO：有输入，无输出</text>
-<text x="554" y="388" class="mono" font-size="16" font-weight="700" style="fill:#2e7565">C</text>
-<text x="588" y="388" class="" font-size="22" font-weight="650" style="fill:#213e42">两拍切片：三份候选补齐八行</text>
-<path d="M530 380 L530 666" stroke="#c6d4d0" stroke-width="1" fill="none"/>
-<text x="44" y="422" class="" font-size="17" font-weight="400" style="fill:#546e68">首个反例 / 上升沿前采样</text>
-<path d="M151 442 L151 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
-<text x="159" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t1</text>
-<path d="M235 442 L235 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
-<text x="243" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t2</text>
-<path d="M319 442 L319 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
-<text x="327" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t3</text>
-<path d="M403 442 L403 612" stroke="#d6dedc" stroke-width="1" fill="none"/>
-<text x="411" y="458" class="mono" font-size="17" font-weight="400" style="fill:#213e42">t4</text>
-<text x="45" y="490" class="mono" font-size="19" font-weight="400" style="fill:#213e42">s_valid</text>
-<path d="M151 487 H235 V475 H319 V487 H403 V487 H487" fill="none" stroke="#276952" stroke-width="3"/>
-<text x="45" y="527" class="mono" font-size="19" font-weight="400" style="fill:#213e42">s_ready</text>
-<path d="M151 512 H235 V512 H319 V512 H403 V512 H487" fill="none" stroke="#276952" stroke-width="3"/>
-<text x="45" y="564" class="mono" font-size="19" font-weight="400" style="fill:#213e42">m_valid</text>
-<path d="M151 561 H235 V561 H319 V561 H403 V561 H487" fill="none" stroke="#ac5b43" stroke-width="3"/>
-<text x="45" y="601" class="mono" font-size="19" font-weight="400" style="fill:#213e42">m_ready</text>
-<path d="M151 598 H235 V598 H319 V598 H403 V598 H487" fill="none" stroke="#276952" stroke-width="3"/>
-<text x="44" y="654" class="" font-size="20" font-weight="400" style="fill:#213e42">第 2 拍已入队，第 5 拍 m_valid 仍为 0。</text>
-<text x="554" y="422" class="" font-size="17" font-weight="400" style="fill:#546e68">每格代表一种收发转移；深色为本稿新增。</text>
-<text x="554" y="465" class="" font-size="18" font-weight="400" style="fill:#213e42">首稿</text>
-<rect x="649" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="685" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="721" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="757" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="793" y="444" width="29" height="25" fill="#f5f2ed" stroke="#a6bbb1"/>
-<path d="M802 461 L812 451" stroke="#94644d" stroke-width="1.5" fill="none"/>
-<rect x="829" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="865" y="444" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="901" y="444" width="29" height="25" fill="#f5f2ed" stroke="#a6bbb1"/>
-<path d="M910 461 L920 451" stroke="#94644d" stroke-width="1.5" fill="none"/>
-<text x="954" y="465" class="mono" font-size="22" font-weight="650" style="fill:#213e42">6/8</text>
-<text x="554" y="505" class="" font-size="18" font-weight="400" style="fill:#213e42">修正入队</text>
-<rect x="649" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="685" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="721" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="757" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="793" y="484" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<rect x="829" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="865" y="484" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="901" y="484" width="29" height="25" fill="#f5f2ed" stroke="#a6bbb1"/>
-<path d="M910 501 L920 491" stroke="#94644d" stroke-width="1.5" fill="none"/>
-<text x="954" y="505" class="mono" font-size="22" font-weight="650" style="fill:#213e42">7/8</text>
-<text x="554" y="545" class="" font-size="18" font-weight="400" style="fill:#213e42">修正出队</text>
-<rect x="649" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="685" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="721" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="757" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="793" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="829" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="865" y="524" width="29" height="25" fill="#bed4c8" stroke="#a6bbb1"/>
-<rect x="901" y="524" width="29" height="25" fill="#326858" stroke="#a6bbb1"/>
-<text x="954" y="545" class="mono" font-size="22" font-weight="650" style="fill:#213e42">8/8</text>
-<text x="554" y="600" class="mono" font-size="32" font-weight="650" style="fill:#2e6755">22,176 拍</text>
-<text x="772" y="598" class="" font-size="24" font-weight="650" style="fill:#213e42">SAT 归纳证明</text>
-<text x="554" y="637" class="" font-size="18" font-weight="400" style="fill:#213e42">同一份组合 RTL；三份原稿各自仿真均失败。</text>
-<path d="M44 683 L1036 683" stroke="#c6d4d0" stroke-width="1" fill="none"/>
-<text x="44" y="705" class="mono" font-size="14" font-weight="500" style="fill:#667c76">AXI4-STREAM   /   COUNTEREXAMPLE REPLAY</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720" role="img" aria-labelledby="title desc"><title id="title">RTL Witness · 从反例修复 AXI-Stream 位宽转换器</title><desc id="desc">左侧逐拍显示原稿在第二拍拒绝下一个字，修复后连续输出 11、55、66。右侧四条反例将局部改法从 116 个筛到 2 个。冻结候选通过 6,524 拍独立回放、八项端口安全性质证明。</desc><style>text{font-family:'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif;fill:#263b35}.code{font-family:Consolas,'Liberation Mono','Microsoft YaHei',monospace}.serif{font-family:Georgia,'Times New Roman',serif}</style>
+<rect x="0" y="0" width="1080" height="720" rx="0" fill="#faf8f1"/>
+<rect x="46" y="33" width="29" height="3" rx="0" fill="#356853"/>
+<text x="87" y="41" class="code" font-size="16" font-weight="600" text-anchor="start" style="fill:#566b5f">DGX SPARK   /   AI FOR RTL</text>
+<text x="43" y="109" class="serif" font-size="70" font-weight="400" text-anchor="start" style="fill:#233d35">RTL Witness</text>
+<text x="46" y="151" class="" font-size="27" font-weight="650" text-anchor="start" style="fill:#233d35">用反例修复 Verilog 转换器的同拍收发逻辑</text>
+<text x="740" y="44" class="code" font-size="14" font-weight="700" text-anchor="start" style="fill:#566b5f">32-BIT WORD</text>
+<rect x="740" y="57" width="35" height="45" rx="3" fill="#dedfd1"/>
+<text x="757" y="86" class="code" font-size="19" font-weight="600" text-anchor="middle" style="fill:#233d35">3</text>
+<rect x="778" y="57" width="35" height="45" rx="3" fill="#c5cfbb"/>
+<text x="795" y="86" class="code" font-size="19" font-weight="600" text-anchor="middle" style="fill:#233d35">2</text>
+<rect x="816" y="57" width="35" height="45" rx="3" fill="#a3bba6"/>
+<text x="833" y="86" class="code" font-size="19" font-weight="600" text-anchor="middle" style="fill:#233d35">1</text>
+<rect x="854" y="57" width="35" height="45" rx="3" fill="#6c9382"/>
+<text x="871" y="86" class="code" font-size="19" font-weight="600" text-anchor="middle" style="fill:#233d35">0</text>
+<path d="M894 79H930 M924 73l6 6-6 6" fill="none" stroke="#356853" stroke-width="2"/>
+<rect x="940" y="57" width="75" height="45" rx="3" fill="#356853"/>
+<text x="977" y="85" class="code" font-size="20" font-weight="600" text-anchor="middle" style="fill:#fffdf6">8 bit</text>
+<text x="740" y="128" class="code" font-size="17" font-weight="400" text-anchor="start" style="fill:#566b5f">AXI-Stream  /  32 → 8</text>
+<path d="M46 176H1034" fill="none" stroke="#cbd1c2" stroke-width="1.5"/>
+<path d="M632 192V553" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="46" y="213" class="code" font-size="18" font-weight="700" text-anchor="start" style="fill:#356853">01</text>
+<text x="86" y="214" class="" font-size="23" font-weight="650" text-anchor="start" style="fill:#233d35">同拍交接：哪根信号错了？</text>
+<text x="47" y="246" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#566b5f">上一字发出末字节，下一字同时到达；修前已修正位选语法。</text>
+<rect x="346" y="264" width="79" height="230" rx="5" fill="#e9ddca"/>
+<text x="50" y="289" class="" font-size="17" font-weight="400" text-anchor="start" style="fill:#566b5f">上升沿</text>
+<text x="301" y="289" class="code" font-size="18" font-weight="650" text-anchor="middle" style="fill:#233d35">01</text>
+<text x="385" y="289" class="code" font-size="18" font-weight="650" text-anchor="middle" style="fill:#233d35">02</text>
+<text x="469" y="289" class="code" font-size="18" font-weight="650" text-anchor="middle" style="fill:#233d35">03</text>
+<text x="553" y="289" class="code" font-size="18" font-weight="650" text-anchor="middle" style="fill:#233d35">04</text>
+<path d="M48 303H606" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="50" y="331" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#233d35">下游 m_ready</text>
+<text x="301" y="331" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">0</text>
+<text x="385" y="331" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<text x="469" y="331" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<text x="553" y="331" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<path d="M48 351H606" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="50" y="379" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#233d35">修前 s_ready</text>
+<text x="301" y="379" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<text x="385" y="379" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#994b32">0</text>
+<text x="469" y="379" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">·</text>
+<text x="553" y="379" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">·</text>
+<path d="M48 399H606" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="50" y="427" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#233d35">修复 s_ready</text>
+<text x="301" y="427" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<text x="385" y="427" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#356853">1</text>
+<text x="469" y="427" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">0</text>
+<text x="553" y="427" class="code" font-size="25" font-weight="400" text-anchor="middle" style="fill:#233d35">1</text>
+<path d="M48 447H606" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="50" y="475" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#233d35">修后输出 / HEX</text>
+<text x="301" y="475" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#356853">—</text>
+<text x="385" y="475" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#356853">11</text>
+<text x="469" y="475" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#356853">55</text>
+<text x="553" y="475" class="code" font-size="25" font-weight="700" text-anchor="middle" style="fill:#356853">66</text>
+<path d="M384 496v12H67" fill="none" stroke="#994b32" stroke-width="1.5"/>
+<text x="50" y="539" class="" font-size="19" font-weight="650" text-anchor="start" style="fill:#994b32">第 2 拍：修前拒收，修后接收下一字。</text>
+<text x="657" y="213" class="code" font-size="18" font-weight="700" text-anchor="start" style="fill:#356853">02</text>
+<text x="698" y="214" class="" font-size="23" font-weight="650" text-anchor="start" style="fill:#233d35">四条反例筛选改法</text>
+<text x="658" y="246" class="" font-size="17" font-weight="400" text-anchor="start" style="fill:#566b5f">每轮将首个失败用例重放给剩余候选。</text>
+<text x="659" y="295" class="" font-size="18" font-weight="500" text-anchor="start" style="fill:#233d35">末字节背压放行</text>
+<text x="1027" y="295" class="code" font-size="24" font-weight="650" text-anchor="end" style="fill:#356853">116 → 24</text>
+<path d="M659 309H1028" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="659" y="352" class="" font-size="18" font-weight="500" text-anchor="start" style="fill:#233d35">同拍接收下一字</text>
+<text x="1027" y="352" class="code" font-size="24" font-weight="650" text-anchor="end" style="fill:#356853">24 → 6</text>
+<path d="M659 366H1028" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="659" y="409" class="" font-size="18" font-weight="500" text-anchor="start" style="fill:#233d35">非包尾字交接</text>
+<text x="1027" y="409" class="code" font-size="24" font-weight="650" text-anchor="end" style="fill:#356853">6 → 4</text>
+<path d="M659 423H1028" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="659" y="466" class="" font-size="18" font-weight="500" text-anchor="start" style="fill:#233d35">两沿间的复位脉冲</text>
+<text x="1027" y="466" class="code" font-size="24" font-weight="650" text-anchor="end" style="fill:#356853">4 → 2</text>
+<path d="M659 480H1028" fill="none" stroke="#cbd1c2" stroke-width="1"/>
+<text x="658" y="538" class="" font-size="18" font-weight="400" text-anchor="start" style="fill:#566b5f">末轮剩 2 份，按预定顺序验收第 1 份。</text>
+<rect x="46" y="570" width="988" height="118" rx="6" fill="#243f35"/>
+<text x="69" y="631" class="serif" font-size="51" font-weight="400" text-anchor="start" style="fill:#faf8eb">6,524</text>
+<text x="71" y="665" class="" font-size="19" font-weight="550" text-anchor="start" style="fill:#dce8d6">拍独立回放</text>
+<text x="385" y="631" class="serif" font-size="51" font-weight="400" text-anchor="start" style="fill:#faf8eb">8 / 8</text>
+<text x="387" y="665" class="" font-size="19" font-weight="550" text-anchor="start" style="fill:#dce8d6">端口安全性质证明</text>
+<text x="707" y="631" class="serif" font-size="51" font-weight="400" text-anchor="start" style="fill:#faf8eb">4 / 4</text>
+<text x="709" y="665" class="" font-size="19" font-weight="550" text-anchor="start" style="fill:#dce8d6">协议场景可达</text>
+<path d="M361 592v75" fill="none" stroke="#547061" stroke-width="1"/>
+<path d="M684 592v75" fill="none" stroke="#547061" stroke-width="1"/>
 </svg>
