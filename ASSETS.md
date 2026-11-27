@@ -5,7 +5,7 @@
 | 新图版（`assets/plates/`） | 依据与处理 |
 |---|---|
 | `scope.webp`、`array.webp`、`vision.webp` | 由本站原有 `lissajous-hardware.jpg`、`n60-hardware.jpg`、`elinx-competition-demo.png` 派生：缩放、轻微对比与锐化、WebP 压缩。卡片取景不影响原图入口。 |
-| `../pmux-overview-zh.webp`、`../pmux-overview-zh.png` | Yosys 保留网站仓库的原图。首页完整展示原有 WebP，高清入口是原始 4080 × 2751 PNG，不裁切、不叠标。 |
+| `../pmux-overview-zh.webp`、`../pmux-overview-zh.png` | 高清 PNG 与 [Yosys 项目机制图](https://github.com/EtherealBian/yosys-pmux-opt/blob/main/docs/pmux-overview-zh.png) 一致；1360 × 917 的无损 WebP 由该 PNG 等比缩小，不裁切。 |
 | `uavcount-counting.svg` | 按原图 `assets/uavcount-pipeline.svg` 的算法步骤、输出样例和回归统计，以及 `work/uavcount.html` 的计数判据重绘。三条身份轨迹只用于说明规则，不是实拍观测；统计来自 156 段半合成视频，不代表实景检测准确率。原图保留。 |
 | `vitis-hls-architecture.svg` | 为本次改版绘制的五面板工程图。初赛三算子的机制和固定测试负载周期按 [Vitis 项目说明](https://github.com/EtherealBian/vitis-hls-kernel-optimization)；决赛频谱仪另列。 |
 | `kernels.webp` | 由本站三算子架构原图 `vitis-hls-kernel-optimization.png` 压缩，保留完整图形和数值。 |
