@@ -1,28 +1,48 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VCU118 Rocket · 从复位向量到 Linux — EtherealBian 工程图志</title>
-<meta name="description" content="五级 RV64GC Rocket 的启动路径：SDHC、DDR4、OpenSBI 与 Linux。按 RTL、QEMU 和实板列出已通过及尚待验证的项目。">
-<link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"></head>
-<body class="dossier"><a class="skip" href="#sheet">跳至图志</a><header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#vcu118-rocket">← 返回工程图集</a></div></header>
-<main class="sheet-wrap" id="sheet"><header class="sheet-title"><div class="issue"><span>ENGINEERING RECORD <i>/</i> 09</span><span>Digital Hardware</span></div>
-<h1>VCU118 Rocket：从复位向量到 Linux</h1><p>在没有硬处理器的 VCU118 上，第一条指令由 FPGA 内的 Rocket 执行。11 月 26 日 15:49，串口另一端的 BusyBox 返回了现场生成的算术挑战结果。下面分别列出支持这次启动的 RTL、布线与实板记录。</p>
-<nav class="bench-links" aria-label="阅读入口"><a href="https://github.com/EtherealBian/vcu118-rocket-soc">GitHub 仓库 ↗</a><a href="#evidence">分层验证 ↓</a><a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/00a9b09abfccec6cfb11eaf12f8645b7f6c5ec95/docs/validation.json">本期验证数据 ↗</a></nav></header>
-<div class="exhibit-grid"><figure class="evidence"><div class="plate-head"><span>FIG. 09A</span><b>复位入口与两次控制权交接</b></div><div class="exhibit"><img src="../assets/plates/vcu118-rocket-boot.svg" width="800" height="500" alt="Boot ROM 在 0x10000 运行；OpenSBI 的装载地址为 0x80000000，Linux 入口为 0x80200000。"></div><figcaption>上排是处理器流水级，下排是软件启动顺序；后者横跨许多时钟周期。</figcaption></figure>
-<aside class="readout"><div class="rail-kicker">BOOT ROM <i>/</i> SDHC</div><strong>33 + 1</strong><p>紧凑裸机镜像的 RTL 测试中，ROM 读了 33 个 GPT 元数据扇区，再读 1 个程序扇区。</p><dl><dt>为什么改 ROM？</dt><dd>原版固定读取 30 MiB。候选版核对 GPT 后按实际分区长度装载。</dd><dt>字节读错了呢？</dt><dd>载荷扇区 CRC 出错后，调试端读到 PC 停在 ROM 的 0x1003c，没有跳进 DDR。</dd></dl><a href="https://github.com/EtherealBian/vcu118-rocket-soc/tree/b4cd3a56eb85969b5ccd38816162024c0aabbdaf/software/boot-gpt">阅读启动 ROM ↗</a></aside></div>
-<section class="analysis" id="evidence"><div class="section-label">01 <i>/</i> VERIFICATION</div><h2>哪些测试跑在了哪台机器上？</h2><table><caption>实板与模型分层记录 · 2026-11-26</caption><thead><tr><th scope="col">环境</th><th scope="col">已观察到</th><th scope="col">边界</th></tr></thead><tbody><tr><th scope="row">Rocket RTL</th><td>裸机完成两轮 1 MiB 读写；四种坏卡输入均在 ROM 停机。</td><td>SD 和外存是行为模型。</td></tr><tr><th scope="row">串口恢复 ROM · RTL</th><td>不预装 RAM、不读 SD：用 UART 送入 422 字节程序，Rocket 在 13,049,856 个模拟周期内完成两轮 1 MiB 内存自检。坏魔数、超长、错误 CRC 三项均停在 ROM。</td><td>此行记录模型串口引脚；下方另列实机串口下载结果。</td></tr><tr><th scope="row">INT8 点积 · Rocket RTL</th><td>Rocket 裸机经 TileLink 写入两个操作数、取回四项乘积之和；257 组向量全部与标量参考一致，空取和重复提交两种错误均被识别。</td><td>整段诊断耗时 695,296 个模拟周期，含启动及串口输出。首版组合设计因三 LUT 组合环被 Vivado 拒绝写 bit，未上板。</td></tr><tr><th scope="row">Linux 内核 · Rocket RTL</th><td>第 4,000 万个模拟周期，通过 JTAG 停核并读到 PC；匹配的内核 ELF 将该地址定位到 <code>memmap_init_range+0xfe</code>，当时 hart 处于 S 模式，Sv39 已开启。</td><td>固件预载到模拟 RAM。另一个限用 128 MiB 的配置已运行 /init，并输出 Linux 6.6.65 的 uname。它使用模拟外存。</td></tr><tr><th scope="row">QEMU virt</th><td>10 次独立启动，均完成 16 MiB 自检并响应 shell 命令。</td><td>不含 VCU118 的 DDR PHY 或引脚。</td></tr><tr><th scope="row">整机布线 · Vivado</th><td>实测所用的调试缓冲版有 113,460 条网络，全部布通。最差建立裕量 +0.403 ns、保持 +0.011 ns、脉宽 +0.143 ns；100 MHz 系统同域建立裕量 +1.205 ns。</td><td>跨域报告仍有 7 条严重项；本轮仅用 J106 配置与 J4 串口，不据此签核外接调试口或 SD。</td></tr><tr><th scope="row">独立探针 · 实板</th><td>通过 JTAG 易失配置独立诊断设计，三个 SLR 的 DONE 均为 1、CRC_ERROR 均为 0。FPGA 侧串口收到 260 个随机请求并返回 1,040 字节，宿主逐条核对通过，含序号回绕。</td><td>这次板测只验配置、时钟链和双向 UART；诊断电路不含 Rocket 或 DDR，未写 Flash 或 SD。</td></tr>
-<tr><th scope="row">Rocket 与 DDR4 · 实板</th><td>JTAG 易失配置后，从 J4 上传 422 字节程序。Rocket 两轮写读 1 MiB，计时器前进。另一次启动检查四个地址窗口：各 4 KiB、两轮，逐条刷出 L2 缓存线再读回，均通过。</td><td>另取的 MIG 只读校准快照为 CAL PASS：1 rank、64 数据位。这两项是抽测；另一轮大范围扫描如下。</td></tr>
-<tr><th scope="row">2,032 MiB 扫描 · 实板</th><td>先写满 254 个 8 MiB 块，再逐字读回。地址图样及其反相均通过，每次写约 46.22 秒，读并校验约 45.84 秒。</td><td>为程序和启动栈保留的两个 8 MiB 块未测。这里记录 CPU 端到端耗时，不是 DDR 峰值带宽。</td></tr>
-<tr><th scope="row">Linux 与 BusyBox · 实板</th><td>通过 J4 向板上传 5,341,704 字节固件，OpenSBI 进入 Linux 6.6.65。16 MiB 启动自检通过，BusyBox 1.36.1 的 ash 返回随机命令的计算结果。同一启动上又完成 13 轮 16 MiB 写读，定时器中断增加 3,893 次。</td><td>hart 0、Sv39，Linux 报告 MemTotal 2,061,808 KiB。使用 RAM 中的 initramfs，没有写 Flash 或 SD，也未据此测算 DDR 峰值带宽。</td></tr>
-<tr><th scope="row">两个 Linux 进程 · 实板</th><td>停核信号拆分版单独重启后，父子进程对同一虚拟页写入不同内容，校验各自的 4 KiB。64 轮管道交接后，两个进程的浮点寄存器保持正确，共享计数器恰好加到 128。</td><td>一个 hart，验证写时复制、RV64 原子加法及浮点上下文；不代表多核一致性测试。拆分版另一次裸机扫描也通过 2,032 MiB。</td></tr>
-<tr><th scope="row">同一固件启动 · 实板</th><td>两次从 J4 开始发送，到 BusyBox 答对现场命令：原始 5,341,704 字节用 495.050 秒，自解压 2,018,528 字节用 194.469 秒。板端校验了还原后的固件。</td><td>同一块板、同一 bit 的一对观察值，不含 JTAG 配置。两次启动的内核与用户程序没有变化。</td></tr>
-<tr><th scope="row">CPU 工作负载 · 实板</th><td>100 MHz 单核 Rocket，Linux 用户态。GCC 15.1 配合 -O3、LTO 和 Zba/Zbb，性能种子三次中位数 254.232 次/秒，验证种子 252.813 次/秒。比同次启动的 GCC 13.3 对照快 3.047%。</td><td>三种编译配置交错测试，每种配置 3 次、两套种子各 12,000 轮。一个上下文、2,000 字节，CRC 与墙钟核验通过。独立测量，非认证成绩。</td></tr>
-<tr><th scope="row">通用 RV64GC · 实板</th><td>重启后，在同一颗 100 MHz Rocket 上、不使用 Zba/Zbb：GCC 13.3 的 -O2 与 -O3 分别为 216.924 和 223.743 次/秒；GCC 15.1 的 -O3 -flto 为 228.241 次/秒。均为三次性能中位数。</td><td>三份程序、两套种子，共 18 次计时通过 CRC 与主机墙钟复核。这是给后续 BOOM 共用的软件基准。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/coremark-portable-rocket-board.json">查看各次测量 ↗</a></td></tr>
-<tr><th scope="row">调优与对齐 · 实板</th><td>同一 100 MHz Rocket、同次 Linux 启动：GCC 15 默认配置 228.324 次/秒，加 <code>-mtune=generic-ooo</code> 后 229.850 次/秒（性能中位数，+0.668%）。</td><td>该选项还改变了 GCC 默认的非对齐访问策略。三份程序各测两套种子、三次重复，18 次计时均通过 CRC 和墙钟复核。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/3a6ca89c97c79a92a336b0a7ca0bb20305c7c9a0/docs/coremark-tune-rocket-board.json">查看本轮各次板测 ↗</a></td></tr>
-<tr><th scope="row">固定对齐策略 · 实板</th><td>同一 100 MHz Rocket 上，将调度和对齐分开测：固定严格对齐或允许非对齐后，换用 <code>generic-ooo</code> 的配对提升分别为 0.557% 和 0.657%。本轮最佳中位数 229.819 次/秒，未刷新纪录。</td><td>四份通用 RV64GC 程序，24 次计时通过 CRC 及墙钟复核。四路 BOOM 的 −9.105 ns 是布局后时序估计，不是板分。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/93487cd1c5d30f74352b5f574db4bafa10d9e2f4/docs/coremark-align-rocket-contrasts.json">查看四项配对比较 ↗</a></td></tr>
-<tr><th scope="row">串口压力 · 实板</th><td>首轮第 27 行发送 256 字符，板上只校验到 233 字符；保持同一启动重测，32 行、8,192 字符及全部摘要和 ACK 都匹配。</td><td>保留首轮失败。期间有内核日志插入，不能仅凭回显判定哪一层丢失。</td></tr>
-</tbody></table>
-<p><strong>四路是一个核，不是四个核。</strong> 同一份通用 <code>-O2</code> 程序，双路、三路和四路 BOOM 的性能种子中位数依次是 223,562、177,191.75 和 162,125.50 周期/轮。换用两份编译产物、两套种子，四路的 12 个 RTL 窗口全部低于每轮 175,000 拍。要将这一优势兑现，四路在 <code>-O2</code> 的实时时钟至少要保住三路的约 91.5%。这是裸机模型；175 MHz 未获整机布线验证，不能将窗口换算成 Linux 实板得分。</p><p>双路 100 MHz 原版布线通过，但调试停核请求存在跨时钟风险，所以未下载该 bit。三路 175 MHz 的布局前估算定位到数据缓存至整数发射队列的 38 级路径。已测得的最高实板中位数仍是 Rocket 的 254.232，而不是任一 BOOM 的推算值。</p><p><strong>四路先拿哪份程序上板？</strong> 在同一份四路 RTL 上，GCC 13.3 <code>-O2</code> 的性能种子中位数是 162,125.50 周期/轮；GCC 15.1 <code>-O3 -flto</code> 虽少退休 5.88% 的指令，却多用 2.23% 的周期。因此两者都保留作板测对照。这些是裸机窗口，不是上面 Rocket 的 Linux 程序。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/1683bcc0c0d102f1bcb18117f6513b2f31c8779b/docs/perf-mega-g15gc-software.json">比较同一硬件上的六对窗口 ↗</a></p>
-<p>四路 175 MHz 请求配置的 ROM 已在整核引脚仿真中用串口启动：正确帧交接到程序并收到回复，坏 CRC 帧在 ROM 停止，错误波特率被拒绝。没有用这项测试推算 FPGA 主频或实板跑分。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/1683bcc0c0d102f1bcb18117f6513b2f31c8779b/docs/perf-mega175-rom-link.json">查看原版串口测试 ↗</a></p>
-<p><strong>四路要多用多少逻辑？</strong> 同为 175 MHz 请求，整机综合表里，三路原版有 265,404 个 LUT1–LUT6 原语实例，四路修订版有 454,316 个，多 71.18%。这是综合实例数，不是布局后的实际 LUT 占用。四路已进入布局，尚无 Linux 实板成绩。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/452e7a96b022fa7ac7bcef2e92003bd1aac0ab2d/docs/perf175-synth-footprint.json">查看两份综合表对照</a>。</p>
-<p><strong>把缓存选择提前，会选错路吗？</strong> 三路单核把命中路和替换路的选择移到同一个寄存器之前。从生成的 RTL 逐一检查 2,048 个输入组合，包括多个标签位同时命中的情况；送到缺失处理单元的 8 位结果仍在同一拍出现。GCC 13.3 的 <code>-O2</code> 和 <code>-O3</code> 两份程序各跑六个裸机窗口；改动前后，12 对窗口的周期与退休指令数都相等。能否提频要看布线。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/452e7a96b022fa7ac7bcef2e92003bd1aac0ab2d/docs/perf-early-way-windows.json">查看逐窗口计数</a>；<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/bb79a354f178902e0047a495cbf49643262b7b45/docs/perf-early-way-cone.json">查看逐拍验证范围和两个反例</a>。</p>
-<p><strong>四路派发会不会多等一拍？</strong> 将发射队列改为每四槽一组计数后，24、32、40 槽三种队列都通过了逐拍等价证明。即使自由选择每个槽是否可用，四路派发许可也与原版一致。故意漏掉最后一个槽，三次都找到了反例。这回答的是延迟是否改变；整核能否提高时钟，要由布线回答。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/8df07782f71603c833e8a9c426362211cbd38557/docs/perf-real-issue-proof.json">查看三个队列的证明与反例 ↗</a></p><p><strong>四核与单核分开验。</strong> 四核九级 Rocket 在 RTL 中完成 64 次共享交接、和为 2,080。每核逐拍检查 256 条退休整数指令，其中 251 条走过连续九级。它验证了这一段程序，不是四核板测；四核吞吐也不计入单核成绩。<a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/performance-first.md">性能实验与选型 ↗</a> · <a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/perf-mega-o2.json">三路与四路逐次计数 ↗</a> · <a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/coremark-1000-compilers-board.json">单核实板逐次记录 ↗</a> · <a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/quad-nine.md">四核轨迹与参考论文 ↗</a></p><nav class="bench-links" aria-label="项目资料"><a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/00a9b09abfccec6cfb11eaf12f8645b7f6c5ec95/docs/bring-up.md">按步骤复现 ↗</a><a href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/main/docs/validation.md">查看后续验证记录 ↗</a><a href="spark-fuse.html">← 工程图志 08 · PyTorch → CUDA 推理编译器</a></nav></section></main></body></html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RISC-V Linux SoC — EtherealBian 工程图志</title>
+  <meta name="description" content="在 VCU118 上部署五级 Rocket，启动 Linux 6.6.65；用 LZ4 缩短串口引导，测量单核 CoreMark，并对比三路与四路 BOOM 的 RTL 周期。">
+  <link rel="icon" href="../assets/orbit.svg"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../dossier.css"><link rel="stylesheet" href="../assets/rocket.css">
+</head>
+<body class="dossier rocket-sheet">
+<a class="skip" href="#sheet">跳至项目</a>
+<header class="sheet-nav"><div class="sheet-wrap"><a class="brand" href="../index.html"><img src="../assets/orbit.svg" width="32" height="32" alt="">EtherealBian</a><a href="../index.html#vcu118-rocket">← 返回工程图集</a></div></header>
+<main id="sheet" class="sheet-wrap">
+  <header class="rocket-title">
+    <p class="rocket-folio">工程图志 09 <span>/</span> VCU118</p>
+    <h1 lang="en">RISC-V Linux SoC</h1>
+    <div class="rocket-deck"><p>在 VCU118 上部署 100 MHz 五级 Rocket，从片上 Boot ROM 启动 Linux 6.6.65，进入 BusyBox 用户态。</p><a href="https://github.com/EtherealBian/vcu118-rocket-soc">GitHub 仓库 ↗</a></div>
+  </header>
+  <div class="rocket-spread">
+    <figure class="rocket-figure">
+      <a href="../assets/plates/atlas-09-rocket.svg?v=3" aria-label="放大 Rocket 启动与性能工程图"><img src="../assets/plates/atlas-09-rocket.svg?v=3" width="1080" height="720" alt="Rocket 五级流水、启动地址和从串口到 BusyBox 的引导链；下方分别展示实板引导时间、单核吞吐和 BOOM RTL 周期。"></a>
+      <figcaption><span>Rocket 启动路径与性能对照</span><a href="../assets/plates/atlas-09-rocket.svg?v=3">放大工程图 ↗</a></figcaption>
+    </figure>
+    <section class="rocket-boot" aria-labelledby="boot-title">
+      <h2 id="boot-title">串口引导优化</h2>
+      <p class="rocket-reading"><span>495</span><i aria-hidden="true"> → </i>194 <small>s</small></p>
+      <p class="rocket-scope">J4 开始发送 → BusyBox 正确应答</p>
+      <dl class="rocket-steps">
+        <dt>压缩传输</dt><dd>主机用 LZ4 将固件封装为自解压载荷，串口发送量从 5,341,704 字节减至 2,018,528 字节。</dd>
+        <dt>在 DDR4 中还原</dt><dd>解压程序先将自身搬到 <code>0x84000000</code>，再将原始固件还原到 <code>0x80000000</code>，校验 CRC32 后跳入 OpenSBI。</dd>
+        <dt>进入 Linux</dt><dd>OpenSBI 将控制权交给 S 模式内核。两次使用同一块板、同一份比特流与内层固件，计时不含 JTAG 配置。</dd>
+      </dl>
+      <a class="rocket-source" href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/validation.md">对照两次引导计时 ↗</a>
+    </section>
+  </div>
+  <div class="rocket-comparisons">
+    <section aria-labelledby="coremark-title"><h2 id="coremark-title">Rocket 单核吞吐</h2>
+      <p class="rocket-stat">254.2 <small>次/秒</small></p>
+      <p>在 100 MHz Rocket 的 Linux 用户态运行 CoreMark。GCC 15.1 启用 <code>-O3</code>、LTO 和 Zba/Zbb 后，性能种子三次运行的中位数为 <strong>254.232 次/秒</strong>，验证种子为 252.813 次/秒。</p>
+      <a class="rocket-source" href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/coremark-1000-compilers-board.json">查看 CoreMark 板上读数 ↗</a>
+    </section>
+    <section aria-labelledby="boom-title"><h2 id="boom-title">BOOM 单核宽度对比</h2>
+      <p class="rocket-stat">−8.5% <small>周期/轮</small></p>
+      <p>在 RTL 仿真中运行同一份 <code>-O2</code> 裸机程序。性能种子下，三路 BOOM 每轮中位数为 177,191.75 周期，四路降至 <strong>162,125.50 周期</strong>。这里比较每轮周期，不换算为 FPGA 实板吞吐。</p>
+      <a class="rocket-source" href="https://github.com/EtherealBian/vcu118-rocket-soc/blob/279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af/docs/perf-mega-o2.json">查看 BOOM 逐窗口计数 ↗</a>
+    </section>
+  </div>
+</main>
+</body></html>

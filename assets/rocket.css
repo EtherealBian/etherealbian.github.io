@@ -1,0 +1,33 @@
+/* 第 09 项：宽幅工程图与旁栏共用基线；窄屏按图、引导、性能的顺序阅读。 */
+.rocket-sheet main { padding-block: clamp(24px,4vw,54px) clamp(52px,6vw,82px); }
+.rocket-title { margin-bottom:clamp(22px,3vw,38px); }
+.rocket-folio { color:#456859; font:600 .78rem/1.6 var(--mono); }
+.rocket-folio span { margin-inline:.4em; color:#789287; }
+.rocket-title h1 { margin:12px 0; font:400 clamp(44px,6vw,86px)/1.05 var(--serif); letter-spacing:-.05em; color:#223e32; }
+.rocket-deck { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px 24px; }
+.rocket-deck p,.rocket-boot dd,.rocket-comparisons section>p:not(.rocket-stat) { line-height:1.8; color:#44594d; }
+.rocket-spread { display:grid; grid-template-columns:minmax(0,2fr) minmax(245px,1fr); gap:clamp(22px,3.2vw,48px); align-items:start; }
+.rocket-figure { margin:0; min-width:0; }
+.rocket-figure>a { display:block; border:1px solid #bdcfc5; cursor:zoom-in; }
+.rocket-figure img { width:100%; height:auto; display:block; }
+.rocket-figure figcaption { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-top:8px; font-size:.82rem; color:#52675a; }
+.rocket-boot,.rocket-comparisons section { border-top:2px solid #507464; padding-top:14px; min-width:0; }
+.rocket-sheet h2 { font:600 clamp(20px,2vw,27px)/1.35 var(--sans); color:#223f32; }
+.rocket-reading,.rocket-stat { color:#215745; font:500 clamp(40px,4.3vw,68px)/1.1 var(--serif); letter-spacing:-.045em; margin:14px 0 4px; font-variant-numeric:lining-nums tabular-nums; }
+.rocket-reading span,.rocket-reading i { color:#62766b; }
+.rocket-reading i { font:400 .52em var(--sans); vertical-align:.14em; }
+.rocket-reading small,.rocket-stat small { font:500 .9rem var(--sans); letter-spacing:0; }
+.rocket-scope { font-size:.82rem; color:#566b5e; }
+.rocket-steps { margin:22px 0 4px; }
+.rocket-steps dt { color:#294e3e; font-weight:650; }
+.rocket-steps dd { margin:3px 0 13px; font-size:.92rem; }
+.rocket-sheet code { font-family:var(--mono); font-size:.94em; }
+.rocket-comparisons { display:grid; grid-template-columns:1fr 1fr; gap:clamp(22px,4vw,58px); margin-top:clamp(28px,4vw,55px); }
+.rocket-comparisons .rocket-stat { margin-bottom:12px; }
+.rocket-source,.rocket-deck a,.rocket-figure figcaption a { display:inline-block; color:#285541; font-size:.86rem; font-weight:550; text-decoration:underline; text-underline-offset:.22em; padding-block:6px; }
+.rocket-comparisons .rocket-source { margin-top:8px; }
+@media (max-width:760px) {
+  .rocket-spread,.rocket-comparisons { grid-template-columns:1fr; }
+  .rocket-deck { display:block; }
+  .rocket-title h1 { font-size:clamp(38px,8vw,59px); }
+}

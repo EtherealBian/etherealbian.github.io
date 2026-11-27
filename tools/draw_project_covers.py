@@ -629,32 +629,24 @@ def ct():
 
 def rocket():
     d = page(
-        9,
-        "Rocket / RV64GC",
-        "从 FPGA 配置到 BusyBox 应答",
-        "两条线连接 VCU118：J106 配置逻辑，J4 串口传送固件并接收 shell 回答。",
-        "Board bring-up",
-        "板上验收字段、五级 Rocket 与软件启动路径示意；同一板卡与 bitstream 的两次串口启动计时。",
+        9, "RISC-V Linux SoC", "从复位向量到 Linux",
+        "VCU118 · 单核 RV64GC · 五级流水 · 100 MHz", None,
+        "上半图为 Rocket 地址图和硬件通路，中部为串口自解压启动链；下方分别给出实板启动时间、单核 CoreMark 与 BOOM RTL 周期。",
     )
-    section(d, 34, 146, "a", "实板验收记录", BLUE)
-    d.rect(34, 166, 300, 236, DARK, r=4)
-    t(d, 49, 195, "linux-oscheck", 21, WHITE, 620, cls="mono")
-    d.path("M49 207H320", "#486363")
-    t(d, 51, 235, "SLR", 15, "#b5c9c6", 550, cls="mono")
-    for j in range(3):
-        center(d, 224 + j * 40, 235, str(j), 16, "#b9cec6", 550, "mono")
-    for i, (name, val) in enumerate([("DONE", "1"), ("CRC_ERROR", "0")]):
-        yy = 260 + 34 * i
-        t(d, 51, yy + 5, name, 17, "#eff4e9", 560, cls="mono")
-        for j in range(3):
-            xx = 224 + 40 * j
-            d.rect(xx - 13, yy - 15, 26, 25, "#2a5351", "#53827a", 2)
-            center(d, xx, yy + 4, val, 16, MINT, 650, "mono")
-    d.path("M49 312H320", "#486363")
-    t(d, 50, 340, "UART", 16, "#d5e2dc", 520, cls="mono")
-    t(d, 317, 340, "115200 8N1", 17, MINT, 600, "end", "mono")
-    t(d, 51, 374, "shell 命令应答", 16, "#d5e2dc")
-    t(d, 317, 374, "verified", 17, MINT, 600, "end", "mono")
+    section(d, 34, 146, "a", "启动地址图", BLUE)
+    d.rect(34, 167, 300, 236, DARK, r=4)
+    t(d, 51, 195, "物理地址", 17, WHITE, 600)
+    d.path("M66 218V367", "#81a99f", 1.5)
+    for i, (addr, name) in enumerate([
+        ("0x00010000", "复位 · Boot ROM"),
+        ("0x80000000", "DDR4 · 原始固件入口"),
+        ("0x80200000", "Linux 内核入口"),
+        ("0x84000000", "自解压程序重定位"),
+    ]):
+        yy = 221 + i * 48
+        d.circ(66, yy, 5, GOLD if i == 0 else MINT, DARK)
+        t(d, 84, yy + 4, addr, 19, WHITE, 610, cls="mono")
+        t(d, 84, yy + 24, name, 15, MINT)
     section(d, 356, 146, "b", "配置与执行路径", GREEN)
     # Functional board schematic, not a photograph or device floorplan.
     d.rect(355, 167, 691, 236, "#edf4ef", "#adc6ba", 9)
@@ -693,46 +685,42 @@ def rocket():
         d.rect(914, yy, 107, 45, "#dce5db", "#95aa93", 2)
         center(d, 967, yy + 29, dev, 16, GREEN, 620, "mono")
         d.path(f"M877 {yy + 22}h37", "#90a797", 1.4)
-    t(d, 1019, 389, "功能连接，不表示器件物理布局。", 14, SLATE, 500, "end")
-    section(d, 34, 443, "c", "启动中的控制权交接", GREEN)
-    for i, (u, v, xx) in enumerate(
-        [
-            ("复位 / Boot ROM", "J4 接收固件", 52),
-            ("DDR4", "装载到内存", 281),
-            ("OpenSBI", "移交内核", 512),
-            ("Linux 6.6.65", "启动用户态", 708),
-            ("BusyBox", "shell 应答", 932),
-        ]
-    ):
-        d.circ(xx, 470, 4.5, GREEN if i < 4 else AMBER)
-        t(d, xx, 498, u, 20, NAVY, 650)
-        t(d, xx, 522, v, 15, SLATE)
-        if i < 4:
-            d.wire(f"M{xx + 6} 470H{[281, 512, 708, 932][i] - 8}")
-    d.path("M34 538H1046", RULE)
-    section(d, 34, 572, "d", "相同固件，两种串口传法", BLUE)
-    for i, (title, bytes_, sec, p) in enumerate(
-        [("原始", "5,341,704 B", 495.050, INDIGO), ("自解压", "2,018,528 B", 194.469, JADE)]
-    ):
-        yy = 595 + 39 * i
-        t(d, 35, yy + 18, title, 18, p[0], 620)
-        t(d, 117, yy + 18, bytes_, 16, SLATE, 500, cls="mono")
-        length = 397 * sec / 495.050
-        d.rect(267, yy, 397, 22, "#edf1ee", r=2)
-        d.rect(267, yy, length, 22, p[0], r=2)
-        t(d, 680, yy + 18, f"{sec:.3f} s", 18, p[0], 650, cls="mono")
-    d.path("M804 581v73", RULE)
-    t(d, 821, 606, "计时起点：J4 发送", 17, SLATE)
-    t(d, 821, 643, "终点：shell 正确应答", 17, SLATE)
-    footer(
-        d,
-        "同板、同一 bitstream；计时不含 JTAG 配置。",
-        "左上为 JSON 字段摘录；下方为独立的一对启动记录。",
-    )
-    meta(
-        d,
-        "Hardware acceptance excerpt: https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json ; see work/vcu118-rocket.html for the separate paired measurements.",
-    )
+    t(d, 1019, 389, "UART 115200 · 8N1", 15, GREEN, 550, "end", "mono")
+    section(d, 34, 439, "c", "自解压引导路径", GREEN)
+    nodes = [(46, "Boot ROM", "J4 接收压缩载荷"), (258, "DDR4 自解压", "LZ4 还原 · CRC32 校验"),
+             (518, "OpenSBI", "M 模式交接"), (694, "Linux 6.6.65", "S 模式 · Sv39"),
+             (913, "BusyBox", "initramfs · shell")]
+    for i, (x, name, note) in enumerate(nodes):
+        d.circ(x, 465, 4.5, GREEN if i < 4 else AMBER)
+        if i + 1 < len(nodes): d.wire(f"M{x + 7} 465H{nodes[i + 1][0] - 8}")
+        t(d, x, 495, name, 19, NAVY, 650)
+        t(d, x, 519, note, 15, SLATE)
+    d.path("M34 540H1046", RULE)
+    # Each panel has its own unit; bar lengths encode only like-for-like measurements.
+    d.path("M408 557V690M702 557V690", RULE)
+    section(d, 34, 573, "d", "串口引导 · 实板", BLUE)
+    t(d, 34, 603, "J4 开始发送 → shell 应答", 16, SLATE)
+    for i, (label, time, tone) in enumerate([("原始", 495.050, BLUE), ("自解压", 194.469, GREEN)]):
+        yy = 631 + 39*i
+        t(d, 34, yy + 4, label, 16, NAVY, 580)
+        d.rect(99, yy - 8, 150, 10, PALE, r=3)
+        d.rect(99, yy - 8, 150*time/495.050, 10, tone, r=3)
+        t(d, 385, yy + 4, f"{time:.3f} s", 19, tone, 620, "end", "mono")
+    section(d, 428, 573, "e", "单核 CoreMark", GREEN)
+    t(d, 428, 603, "Rocket · Linux 用户态", 16, SLATE)
+    t(d, 428, 646, "254.2", 38, GREEN, 650, cls="mono")
+    t(d, 553, 644, "次 / 秒", 18, NAVY, 550)
+    t(d, 428, 674, "GCC 15.1 · LTO · Zba/Zbb", 16, SLATE)
+    section(d, 722, 573, "f", "BOOM · RTL", BLUE)
+    t(d, 1046, 574, "−8.5%", 21, GREEN, 650, "end", "mono")
+    t(d, 722, 603, "单核宽度对照 · 周期 / 轮", 16, SLATE)
+    for i, (label, cycles, tone) in enumerate([("三路", 177191.75, BLUE), ("四路", 162125.50, GREEN)]):
+        yy = 631 + 39*i
+        t(d, 722, yy + 4, label, 16, NAVY, 580)
+        d.rect(766, yy - 8, 109, 10, PALE, r=3)
+        d.rect(766, yy - 8, 109*cycles/177191.75, 10, tone, r=3)
+        t(d, 1046, yy + 4, f"{cycles:,.2f}", 19, tone, 620, "end", "mono")
+    meta(d, "EtherealBian/vcu118-rocket-soc @ 279b0202c83c3b1dc8dfda4d3efeaa2a3f3433af: docs/validation.md, docs/bring-up.md, docs/coremark-1000-compilers-board.json, docs/perf-mega-o2.json.")
     d.save("atlas-09-rocket.svg")
 
 
