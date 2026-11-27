@@ -213,10 +213,14 @@ def model_results(root):
     return qwen, glm
 
 
-def overview(totals, qwen, glm, photo):
-    p = Plate(1280, 800, 'PyTorch → CUDA C++：子图编译与单机推理',
+def overview(totals, qwen, glm, photo, *, atlas_cover=False):
+    # Reflow the three bands for the catalogue; keep glyphs, plots and photo undistorted.
+    height = 1280 * 2 / 3 if atlas_cover else 800
+    gap = (height - 800) / 4
+    p = Plate(1280, height, 'PyTorch → CUDA C++：子图编译与单机推理',
               '四层 BERT 的图分区、QKV 打包和四种实现的启动次数；下方是独立的双请求 KV 复用和量化模型 HTTP 请求。DGX Spark 型号照片：Daniel Lu；改编图版 CC BY-SA 4.0。')
     p.put('<metadata>Photo: Daniel Lu (dllu), Nvidia DGX Spark oblique view dllu, Wikimedia Commons. Cut out and resized. Composition: EtherealBian, CC BY-SA 4.0. https://creativecommons.org/licenses/by-sa/4.0/</metadata>')
+    p.group(f'translate(0 {gap})')
     p.text(30, 54, 'PyTorch → CUDA C++', 47, INK, 660, DIN)
     p.text(1250, 49, '四层 BERT  ·  batch 1  ·  33 tokens', 22, SUB, 550, anchor='end')
     p.line('M30 74H1250', HAIR)
@@ -246,7 +250,9 @@ def overview(totals, qwen, glm, photo):
     p.text(1247, 301, '缩放 + 偏置', 17, SUB, 540, anchor='end')
 
     # Equal scales within this band only: counts are for the complete forward pass.
-    p.box(0, 373, 1280, 112, '#F0E5D5')
+    p.end()
+    p.box(0, 373 + 2*gap, 1280, 112 + gap, '#F0E5D5')
+    p.group(f'translate(0 {2.5*gap})')
     p.text(30, 417, 'GPU 内核启动次数', 28, INK, 680)
     p.text(30, 451, '一次完整前向 · 同一输入', 18, SUB)
     for i, (title, n) in enumerate(zip(('量化 eager', '独立量化', '共享量化', '每层打包'), totals)):
@@ -258,8 +264,10 @@ def overview(totals, qwen, glm, photo):
         p.box(x, 462, 140*n/totals[0], 6, color, 3)
         if i < 3: p.line(f'M{x+157} 434h26m-6-5 6 5-6 5', RULE, 1.7)
 
-    p.box(0, 485, 1280, 315, '#FAF6EF')
-    p.box(648, 485, 632, 315, '#F5EADC')
+    p.end()
+    p.box(0, 485 + 3*gap, 1280, 315 + gap, '#FAF6EF')
+    p.box(648, 485 + 3*gap, 632, 315 + gap, '#F5EADC')
+    p.group(f'translate(0 {3.5*gap})')
     p.text(30, 518, '独立整模型实验  /  共享 KV 快照', 17, RUST, 610)
     p.text(678, 518, '独立整模型实验  /  llama.cpp CUDA', 17, RUST, 610)
     p.text(30, 561, 'Qwen2.5-32B', 40, INK, 670, DIN)
@@ -295,6 +303,7 @@ def overview(totals, qwen, glm, photo):
     p.text(678, 723, f"{glm['wall']:.3f} s", 53, RUST, 660, DIN)
     p.text(1248, 714, '本机 HTTP 请求耗时中位数', 21, INK, 600, anchor='end')
     p.text(678, 761, '模型已加载；计时不含权重载入。', 20, SUB)
+    p.end()
     return p
 
 
@@ -305,7 +314,9 @@ def main():
     opts = args.parse_args(); opts.out.mkdir(exist_ok=True, parents=True)
     totals, groups = measured(opts.reports/'stacked-bert-gb10.json')
     qwen, glm = model_results(opts.reports)
-    overview(totals, qwen, glm, cutout(opts.photo)).save(opts.out/'sparkfuse-system.svg')
+    photo = cutout(opts.photo)
+    overview(totals, qwen, glm, photo).save(opts.out/'sparkfuse-system.svg')
+    overview(totals, qwen, glm, photo, atlas_cover=True).save(opts.out/'sparkfuse-system-cover.svg')
     detail(totals, groups).save(opts.out/'qkv-warm-detail.svg')
 
 
