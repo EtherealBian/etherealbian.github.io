@@ -1,68 +1,144 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720" role="img" aria-labelledby="title desc">
-<title id="title">在 VCU118 上启动 Rocket Linux</title><desc id="desc">左侧是板上验收 JSON 的字段摘录，不是串口屏幕截图。JTAG 配置与 UART 固件装载分开。底部为独立的一对端到端计时。</desc>
+<title id="title">从 FPGA 配置到 BusyBox 应答</title><desc id="desc">板上验收字段、五级 Rocket 与软件启动路径示意；同一板卡与 bitstream 的两次串口启动计时。</desc>
 <defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
 <rect x="0" y="0" width="1080" height="720" rx="0" fill="#ffffff" stroke="none"/>
-<text x="32" y="67" font-size="39" font-weight="680" fill="#203f58" text-anchor="start" class="">在 VCU118 上启动 Rocket Linux</text>
-<text x="1048" y="38" font-size="16" font-weight="600" fill="#21695a" text-anchor="end" class="mono">ENGINEERING PLATE   /   09</text>
-<text x="1048" y="67" font-size="19" font-weight="500" fill="#475e6c" text-anchor="end" class="serif">FPGA configuration to a BusyBox shell</text>
-<path d="M32 86H1048" fill="none" stroke="#203f58" stroke-width="2" stroke-linejoin="round"/>
-<rect x="32" y="105" width="356" height="331" rx="3" fill="#ffffff" stroke="#abc4d9"/>
-<rect x="32" y="105" width="356" height="4" rx="0" fill="#265b8b" stroke="none"/>
-<rect x="48" y="122" width="28" height="28" rx="3" fill="#265b8b" stroke="none"/>
-<text x="62" y="142" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">a</text>
-<text x="88" y="145" font-size="24" font-weight="650" fill="#265b8b" text-anchor="start" class="">板上验收记录</text>
-<rect x="404" y="105" width="644" height="331" rx="3" fill="#ffffff" stroke="#aacdbd"/>
-<rect x="404" y="105" width="644" height="4" rx="0" fill="#21695a" stroke="none"/>
-<rect x="420" y="122" width="28" height="28" rx="3" fill="#21695a" stroke="none"/>
-<text x="434" y="142" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">b</text>
-<text x="460" y="145" font-size="24" font-weight="650" fill="#21695a" text-anchor="start" class="">从易失配置到 Linux 用户态</text>
-<rect x="50" y="173" width="320" height="189" rx="3" fill="#f2f6f6" stroke="#abc4d9"/>
-<rect x="50" y="173" width="320" height="33" rx="3" fill="#eaf2fa" stroke="#abc4d9"/>
-<text x="62" y="196" font-size="17" font-weight="600" fill="#265b8b" text-anchor="start" class="">linux-oscheck  /  JSON 字段摘录</text>
-<text x="62" y="233" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">uart</text>
-<text x="359" y="233" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">115200 8N1</text>
-<text x="62" y="269" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">slr_done</text>
-<text x="359" y="269" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">[1, 1, 1]</text>
-<text x="62" y="305" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">slr_crc_error</text>
-<text x="359" y="305" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">[0, 0, 0]</text>
-<text x="62" y="341" font-size="16" font-weight="550" fill="#203f58" text-anchor="start" class="mono">shell_challenge_verified</text>
-<text x="359" y="341" font-size="17" font-weight="650" fill="#21695a" text-anchor="end" class="mono">true</text>
-<text x="50" y="394" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">三个 SLR 配置完成；</text>
-<text x="50" y="419" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">BusyBox 正确回答现场命令。</text>
-<text x="426" y="186" font-size="19" font-weight="630" fill="#265b8b" text-anchor="start" class="">配置通路</text>
-<rect x="426" y="200" width="195" height="60" rx="4" fill="#eaf2fa" stroke="#abc4d9"/>
-<text x="523.5" y="238.0" font-size="22" font-weight="630" fill="#265b8b" text-anchor="middle" class="">J106 / JTAG</text>
-<path d="M621 230h39" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
-<rect x="665" y="200" width="353" height="60" rx="4" fill="#eaf2fa" stroke="#abc4d9"/>
-<text x="841.5" y="238.0" font-size="22" font-weight="630" fill="#265b8b" text-anchor="middle" class="">FPGA · 100 MHz 五级 Rocket</text>
-<text x="426" y="297" font-size="19" font-weight="630" fill="#21695a" text-anchor="start" class="">固件与软件启动</text>
-<rect x="426" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
-<text x="517.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">J4 UART</text>
-<text x="517.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">Boot ROM</text>
-<path d="M609 353h17" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
-<rect x="630" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
-<text x="721.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">DDR4</text>
-<text x="721.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">固件 / OpenSBI</text>
-<path d="M813 353h17" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
-<rect x="834" y="313" width="183" height="79" rx="4" fill="#eaf4ef" stroke="#aacdbd"/>
-<text x="925.5" y="351.5" font-size="22" font-weight="630" fill="#21695a" text-anchor="middle" class="">Linux 6.6.65</text>
-<text x="925.5" y="374.5" font-size="17" font-weight="450" fill="#475e6c" text-anchor="middle" class="">BusyBox</text>
-<rect x="32" y="456" width="1016" height="235" rx="3" fill="#ffffff" stroke="#d4be9c"/>
-<rect x="32" y="456" width="1016" height="4" rx="0" fill="#885a27" stroke="none"/>
-<rect x="48" y="473" width="28" height="28" rx="3" fill="#885a27" stroke="none"/>
-<text x="62" y="493" font-size="21" font-weight="650" fill="#ffffff" text-anchor="middle" class="serif">c</text>
-<text x="88" y="496" font-size="24" font-weight="650" fill="#885a27" text-anchor="start" class="">同一固件两种传法：从串口开始发送，到 shell 回答</text>
-<text x="54" y="562" font-size="22" font-weight="630" fill="#265b8b" text-anchor="start" class="">原始固件</text>
-<rect x="202" y="540" width="400" height="26" rx="3" fill="#eaf2fa" stroke="#abc4d9"/>
-<rect x="202" y="540" width="5" height="26" rx="0" fill="#265b8b" stroke="none"/>
-<text x="619" y="563" font-size="25" font-weight="650" fill="#265b8b" text-anchor="start" class="mono">495.050 s</text>
-<text x="54" y="625" font-size="22" font-weight="630" fill="#21695a" text-anchor="start" class="">自解压固件</text>
-<rect x="202" y="603" width="157" height="26" rx="3" fill="#eaf4ef" stroke="#aacdbd"/>
-<rect x="202" y="603" width="5" height="26" rx="0" fill="#21695a" stroke="none"/>
-<text x="376" y="626" font-size="25" font-weight="650" fill="#21695a" text-anchor="start" class="mono">194.469 s</text>
-<path d="M765 522v145" fill="none" stroke="#c4d1d4" stroke-width="1" stroke-linejoin="round"/>
-<text x="787" y="555" font-size="21" font-weight="650" fill="#203f58" text-anchor="start" class="">对照条件</text>
-<text x="787" y="592" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">同板、同一 bitstream</text>
-<text x="787" y="625" font-size="19" font-weight="450" fill="#475e6c" text-anchor="start" class="">不含 JTAG 配置时间</text>
-<metadata>Record excerpt: https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json . Timing bars are a distinct paired experiment reported on work/vcu118-rocket.html.</metadata>
+<text x="34" y="61" font-size="44" font-weight="690" fill="#265b8b" text-anchor="start" class="serif">Rocket / RV64GC</text>
+<text x="34" y="93" font-size="18" font-weight="480" fill="#475e6c" text-anchor="start" class="">两条线连接 VCU118：J106 配置逻辑，J4 串口传送固件并接收 shell 回答。</text>
+<text x="1046" y="58" font-size="33" font-weight="670" fill="#203f58" text-anchor="end" class="">从 FPGA 配置到 BusyBox 应答</text>
+<text x="1046" y="91" font-size="15" font-weight="600" fill="#21695a" text-anchor="end" class="mono">Board bring-up   /   09</text>
+<path d="M34 110H1046" fill="none" stroke="#203f58" stroke-width="1.6" stroke-linejoin="round"/>
+<rect x="34" y="128" width="24" height="24" rx="3" fill="#265b8b" stroke="none"/>
+<text x="46" y="146" font-size="18" font-weight="650" fill="#fff" text-anchor="middle" class="serif">a</text>
+<text x="69" y="147" font-size="21" font-weight="650" fill="#265b8b" text-anchor="start" class="">实板验收记录</text>
+<rect x="34" y="166" width="300" height="236" rx="4" fill="#16383f" stroke="none"/>
+<text x="49" y="195" font-size="21" font-weight="620" fill="#fff" text-anchor="start" class="mono">linux-oscheck</text>
+<path d="M49 207H320" fill="none" stroke="#486363" stroke-width="1" stroke-linejoin="round"/>
+<text x="51" y="235" font-size="15" font-weight="550" fill="#b5c9c6" text-anchor="start" class="mono">SLR</text>
+<text x="224" y="235" font-size="16" font-weight="550" fill="#b9cec6" text-anchor="middle" class="mono">0</text>
+<text x="264" y="235" font-size="16" font-weight="550" fill="#b9cec6" text-anchor="middle" class="mono">1</text>
+<text x="304" y="235" font-size="16" font-weight="550" fill="#b9cec6" text-anchor="middle" class="mono">2</text>
+<text x="51" y="265" font-size="17" font-weight="560" fill="#eff4e9" text-anchor="start" class="mono">DONE</text>
+<rect x="211" y="245" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="224" y="264" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">1</text>
+<rect x="251" y="245" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="264" y="264" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">1</text>
+<rect x="291" y="245" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="304" y="264" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">1</text>
+<text x="51" y="299" font-size="17" font-weight="560" fill="#eff4e9" text-anchor="start" class="mono">CRC_ERROR</text>
+<rect x="211" y="279" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="224" y="298" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">0</text>
+<rect x="251" y="279" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="264" y="298" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">0</text>
+<rect x="291" y="279" width="26" height="25" rx="2" fill="#2a5351" stroke="#53827a"/>
+<text x="304" y="298" font-size="16" font-weight="650" fill="#a9e0ca" text-anchor="middle" class="mono">0</text>
+<path d="M49 312H320" fill="none" stroke="#486363" stroke-width="1" stroke-linejoin="round"/>
+<text x="50" y="340" font-size="16" font-weight="520" fill="#d5e2dc" text-anchor="start" class="mono">UART</text>
+<text x="317" y="340" font-size="17" font-weight="600" fill="#a9e0ca" text-anchor="end" class="mono">115200 8N1</text>
+<text x="51" y="374" font-size="16" font-weight="500" fill="#d5e2dc" text-anchor="start" class="">shell 命令应答</text>
+<text x="317" y="374" font-size="17" font-weight="600" fill="#a9e0ca" text-anchor="end" class="mono">verified</text>
+<rect x="356" y="128" width="24" height="24" rx="3" fill="#21695a" stroke="none"/>
+<text x="368" y="146" font-size="18" font-weight="650" fill="#fff" text-anchor="middle" class="serif">b</text>
+<text x="391" y="147" font-size="21" font-weight="650" fill="#21695a" text-anchor="start" class="">配置与执行路径</text>
+<rect x="355" y="167" width="691" height="236" rx="9" fill="#edf4ef" stroke="#adc6ba"/>
+<circle cx="367" cy="180" r="4.2" fill="#fafcfa" stroke="#a8bbb2"/>
+<circle cx="367" cy="180" r="1.4" fill="#a1b5aa" stroke="none"/>
+<circle cx="367" cy="390" r="4.2" fill="#fafcfa" stroke="#a8bbb2"/>
+<circle cx="367" cy="390" r="1.4" fill="#a1b5aa" stroke="none"/>
+<circle cx="1033" cy="180" r="4.2" fill="#fafcfa" stroke="#a8bbb2"/>
+<circle cx="1033" cy="180" r="1.4" fill="#a1b5aa" stroke="none"/>
+<circle cx="1033" cy="390" r="4.2" fill="#fafcfa" stroke="#a8bbb2"/>
+<circle cx="1033" cy="390" r="1.4" fill="#a1b5aa" stroke="none"/>
+<text x="376" y="194" font-size="17" font-weight="600" fill="#21695a" text-anchor="start" class="">VCU118   /   功能示意</text>
+<text x="1019" y="194" font-size="17" font-weight="620" fill="#21695a" text-anchor="end" class="mono">RV64GC · 100 MHz</text>
+<rect x="375" y="231" width="97" height="49" rx="3" fill="#d9e5df" stroke="#90a99b"/>
+<text x="383" y="251" font-size="17" font-weight="650" fill="#203f58" text-anchor="start" class="mono">J106</text>
+<text x="383" y="272" font-size="14" font-weight="500" fill="#475e6c" text-anchor="start" class="">JTAG 配置</text>
+<rect x="375" y="304" width="97" height="49" rx="3" fill="#d9e5df" stroke="#90a99b"/>
+<text x="383" y="324" font-size="17" font-weight="650" fill="#203f58" text-anchor="start" class="mono">J4</text>
+<text x="383" y="345" font-size="14" font-weight="500" fill="#475e6c" text-anchor="start" class="">UART 收发</text>
+<path d="M473 254h30v-45h41" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<text x="548" y="205" font-size="13" font-weight="500" fill="#475e6c" text-anchor="start" class="">配置逻辑</text>
+<path d="M473 329h32v14h34" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<rect x="543" y="216" width="333" height="151" rx="4" fill="#c1d7ca" stroke="#8aaf99"/>
+<rect x="550" y="222" width="320" height="139" rx="3" fill="#fbfcf7" stroke="#95af9c"/>
+<text x="565" y="251" font-size="22" font-weight="650" fill="#21695a" text-anchor="start" class="">Rocket 单核</text>
+<text x="853" y="249" font-size="16" font-weight="550" fill="#475e6c" text-anchor="end" class="">五级流水</text>
+<polygon points="560.00,270.00 609.00,270.00 615.00,289.00 609.00,309.00 560.00,309.00 565.00,289.00" fill="#dbe9ed" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="587" y="295" font-size="17" font-weight="650" fill="#21695a" text-anchor="middle" class="mono">IF</text>
+<text x="587" y="339" font-size="15" font-weight="550" fill="#475e6c" text-anchor="middle" class="">取指</text>
+<polygon points="620.00,270.00 669.00,270.00 675.00,289.00 669.00,309.00 620.00,309.00 625.00,289.00" fill="#d6e8e5" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="647" y="295" font-size="17" font-weight="650" fill="#21695a" text-anchor="middle" class="mono">ID</text>
+<text x="647" y="339" font-size="15" font-weight="550" fill="#475e6c" text-anchor="middle" class="">译码</text>
+<polygon points="680.00,270.00 729.00,270.00 735.00,289.00 729.00,309.00 680.00,309.00 685.00,289.00" fill="#c2ded1" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="707" y="295" font-size="17" font-weight="650" fill="#21695a" text-anchor="middle" class="mono">EX</text>
+<text x="707" y="339" font-size="15" font-weight="550" fill="#475e6c" text-anchor="middle" class="">执行</text>
+<polygon points="740.00,270.00 789.00,270.00 795.00,289.00 789.00,309.00 740.00,309.00 745.00,289.00" fill="#d6e8e5" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="767" y="295" font-size="17" font-weight="650" fill="#21695a" text-anchor="middle" class="mono">MEM</text>
+<text x="767" y="339" font-size="15" font-weight="550" fill="#475e6c" text-anchor="middle" class="">访存</text>
+<polygon points="800.00,270.00 849.00,270.00 855.00,289.00 849.00,309.00 800.00,309.00 805.00,289.00" fill="#e2ebdc" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="827" y="295" font-size="17" font-weight="650" fill="#21695a" text-anchor="middle" class="mono">WB</text>
+<text x="827" y="339" font-size="15" font-weight="550" fill="#475e6c" text-anchor="middle" class="">写回</text>
+<path d="M564 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M588 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M612 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M636 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M660 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M684 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M708 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M732 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M756 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M780 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M804 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M828 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M852 211v5m0 151v5" fill="none" stroke="#839e8d" stroke-width="1.7" stroke-linejoin="round"/>
+<rect x="914" y="242" width="107" height="45" rx="2" fill="#dce5db" stroke="#95aa93"/>
+<text x="967" y="271" font-size="16" font-weight="620" fill="#21695a" text-anchor="middle" class="mono">Boot ROM</text>
+<path d="M877 264h37" fill="none" stroke="#90a797" stroke-width="1.4" stroke-linejoin="round"/>
+<rect x="914" y="313" width="107" height="45" rx="2" fill="#dce5db" stroke="#95aa93"/>
+<text x="967" y="342" font-size="16" font-weight="620" fill="#21695a" text-anchor="middle" class="mono">DDR4</text>
+<path d="M877 335h37" fill="none" stroke="#90a797" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="1019" y="389" font-size="14" font-weight="500" fill="#475e6c" text-anchor="end" class="">功能连接，不表示器件物理布局。</text>
+<rect x="34" y="425" width="24" height="24" rx="3" fill="#21695a" stroke="none"/>
+<text x="46" y="443" font-size="18" font-weight="650" fill="#fff" text-anchor="middle" class="serif">c</text>
+<text x="69" y="444" font-size="21" font-weight="650" fill="#21695a" text-anchor="start" class="">启动中的控制权交接</text>
+<circle cx="52" cy="470" r="4.5" fill="#21695a" stroke="none"/>
+<text x="52" y="498" font-size="20" font-weight="650" fill="#203f58" text-anchor="start" class="">复位 / Boot ROM</text>
+<text x="52" y="522" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">J4 接收固件</text>
+<path d="M58 470H273" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="281" cy="470" r="4.5" fill="#21695a" stroke="none"/>
+<text x="281" y="498" font-size="20" font-weight="650" fill="#203f58" text-anchor="start" class="">DDR4</text>
+<text x="281" y="522" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">装载到内存</text>
+<path d="M287 470H504" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="512" cy="470" r="4.5" fill="#21695a" stroke="none"/>
+<text x="512" y="498" font-size="20" font-weight="650" fill="#203f58" text-anchor="start" class="">OpenSBI</text>
+<text x="512" y="522" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">移交内核</text>
+<path d="M518 470H700" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="708" cy="470" r="4.5" fill="#21695a" stroke="none"/>
+<text x="708" y="498" font-size="20" font-weight="650" fill="#203f58" text-anchor="start" class="">Linux 6.6.65</text>
+<text x="708" y="522" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">启动用户态</text>
+<path d="M714 470H924" fill="none" stroke="#496778" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#tip)"/>
+<circle cx="932" cy="470" r="4.5" fill="#885a27" stroke="none"/>
+<text x="932" y="498" font-size="20" font-weight="650" fill="#203f58" text-anchor="start" class="">BusyBox</text>
+<text x="932" y="522" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">shell 应答</text>
+<path d="M34 538H1046" fill="none" stroke="#cad6d7" stroke-width="1" stroke-linejoin="round"/>
+<rect x="34" y="554" width="24" height="24" rx="3" fill="#265b8b" stroke="none"/>
+<text x="46" y="572" font-size="18" font-weight="650" fill="#fff" text-anchor="middle" class="serif">d</text>
+<text x="69" y="573" font-size="21" font-weight="650" fill="#265b8b" text-anchor="start" class="">相同固件，两种串口传法</text>
+<text x="35" y="613" font-size="18" font-weight="620" fill="#265b8b" text-anchor="start" class="">原始</text>
+<text x="117" y="613" font-size="16" font-weight="500" fill="#475e6c" text-anchor="start" class="mono">5,341,704 B</text>
+<rect x="267" y="595" width="397" height="22" rx="2" fill="#edf1ee" stroke="none"/>
+<rect x="267" y="595" width="397.0" height="22" rx="2" fill="#265b8b" stroke="none"/>
+<text x="680" y="613" font-size="18" font-weight="650" fill="#265b8b" text-anchor="start" class="mono">495.050 s</text>
+<text x="35" y="652" font-size="18" font-weight="620" fill="#21695a" text-anchor="start" class="">自解压</text>
+<text x="117" y="652" font-size="16" font-weight="500" fill="#475e6c" text-anchor="start" class="mono">2,018,528 B</text>
+<rect x="267" y="634" width="397" height="22" rx="2" fill="#edf1ee" stroke="none"/>
+<rect x="267" y="634" width="155.9523139076861" height="22" rx="2" fill="#21695a" stroke="none"/>
+<text x="680" y="652" font-size="18" font-weight="650" fill="#21695a" text-anchor="start" class="mono">194.469 s</text>
+<path d="M804 581v73" fill="none" stroke="#cad6d7" stroke-width="1" stroke-linejoin="round"/>
+<text x="821" y="606" font-size="17" font-weight="500" fill="#475e6c" text-anchor="start" class="">计时起点：J4 发送</text>
+<text x="821" y="643" font-size="17" font-weight="500" fill="#475e6c" text-anchor="start" class="">终点：shell 正确应答</text>
+<path d="M34 677H1046" fill="none" stroke="#cad6d7" stroke-width="1" stroke-linejoin="round"/>
+<text x="34" y="703" font-size="15" font-weight="500" fill="#475e6c" text-anchor="start" class="">同板、同一 bitstream；计时不含 JTAG 配置。</text>
+<text x="1046" y="703" font-size="15" font-weight="520" fill="#475e6c" text-anchor="end" class="">左上为 JSON 字段摘录；下方为独立的一对启动记录。</text>
+<metadata>Hardware acceptance excerpt: https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json ; see work/vcu118-rocket.html for the separate paired measurements.</metadata>
 </svg>

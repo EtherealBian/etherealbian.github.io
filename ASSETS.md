@@ -50,14 +50,14 @@
 
 ### 首页工程图版 03–09
 
-安装 Pillow 后运行 `python -B tools/draw_project_covers.py`，即可从本站已归档的素材重建这七张独立 SVG 和扫层静帧。01、02 是视觉参照，未替换。详情页仍保留工作台原图和完整实验记录。
+安装 Pillow 后运行 `python -B tools/draw_project_covers.py`，即可从本站素材重建 03、04、05、07、09 五张独立 SVG 和核桃扫层静帧。01、02 保留原图；06、08 直接引用原作品，不经这套生成器转绘。
 
-| 图版 | 左上素材与读图边界 |
+| 图版 | 素材、数据与图示范围 |
 |---|---|
-| 03 李萨如 | `lissajous-hardware.jpg` 竞赛工作台实拍；下方三条曲线按频比与相位绘制，非示波器采样。 |
-| 04 图像处理 | `elinx-competition-demo.png` 竞赛实拍；右侧只画基础版视频流，时序图说明控制字在帧边界生效。 |
-| 05 超声阵列 | `n60-hardware.jpg` 实拍。下方五组圆点表示通道分组，不表示实物位置或声场强度。 |
-| 06 UAVCount | 使用本站 `uavcount-pipeline.svg` 内的水岸与目标素材组合示意，不是测试帧；167/184 是留出判读窗口的计数结果。 |
-| 07 ConeFDK | 上述 Helsinki 核桃数据（Alexander Meaney，CC BY 4.0）经重建得到的轴向切片；静帧取自 `conefdk-sweep.gif`。折线保留 `conefdk-walnut-peak.svg` 的全部 512 个点，纵量是重建强度差。 |
-| 08 推理编译器 | 从上述 Daniel Lu 照片的合成图再次裁取设备，未作实验现场照使用。新合成图 `atlas-08-compiler.svg` 由 EtherealBian 按 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 发布，署名、来源与改动也嵌入 SVG。三组实验来源见前节。 |
-| 09 Rocket Linux | 按[实板验收 JSON](https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json)摘录四项字段，非终端截图。下方两条计时是[另一组配对启动记录](work/vcu118-rocket.html)，不含 JTAG 配置。 |
+| 03 李萨如 | `lissajous-hardware.jpg` 的实拍全景与示波器屏幕裁片。双通道曲线和 X–Y 轨迹来自同一对 1:2 正弦信号；相量与多帧轨迹是原理示意，不是波形采样。 |
+| 04 图像处理 | `elinx-competition-demo.png` 竞赛实拍；将屏幕中的同一裁片离线计算为 Sobel 梯度幅值，非板上截图。控制时序图只表达事件先后。 |
+| 05 超声阵列 | `n60-hardware.jpg` 实拍。换能器斜视图投影自 [N60 工程的 12 个局部坐标、5 个子阵朝向与碗面半径](https://github.com/EtherealBian/n60-ultrasonic-phased-array/blob/05a0002d54e6c3cd4d754f1168ba83c06418adcf/generate_n60_csv.py)，仅表示标称几何。PWM 波形为时序示意，非声场或电气测量。 |
+| 06 UAVCount | 原始 `assets/uavcount-pipeline.webp` / `assets/uavcount-pipeline.svg`，原样展示水岸检测与计数四步流程。水岸画面是合成示意；回归基于 156 段半合成视频。三帧判据另见 `uavcount-counting.svg`。 |
+| 07 ConeFDK | 上述 Helsinki 核桃数据（Alexander Meaney，CC BY 4.0）。轴向静帧取自 `conefdk-sweep.gif`，冠状与矢状断面取自 `conefdk-walnut.png`。逐层强度差折线保留 `conefdk-walnut-peak.svg` 的全部 512 个点；射线几何与插值局部是示意。 |
+| 08 推理编译器 | 直接使用上述 `sparkfuse-system.webp`，点击放大读取 `sparkfuse-system-full.webp`。同一张原图，含 Daniel Lu 的 DGX Spark 型号照片（CC BY-SA 4.0）；详见上节。 |
+| 09 Rocket Linux | 左上摘录[板上验收 JSON](https://github.com/EtherealBian/vcu118-rocket-soc/blob/5862e904c97ca7648daaa45c04587dbfe4fa081f/docs/portable-linux-rocket-boot.json)，不是终端照片。主图是功能连接，不是器件布局；下方是[另一组同板、同 bit 的配对启动记录](work/vcu118-rocket.html)，不含 JTAG 配置时间。 |
