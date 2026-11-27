@@ -55,7 +55,7 @@
 | 图版 | 素材、数据与图示范围 |
 |---|---|
 | 03 李萨如 | 工作台与示波器局部取自 `lissajous-hardware.jpg`。两路时域信号与主 X–Y 图采用同一对 1:2 正弦信号。其余波形、相量与连续帧为示意；控制流程依据同一版归档的 [DPLL RTL](https://github.com/EtherealBian/fpga-lissajous-controller/blob/d28a09db401a55449636eb1bcb8951629dd83aec/rtl/continuous_iq_dpll.sv) 与 [Jetson 视觉流程](https://github.com/EtherealBian/fpga-lissajous-controller/blob/d28a09db401a55449636eb1bcb8951629dd83aec/vision/README.md)。 |
-| 04 图像处理 | `elinx-competition-demo.png` 竞赛实拍；将屏幕中的同一裁片离线计算为 Sobel 梯度幅值，非板上截图。控制时序图只表达事件先后。 |
+| 04 图像处理 | `elinx-competition-demo.png` 为竞赛实拍；右侧边缘图由同一屏幕裁片离线计算（两向 Sobel 梯度绝对值之和 > 80），非板上截图。串口、双路输出及跨域依据[工程协议](https://github.com/EtherealBian/elinx-vision-stream/blob/11b7c3dd3abe4609ec54cea3117e6ea57d33084b/docs/ARCHITECTURE.md)，波形仅示意事件先后。`vision-density-3.png` 保存从独立 CNN 的[归档 RAW8 样本](https://github.com/EtherealBian/elinx-vision-stream/blob/11b7c3dd3abe4609ec54cea3117e6ea57d33084b/fpga/cnn_standalone/new_capture/3/raw8_digit_3_20260622_155426_733_0018.raw)导出的 32 × 32 特征值：取 (320, 104) 起的 640 × 512 ROI，每格统计像素值 ≤ 112 的数量并右移三位。墨绿色仅表示密度，不表示预测类别。 |
 | 05 超声阵列 | `n60-hardware.jpg` 实拍。换能器斜视图投影自 [N60 工程的 12 个局部坐标、5 个子阵朝向与碗面半径](https://github.com/EtherealBian/n60-ultrasonic-phased-array/blob/05a0002d54e6c3cd4d754f1168ba83c06418adcf/generate_n60_csv.py)，仅表示标称几何。PWM 波形为时序示意，非声场或电气测量。 |
 | 06 UAVCount | 原始 `assets/uavcount-pipeline.webp` / `assets/uavcount-pipeline.svg`，原样展示水岸检测与计数四步流程。水岸画面是合成示意；回归基于 156 段半合成视频。三帧判据另见 `uavcount-counting.svg`。 |
 | 07 ConeFDK | 上述 Helsinki 核桃数据（Alexander Meaney，CC BY 4.0）。轴向静帧取自 `conefdk-sweep.gif`，冠状与矢状断面取自 `conefdk-walnut.png`。逐层强度差折线保留 `conefdk-walnut-peak.svg` 的全部 512 个点；射线几何与插值局部是示意。 |

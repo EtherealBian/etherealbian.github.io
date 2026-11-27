@@ -8,7 +8,7 @@ import base64
 import xml.etree.ElementTree as ET
 from html import escape
 from io import BytesIO
-from math import cos, hypot, pi, radians, sin
+from math import cos, pi, radians, sin
 
 from draw_vitis import INDIGO, JADE, NAVY, OCHRE, OUT, SLATE, Plate
 from PIL import Image, ImageOps
@@ -219,20 +219,18 @@ def phase():
 
 
 def sobel(im):
-    """Sobel magnitude of the *same* photographed subject, not a board capture."""
+    """Apply the base RTL's gradient decision to a grayscale photo crop, offline."""
     gray = im.convert("L")
-    out = Image.new("L", gray.size)
-    g = gray.load()
-    dest = out.load()
+    edge = Image.new("L", gray.size)
+    g, out = gray.load(), edge.load()
     for y in range(1, gray.height - 1):
         for x in range(1, gray.width - 1):
             a, b, c = [g[x + i, y - 1] for i in [-1, 0, 1]]
             l, r = g[x - 1, y], g[x + 1, y]
             e, f, h = [g[x + i, y + 1] for i in [-1, 0, 1]]
-            dest[x, y] = min(
-                255, round(hypot(c + 2 * r + h - a - 2 * l - e, e + 2 * f + h - a - 2 * b - c))
-            )
-    return ImageOps.colorize(out, "#102d36", "#dcf4d8")
+            gx, gy = c + 2 * r + h - a - 2 * l - e, a + 2 * b + c - e - 2 * f - h
+            out[x, y] = 255 if abs(gx) + abs(gy) > 80 else 0
+    return edge
 
 
 def vision():
@@ -240,70 +238,120 @@ def vision():
         4,
         "Pixel stream",
         "摄像头到显示器的像素通路",
-        "采集侧写帧，显示侧读帧；控制字跨时钟域，在下一帧开头提交。",
-        "FPGA video",
-        "实拍与同一区域的 Sobel 离线示意；RGB565、帧缓存、双路输出和换帧控制。",
+        "视频流逐像素处理，算法选择按帧提交；数字识别走独立的 RAW8 通路。",
+        None,
+        "竞赛实拍、三时钟域缓存、Sobel 双向梯度、模式切换和 RAW8 数字识别。",
     )
-    section(d, 34, 145, "a", "采集与缓存", BLUE)
-    photo(d, "elinx-competition-demo.png", 34, 164, 256, 165)
-    t(d, 34, 356, "竞赛现场：开发板与显示端", 17, SLATE)
-    t(d, 324, 185, "OV5640", 28, BLUE, 650, cls="serif")
-    t(d, 324, 210, "一个 RGB565 像素 / 16 bit", 16, SLATE)
+    section(d, 34, 143, "a", "竞赛工作台", BLUE)
+    photo(d, "elinx-competition-demo.png", 34, 158, 245, 166)
+
+    # Keep FIFO crossings explicit; the two output paths fork after the processing stage.
+    d.rect(298, 125, 748, 199, DARK, r=5)
+    t(d, 315, 155, "RGB565 视频通路", 22, WHITE, 650)
+    t(d, 1026, 154, "基础版", 16, MINT, 560, "end")
+    light, ink = "#cce1db", "#ebf5ee"
+    for x, width, clock in [(315, 164, "CAM_PCLK"), (501, 174, "clk_sdram"), (697, 151, "clk_hdmi")]:
+        d.path(f"M{x} 170h{width}", "#688782")
+        t(d, x, 190, clock, 15, MINT, 600, cls="mono")
+    t(d, 315, 220, "OV5640", 21, ink, 650)
     for i in range(16):
-        k = 0 if i < 5 else 1 if i < 11 else 2
-        d.rect(324 + i * 12, 232, 11, 25, ("#b65e4e", "#438573", "#557d99")[k])
-    for x, s in [(354, "R · 5"), (420, "G · 6"), (486, "B · 5")]:
-        center(d, x, 278, s, 15, SLATE, 600, "mono")
-    d.wire("M525 243h40")
-    for j in range(3):
-        xx, yy = 580 + 5 * j, 219 - 8 * j
-        d.rect(xx, yy, 150, 65, ["#b0bfc8", "#d5e1e6", "#edf2f4"][j], "#91a8b5", 2)
-    center(d, 665, 236, "SDRAM", 23, NAVY, 650, "serif")
-    center(d, 665, 259, "帧缓存", 15, SLATE)
-    d.wire("M746 236h35")
-    d.rect(787, 205, 244, 59, JADE[1], JADE[2], 3)
-    center(d, 909, 242, "显示时钟域 · 像素算子", 19, GREEN, 650)
-    d.path("M908 264v20H802v12m106-12h83v12", GREEN, 1.5)
-    d.circ(908, 284, 3, GREEN)
-    center(d, 802, 318, "HDMI 直显", 18, GREEN, 630)
-    center(d, 982, 318, "UDP / PyQt6", 17, AMBER, 630)
-    t(d, 324, 351, "相机域写入", 16, SLATE)
-    t(d, 585, 351, "跨域缓冲", 16, SLATE)
-    t(d, 787, 351, "基础版 UDP：1024 × 600", 17, SLATE)
-    d.path("M34 375H1046", RULE)
-    section(d, 34, 412, "b", "同一画面：3 × 3 Sobel 边缘检测", BLUE)
+        d.rect(
+            315 + i * 8,
+            232,
+            7,
+            15,
+            ("#d79380", "#83be9e", "#83aacc")[0 if i < 5 else 1 if i < 11 else 2],
+            r=1,
+        )
+    for x, txt in [(333, "R5"), (377, "G6"), (421, "B5")]:
+        center(d, x, 266, txt, 14, light, 600, "mono")
+    for x, label in [(472, "写 FIFO"), (680, "读 FIFO")]:
+        for j in range(4):
+            d.rect(x - 14 + 7 * j, 231, 5, 16, "#b7d1c3" if j < 3 else "#4e716d", r=1)
+        center(d, x, 292, label, 15, GOLD, 580)
+    for x, end in [(444, 456), (488, 510), (647, 663), (696, 710), (829, 855)]:
+        d.path(f"M{x} 239H{end - 4}", light, 1.3)
+        poly(d, [(end - 5, 236), (end, 239), (end - 5, 242)], light)
+    for j, col in enumerate(["#426268", "#57787b", "#dce9e4"]):
+        d.rect(513 + j * 3, 217 - j * 3, 125, 49, col, "#83a29c", 3)
+    center(d, 581, 242, "SDRAM", 21, DARK, 670, "mono")
+    center(d, 581, 292, "突发读写", 15, light, 550)
+    d.rect(713, 213, 116, 51, "#284e50", "#83a99c", 3)
+    center(d, 771, 246, "像素算子", 19, WHITE, 650)
+    center(d, 771, 292, "模式选择", 15, light, 550)
+    d.path("M858 239V211H874 M858 239V269H874", MINT, 1.7)
+    d.circ(858, 239, 3, MINT)
+    for y, title, sub in [(211, "HDMI", "本地扫描输出"), (269, "UDP → PyQt6", "上位机按帧重组")]:
+        t(d, 881, y + 4, title, 19, WHITE, 650)
+        t(d, 881, y + 26, sub, 15, light)
+
+    d.path("M34 342H1046 M553 358V539", RULE)
+    section(d, 34, 375, "b", "Sobel · 从邻域到边缘", BLUE)
     with Image.open(ASSETS / "elinx-competition-demo.png") as im:
         patch = im.crop((58, 143, 242, 266))
-        edge = sobel(patch)
-        for xx, pic in [(34, patch), (378, edge)]:
-            embed(d, encode(pic, (336, 224), quality=92), xx, 443, 168, 112)
-    for j in range(3):
-        for i in range(3):
-            val = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]][j][i]
-            xx, yy = 241 + 30 * i, 449 + 30 * j
-            d.rect(xx, yy, 28, 28, [INDIGO[1], "#eff1ed", "#d0e4db"][i])
-            center(d, xx + 14, yy + 19, str(val), 15, BLUE if val < 0 else GREEN, 600, "mono")
-    d.wire("M207 501h24")
-    d.wire("M334 501h36")
-    center(d, 118, 581, "实拍屏幕裁片", 16, SLATE)
-    center(d, 285, 581, "水平梯度核 Gx", 16, SLATE)
-    center(d, 462, 581, "两向梯度幅值", 16, SLATE)
-    t(d, 34, 621, "像素邻域 → 水平 / 垂直梯度 → 边缘响应", 18, NAVY, 620)
-    t(d, 34, 648, "右图由左图离线计算，用于解释算子。", 16, SLATE)
-    d.path("M575 394V655", RULE)
-    section(d, 598, 412, "c", "命令到达与模式生效", GREEN)
-    for yy, s in [(474, "串口命令"), (525, "待提交"), (577, "显示模式")]:
-        t(d, 599, yy, s, 17, SLATE)
-    d.path("M691 470h50v-16h40v16h243", BLUE, 2.2)
-    d.path("M691 521h92v-17h83v17h158", AMBER, 2.2)
-    d.path("M866 440v151", GREEN, 1.2, False, True)
-    for xx, ww, lab, p in [(691, 174, "当前帧 A", INDIGO), (867, 157, "下一帧 B", JADE)]:
-        d.rect(xx, 551, ww, 36, p[1], p[2])
-        center(d, xx + ww / 2, 575, lab, 17, p[0], 630)
-    t(d, 692, 619, "跨域握手", 17, BLUE, 600)
-    t(d, 866, 619, "帧首提交", 17, GREEN, 600)
-    t(d, 598, 648, "时序仅示意事件先后，不按时钟比例绘制。", 15, SLATE)
-    footer(d, "像素面：OV5640 / SDRAM / FPGA", "控制面：串口命令 / 跨域握手 / 帧同步")
+        for x, pic in [(34, patch), (405, sobel(patch))]:
+            embed(d, encode(pic, (256, 170), quality=96), x, 393, 128, 85)
+    for x, kernel, label in [
+        (184, ((-1, 0, 1), (-2, 0, 2), (-1, 0, 1)), "Gx"),
+        (290, ((1, 2, 1), (0, 0, 0), (-1, -2, -1)), "Gy"),
+    ]:
+        for row, coeffs in enumerate(kernel):
+            for col, v in enumerate(coeffs):
+                xx, yy = x + col * 25, 398 + row * 25
+                d.rect(xx, yy, 24, 24, INDIGO[1] if v < 0 else "#f1f3ee" if v == 0 else "#d7eade", r=1)
+                center(d, xx + 12, yy + 17, str(v), 15, BLUE if v < 0 else GREEN, 600, "mono")
+        center(d, x + 37, 502, label, 16, BLUE, 640, "mono")
+    d.wire("M165 436h14")
+    d.wire("M369 436h30")
+    center(d, 98, 502, "实拍屏幕裁片", 15, SLATE)
+    center(d, 469, 502, "离线二值结果", 15, SLATE)
+    t(d, 34, 535, "行缓存 → 3 × 3 窗口", 17, NAVY, 600)
+    t(d, 534, 535, "|Gx| + |Gy| > 80 判为边缘", 16, BLUE, 620, "end")
+
+    section(d, 573, 375, "c", "算法切换 · 只在帧首生效", GREEN)
+    t(d, 573, 411, "串口命令", 16, NAVY, 630)
+    for j, byte in enumerate(["AA", "0A", "00", "55"]):
+        x = 656 + 38 * j
+        d.rect(x, 390, 34, 27, JADE[1] if j in (1, 2) else PALE, r=2)
+        center(d, x + 17, 409, byte, 16, GREEN if j in (1, 2) else SLATE, 650, "mono")
+    t(d, 824, 410, "Sobel  /  1 Mbaud", 16, SLATE, 550)
+    for y, label in [(448, "跨域握手"), (478, "等待帧首"), (510, "当前算法")]:
+        t(d, 573, y, label, 16, SLATE)
+    d.path("M663 445H721V431H745V445H1034", BLUE, 2)
+    d.path("M663 475H745V460H864V475H1034", AMBER, 2)
+    d.path("M864 426V513", GREEN, 1.3, False, True)
+    for x, w, label, pal in [(663, 201, "原模式", INDIGO), (865, 169, "Sobel", JADE)]:
+        d.rect(x, 488, w, 29, pal[1], pal[2], 2)
+        center(d, x + w / 2, 508, label, 16, pal[0], 650)
+    t(d, 864, 538, "↑ 帧同步边界", 15, GREEN, 600)
+
+    d.path("M34 554H1046", RULE)
+    section(d, 34, 586, "d", "独立 CNN · RAW8 数字识别", BLUE)
+    # One archived camera frame, not a predicted label or a classifier benchmark.
+    t(d, 1046, 585, "独立输入，不串入 HDMI / UDP 主通路", 15, SLATE, 520, "end")
+    d.rect(34, 604, 346, 91, PALE, r=4)
+    with Image.open(OUT / "vision-density-3.png") as density:
+        # Preserve the 32×32 cell edges. Maximum density code is (20×16) >> 3 = 40.
+        heatmap = ImageOps.colorize(density, "#e3eae4", "#1f5d4f", whitepoint=40)
+        buf = BytesIO()
+        heatmap.save(buf, "PNG", optimize=True)
+        data = base64.b64encode(buf.getvalue()).decode("ascii")
+        d.el.append(
+            f'<image x="47" y="617" width="64" height="64" style="image-rendering:pixelated" href="data:image/png;base64,{data}"/>'
+        )
+    t(d, 124, 633, "32 × 32 特征图", 19, GREEN, 650)
+    t(d, 124, 658, "实采 ROI · 每格 20 × 16 像素", 15, SLATE)
+    t(d, 124, 681, "75 MHz · 统计暗像素密度", 15, SLATE)
+    for x, w, title, detail, pal in [
+        (461, 227, "定点 CNN", "25 MHz · 卷积与全连接", INDIGO),
+        (782, 264, "识别结果稳定化", "连续三次一致，在帧首更新", JADE),
+    ]:
+        d.rect(x, 604, w, 91, pal[1], pal[2], 4)
+        center(d, x + w / 2, 645, title, 20, pal[0], 650)
+        center(d, x + w / 2, 673, detail, 16, SLATE)
+    for x, w, cap in [(382, 75, "特征 FIFO"), (691, 87, "返回 FIFO")]:
+        center(d, x + w / 2, 641, cap, 14, SLATE, 550)
+        d.wire(f"M{x} 654h{w}")
     d.save("atlas-04-vision.svg")
 
 

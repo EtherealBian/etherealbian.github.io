@@ -6,7 +6,7 @@
     <title>FPGA 实时图像处理与 UDP 图传 — EtherealBian 工程图志</title>
     <meta
       name="description"
-      content="摄像头送来 RGB565 像素，FPGA 在帧边界切换算法。处理后的图像既能本地显示，也能传回电脑。另用一条独立的 FPGA 流水线实现 CNN 数字识别。"
+      content="FPGA 采集 RGB565 视频流，在帧首切换算法，支持 HDMI 显示与 UDP 回传；独立 CNN 流水线完成数字识别。"
     />
     <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../style.css" />
@@ -36,7 +36,7 @@
         </div>
         <h1 lang="en">eLinex Vision<b>.</b></h1>
         <h2>从像素流到上位机</h2>
-        <p>摄像头送来 RGB565 像素，FPGA 在帧边界切换算法。处理后的图像既能本地显示，也能传回电脑。另用一条独立的 FPGA 流水线实现 CNN 数字识别。</p>
+        <p class="vision-intro">FPGA 采集 RGB565 视频流，在帧首切换算法，支持 HDMI 显示与 UDP 回传；独立 CNN 流水线完成数字识别。</p>
         <div class="honor-line">
           <strong>全国三等奖</strong><span>第十届 · 全国大学生集成电路创新创业大赛 · 中科亿海微赛道</span>
         </div>
@@ -57,11 +57,10 @@
               fetchpriority="high"
               decoding="async"
               src="../assets/plates/vision.webp"
-              alt="竞赛实拍：同一张照片里可以对照开发板、本地显示器和上位机控制界面。"
+              alt="竞赛工作台上的 FPGA 开发板、HDMI 显示器与上位机。"
             />
           </a>
           <figcaption>
-            <span>同一张照片里可以对照开发板、本地显示器和上位机控制界面。</span>
             <a href="../assets/elinx-competition-demo.png" data-plate>放大图版 ↗</a>
           </figcaption>
         </figure>
@@ -71,8 +70,6 @@
             <i>/</i>
             FIELD NOTE
           </div>
-          <strong>1024 × 600</strong>
-          <p>基础版 · UDP 回传图像尺寸</p>
           <dl>
             <dt>技术</dt>
             <dd>FPGA / UDP / PyQt6</dd>
@@ -110,7 +107,7 @@
             REFERENCE
           </div>
           <h2>图像路径</h2>
-          <p>数字识别是单独的工程记录，未将它画进基础视频通路。</p>
+          <p>基础版从同一处理流输出 HDMI 与 UDP；数字识别使用独立的 RAW8 输入。</p>
         </div>
         <div class="table-wrap">
           <table>
@@ -139,39 +136,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </section>
-      <section class="appendix">
-        <div class="section-label">
-          03
-          <i>/</i>
-          ORIGINAL MATERIAL
-        </div>
-        <h2>原始材料</h2>
-        <div class="supplements">
-          <figure class="evidence" id="fig-2">
-            <div class="plate-head">
-              <span>FIG. 04B</span>
-              <b>独立的数字识别流水线</b>
-            </div>
-            <a
-              class="exhibit"
-              data-plate
-              href="../assets/plates/cnn-pipeline.png"
-              aria-label="查看独立的数字识别流水线原图"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src="../assets/plates/cnn.webp"
-                alt="独立的数字识别流水线：这张图说明 FPGA 数字识别工程。基础版 HDMI 显示与 UDP 图传不以 CNN 为前置步骤。"
-              />
-            </a>
-            <figcaption>
-              <span>这张图说明 FPGA 数字识别工程。基础版 HDMI 显示与 UDP 图传不以 CNN 为前置步骤。</span>
-              <a href="../assets/plates/cnn-pipeline.png" data-plate>放大图版 ↗</a>
-            </figcaption>
-          </figure>
         </div>
       </section>
       <nav class="sheet-end" aria-label="相邻项目">

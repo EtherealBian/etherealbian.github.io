@@ -45,7 +45,8 @@
   line-height: 1.8;
 }
 .sheet-title > .spectrum-intro,
-.sheet-title > .lissajous-intro {
+.sheet-title > .lissajous-intro,
+.sheet-title > .vision-intro {
   max-width: none;
 }
 .exhibit-grid {
