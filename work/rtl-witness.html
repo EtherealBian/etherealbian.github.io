@@ -10,10 +10,11 @@
     <dt>电路</dt><dd>两拍 AXI-Stream 寄存器切片。工具提供接口和寄存器；模型决定每次收发之后，队列有多深、队首和队尾各存什么。</dd>
     <dt>同种子对照</dt><dd>三个相同的生成种子下，Coder-32B 分别用 <strong>1、1、3 次请求</strong>写对八种转移；72B 都用 3 次，覆盖从 6 行进到 7 行、再到 8 行。</dd>
     <dt>验收</dt><dd>总共得到两份不同的 RTL，只在一个已无效的队尾寄存器上写入不同值。两份均通过独立回放、端口隔离和复位后的队列归纳证明。</dd>
+    <dt>同资源下的优化</dt><dd>两份电路均用 68 FF、38 LUT。让无效队尾保持原值，两组突发背压流量下，队尾寄存器翻转分别少了 <strong>25.4% 和 39.1%</strong>。<a href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/slice-activity.md">查看逐拍统计 ↗</a></dd>
   </dl><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/slice-models.md">核对 32B、72B 的逐次原答与两份证明 ↗</a>
 </section></div>
 <div class="rocket-comparisons">
-  <section><h2>限定修订范围有用吗？</h2><p class="rocket-stat">3/3 <small>对</small> 0/3</p><p>同一份首稿有两条错误转移。给 72B 相同证据、按三个种子配对：只改这两行，三次通过；重写全部八行，三次都没修好入队次序。三个补丁内容相同。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/reports/skid72-scope-v1/study.json">对照六份原答 ↗</a></section>
+  <section><h2>限定修订范围有用吗？</h2><p class="rocket-stat">3/3 <small>对</small> 0/3</p><p>固定同一份首稿和两条反例。72B 只改错行时三次都通过，重写八行都未通过；Coder-32B 用两种方式都修好了同一份首稿。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/slice-models.md">对照两模型的修订 ↗</a></section>
   <section><h2>队列里还有 511 个字，为什么会断流？</h2><p class="rocket-stat">20,232 <small>拍独立回放</small></p><p>Coder-32B 的 FIFO 首稿在第 538 拍断流。工具修正队列控制与同步复位后，四组独立回放全部通过。再把包尾和数据合存为 33 位字，综合网表保留 1 块 BRAM，省去 8 个分布式 RAM 原语；两种布局的 RTL 通过等价检查。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/fifo32-local-repair.md">核对 16 种修复组合、资源对比与等价证明 ↗</a></section>
 </div>
 <section class="rocket-boot" style="margin-top:clamp(28px,4vw,55px)"><h2>为什么 8,155 拍仿真仍会漏掉一个错字节？</h2><p>人工故障电路把 32 位字拆成四个字节，只在输入为 <code>0x5ABAD1EA</code> 时翻转最低位。它通过五组仿真和综合；形式工具却找到了这一输入：第 1 拍接收，第 2 拍应发 <strong>EA</strong>，实际为 <strong>EB</strong>。用相同输入重新运行 Icarus，错误再次出现。这是对检查器的校准，不计入模型成绩。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/unpack-proof.md">查看端口证明与反例重放 ↗</a></section>
