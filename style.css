@@ -1403,6 +1403,25 @@ details[open] > summary .icon {
   border-radius: 2px;
   padding: 3px 7px;
 }
+.enhanced .project .tags li[data-technology] { padding: 0; }
+.project .tags button, #clear-tech-filter {
+  border: 0;
+  border-radius: 3px;
+  color: #295553;
+  background: #e5ede7;
+}
+.project .tags button {
+  padding: 3px 8px;
+  min-height: 24px;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#clear-tech-filter { margin-bottom: 12px; padding: 5px 10px; font-size: 13px; }
+.project .tags button:is(:hover, [aria-pressed="true"]), #clear-tech-filter:hover {
+  color: white;
+  background: #295553;
+}
 .project-links {
   display: flex;
   align-items: baseline;

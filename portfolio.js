@@ -34,15 +34,49 @@
     }
   });
   mobile.addEventListener("change", () => menu(false));
-  function filter(group) {
-    filters.forEach((btn) => btn.setAttribute("aria-pressed", String(btn.dataset.filter === group)));
+  const clearTech = document.querySelector("#clear-tech-filter");
+  const status = document.querySelector("#filter-status");
+  const techButtons = [];
+  function filter(group, tech = null) {
+    filters.forEach((btn) => btn.setAttribute("aria-pressed", String(!tech && btn.dataset.filter === group)));
+    techButtons.forEach(({ button, name }) => button.setAttribute("aria-pressed", String(name === tech)));
     cards.forEach((card) => {
-      card.hidden = group !== "all" && card.dataset.group !== group;
+      card.hidden = tech
+        ? !techButtons.some((entry) => entry.card === card && entry.name === tech)
+        : group !== "all" && !card.dataset.group.split(/\s+/).includes(group);
     });
-    document.querySelector("#filter-status").textContent =
-      `显示 ${cards.filter((card) => !card.hidden).length} 个项目`;
+    const count = cards.filter((card) => !card.hidden).length;
+    status.textContent = tech ? `显示 ${count} 个 ${tech} 项目` : `显示 ${count} 个项目`;
+    clearTech.hidden = !tech;
+    if (tech) {
+      clearTech.textContent = `${tech} · ${count} 个项目  ×`;
+      clearTech.setAttribute("aria-label", `清除 ${tech} 筛选，显示全部项目`);
+    }
   }
+  function showAll() {
+    filter("all");
+    filters.find((btn) => btn.dataset.filter === "all").focus();
+  }
+  clearTech.addEventListener("click", showAll);
   filters.forEach((btn) => btn.addEventListener("click", () => filter(btn.dataset.filter)));
+  // Without JavaScript the same labels remain readable as ordinary list items.
+  document.querySelectorAll(".tags [data-technology]").forEach((tag) => {
+    const name = tag.dataset.technology;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = tag.textContent;
+    button.setAttribute("aria-label", `${button.textContent}: filter ${name} projects`);
+    button.setAttribute("aria-controls", "project-list");
+    button.setAttribute("aria-pressed", "false");
+    tag.replaceChildren(button);
+    techButtons.push({ button, name, card: tag.closest(".project") });
+    button.addEventListener("click", () => {
+      if (button.getAttribute("aria-pressed") === "true") return showAll();
+      filter(null, name);
+      clearTech.focus({ preventScroll: true });
+      document.querySelector("#projects").scrollIntoView({ block: "start" });
+    });
+  });
   function restoreTarget() {
     const target = document.getElementById(location.hash.slice(1));
     if (target?.closest(".project[hidden]")) {

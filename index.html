@@ -19,8 +19,8 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=paper-review-1" />
-    <script src="portfolio.js" defer></script>
+    <link rel="stylesheet" href="style.css?v=project-filters-1" />
+    <script src="portfolio.js?v=project-filters-1" defer></script>
     <script src="viewer.js?v=projects-1" defer></script>
   </head>
   <body id="top">
@@ -303,15 +303,16 @@
             </div>
             <div class="filters" role="group" aria-label="Filter projects" lang="en">
               <button type="button" data-filter="all" aria-pressed="true">All</button>
-              <button type="button" data-filter="hardware" aria-pressed="false">Hardware</button>
-              <button type="button" data-filter="logic" aria-pressed="false">Logic</button>
-              <button type="button" data-filter="vision" aria-pressed="false">Vision</button>
+              <button type="button" data-filter="fpga" aria-pressed="false">FPGA</button>
+              <button type="button" data-filter="eda" aria-pressed="false">EDA</button>
+              <button type="button" data-filter="vision" aria-pressed="false">Vision &amp; Imaging</button>
               <button type="button" data-filter="infra" aria-pressed="false">AI Infra</button>
             </div>
           </header>
+          <button id="clear-tech-filter" type="button" hidden></button>
           <span id="filter-status" role="status" class="sr-only"></span>
-          <div class="projects">
-            <article class="project logic" data-group="logic" id="yosys-pmux" aria-labelledby="yosys-pmux-title">
+          <div class="projects" id="project-list">
+            <article class="project logic" data-group="eda" id="yosys-pmux" aria-labelledby="yosys-pmux-title">
               <div class="catalog-meta" lang="en">
                 <span>
                   <b>01</b>
@@ -351,7 +352,7 @@
                 </ul>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="spectrum" aria-labelledby="spectrum-title">
+            <article class="project hardware" data-group="fpga" id="spectrum" aria-labelledby="spectrum-title">
               <div class="catalog-meta" lang="en">
                 <span>
                   <b>02</b>
@@ -391,7 +392,7 @@
                 </ul>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="lissajous" aria-labelledby="lissajous-title">
+            <article class="project hardware" data-group="fpga" id="lissajous" aria-labelledby="lissajous-title">
               <div class="catalog-meta" lang="en">
                 <span>
                   <b>03</b>
@@ -431,7 +432,7 @@
                 </ul>
               </div>
             </article>
-            <article class="project vision" data-group="vision" id="vision" aria-labelledby="vision-title">
+            <article class="project vision" data-group="fpga vision" id="vision" aria-labelledby="vision-title">
               <div class="catalog-meta" lang="en">
                 <span>
                   <b>04</b>
@@ -472,7 +473,7 @@
                 </ul>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="n60" aria-labelledby="n60-title">
+            <article class="project hardware" data-group="fpga" id="n60" aria-labelledby="n60-title">
               <div class="catalog-meta" lang="en">
                 <span>
                   <b>05</b>
@@ -562,7 +563,7 @@
                 </div>
                 <p class="project-summary">在 <strong>NVIDIA DGX Spark</strong> 上完成的锥束 CT 重建项目。用 CUDA 将 720 幅 X 射线投影重建成一颗核桃的三维图像，逐层可见核桃壳、隔膜和核仁。</p>
                 <ul class="tags" lang="en">
-                  <li>CUDA C++</li>
+                  <li data-technology="CUDA">CUDA</li>
                   <li>cuFFT</li>
                   <li>FDK</li>
                   <li>DGX SPARK</li>
@@ -581,10 +582,10 @@
                   </div>
                 </div>
                 <p class="project-summary"><span data-room="2">在 DGX Spark 上</span><span data-room="4">将 PyTorch 子图编译成 CUDA C++</span><span data-room="2">，</span>四层 BERT 内核启动 <strong>233 → 64 次</strong>。<br><span data-room="2">Qwen<span data-room="3">2.5</span>-</span>32B <span data-room="2">长</span><span data-room="1">前缀</span>复用省时<span data-room="4">约</span> 19%；<span data-room="4">量化 </span><span data-room="2">GLM<span data-room="3">-4.5</span> </span>355B <span data-room="4">单机</span>请求<span data-room="4">耗时</span><span data-room="3">中位数</span> 2.588 秒。</p>
-                <ul class="tags" lang="en"><li>CUDA C++</li><li>DGX SPARK</li></ul>
+                <ul class="tags" lang="en"><li data-technology="CUDA">CUDA C++</li><li>DGX SPARK</li></ul>
               </div>
             </article>
-            <article class="project hardware" data-group="hardware" id="vcu118-rocket" aria-labelledby="vcu118-rocket-title">
+            <article class="project hardware" data-group="fpga" id="vcu118-rocket" aria-labelledby="vcu118-rocket-title">
               <div class="catalog-meta" lang="en"><span><b>09</b> / Digital Hardware</span><span>RISC-V SoC</span></div>
               <a class="plate diagram" href="work/vcu118-rocket.html" aria-label="查看 VCU118 Rocket 的启动路径与验证记录"><img loading="lazy" decoding="async" src="assets/plates/vcu118-rocket-boot.svg" width="800" height="500" alt="五级 Rocket 流水线，以及从 Boot ROM 经 OpenSBI 进入 Linux 的设计路径。"></a>
               <div class="project-body"><div class="project-heading">
