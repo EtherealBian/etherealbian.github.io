@@ -1569,6 +1569,12 @@ details[open] > summary .icon {
    static SVG slice (95,164,230,230 in 1080 × 720), including with JS off. */
 .project .atlas-cover {aspect-ratio:3/2;box-sizing:content-box;height:auto}
 .project .atlas-cover.ct-sweep {display:block;background:#fff}
+/* Keep the sweep operable without a separate caption/controls row. */
+.ct-cover-frame {position:relative}
+.ct-motion {position:absolute;top:54%;left:4%;transform:translateY(-100%);width:28px;height:28px;border:1px solid #8da19a;border-radius:50%;background:#152424;color:#fff;cursor:pointer}
+.ct-motion::before {content:"";display:block;margin:auto;width:8px;height:10px;box-sizing:border-box;border-inline:3px solid currentColor}
+.ct-motion[data-playing="false"]::before {width:0;height:0;border:5px solid transparent;border-left:8px solid currentColor;border-right:0}
+@media (hover:hover) { .ct-cover-frame:not(:hover):not(:focus-within) .ct-motion {opacity:0} }
 .project .atlas-cover > img {display:block;max-height:none}
 .project .atlas-cover > .atlas-slice {position:absolute;left:8.796296%;top:22.777778%;width:21.296296%;height:auto;aspect-ratio:1;pointer-events:none}
 .project .atlas-cover > .atlas-slice img {display:block;width:100%;height:100%;max-height:none}

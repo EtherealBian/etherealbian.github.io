@@ -19,9 +19,9 @@
     <meta property="og:image:alt" content="Signals. Logic. Quantum. 与原有环面绳结线稿，Xiangyu Bian 的个人作品集" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/orbit.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=engineering-plates-1" />
+    <link rel="stylesheet" href="style.css?v=ct-plate-3" />
     <script src="portfolio.js?v=project-filters-1" defer></script>
-    <script src="viewer.js?v=projects-1" defer></script>
+    <script src="viewer.js?v=ct-plate-3" defer></script>
   </head>
   <body id="top">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
@@ -496,14 +496,16 @@
                 <span class="catalog-number">07</span>
                 <span>CT Reconstruction</span>
               </div>
-              <a class="plate diagram atlas-cover ct-sweep" data-plate href="assets/plates/atlas-07-ct.svg?v=2" aria-label="放大工程图：CUDA 锥束反投影与逐层核对">
-                <img loading="lazy" decoding="async" src="assets/plates/atlas-07-ct.svg?v=2" width="1080" height="720" alt="左为真实核桃轴向切片与冠状、矢状断面；右为锥束和体素列示意；下方保留逐层误差实测曲线。">
-                <picture class="atlas-slice" aria-hidden="true">
-                  <source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif">
-                  <img loading="lazy" decoding="async" src="assets/plates/atlas-07-still.webp" width="276" height="276" alt="">
-                </picture>
-              </a>
-              <div class="ct-controls" lang="en"><span>FIG. 07A / AXIAL SWEEP</span><button type="button" data-sweep-toggle data-static-label="Show still image" data-play-label="Play slice sweep" hidden>Show still image</button></div>
+              <div class="ct-cover-frame">
+                <a class="plate diagram atlas-cover ct-sweep" data-plate href="assets/plates/atlas-07-ct.svg?v=3" aria-label="放大工程图：CUDA 锥束反投影与逐层核对">
+                  <img loading="lazy" decoding="async" src="assets/plates/atlas-07-ct.svg?v=3" width="1080" height="720" alt="真实核桃的三个正交断面；锥束射线穿过同一列体素，在探测器上做双线性插值；下方为 CUDA 与 ASTRA 的 512 层强度差。">
+                  <picture class="atlas-slice" aria-hidden="true">
+                    <source media="(prefers-reduced-motion: no-preference)" srcset="assets/conefdk-sweep.gif">
+                    <img loading="lazy" decoding="async" src="assets/plates/atlas-07-still.webp" width="276" height="276" alt="">
+                  </picture>
+                </a>
+                <button class="ct-motion" type="button" data-sweep-toggle aria-label="暂停切片动画" hidden></button>
+              </div>
               <div class="project-body">
                 <div class="project-heading">
                   <h3 id="cone-fdk-title" lang="en"><a href="work/cone-fdk.html">ConeFDK: CUDA CT Reconstruction<span class="compact-arrow" aria-hidden="true">&nbsp;→</span></a></h3>
@@ -512,7 +514,7 @@
                     <a class="source-link" href="https://github.com/EtherealBian/cone-fdk" aria-label="GitHub: ConeFDK: CUDA CT Reconstruction">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a>
                   </div>
                 </div>
-                <p class="project-summary">在 <strong>NVIDIA DGX Spark</strong> 上完成的锥束 CT 重建项目。用 CUDA 将 720 幅 X 射线投影重建成一颗核桃的三维图像，逐层可见核桃壳、隔膜和核仁。</p>
+                <p class="project-summary">基于 <strong>NVIDIA DGX Spark</strong> 平台，利用 CUDA 与 cuFFT 实现锥束 CT 的 FDK 并行重建。从 720 幅 X 射线投影中成功恢复出高精度三维结构，清晰呈现核桃样本的壳体、隔膜与核仁细节。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en">
                   <li data-technology="CUDA">CUDA C++</li>
                   <li>cuFFT</li>

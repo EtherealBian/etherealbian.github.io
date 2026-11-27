@@ -495,11 +495,11 @@ def ct():
         7,
         "ConeFDK",
         "CUDA 锥束反投影与逐层核对",
-        "720 幅核桃投影重建成 512³ 体素；在同一体数据上与 ASTRA 比较。",
-        "DGX Spark / GB10",
-        "左为真实核桃轴向切片与冠状、矢状断面；右为锥束和体素列示意；下方保留逐层误差实测曲线。",
+        "720 幅 X 射线投影 → 512³ 体素；以 ASTRA 为参考，逐层核对同一颗核桃的重建强度。",
+        None,
+        "真实核桃的三个正交断面；锥束射线穿过同一列体素，在探测器上做双线性插值；下方为 CUDA 与 ASTRA 的 512 层强度差。",
     )
-    section(d, 34, 144, "a", "核桃 CT / 重建断面", BLUE)
+    section(d, 34, 144, "a", "同一颗核桃的三个断面", BLUE)
     d.rect(34, 156, 352, 247, "#101315", r=3)
     with Image.open(ASSETS / "conefdk-sweep.gif") as im:
         im.seek(12)
@@ -507,11 +507,18 @@ def ct():
     (OUT / "atlas-07-still.webp").write_bytes(data)
     embed(d, data, 95, 164, 230, 230)
     t(d, 43, 183, "XY", 17, "#a5c8bb", 600, cls="mono")
-    for x, tag, crop in [(34, "XZ", (310, 34, 620, 344)), (213, "YZ", (620, 34, 930, 344))]:
-        d.rect(x, 411, 173, 73, "#16242b")
-        photo(d, "conefdk-walnut.png", x + 52, 413, 70, 69, crop)
-        t(d, x + 10, 433, tag, 14, "#c0d2d1", 600, cls="mono")
+    t(d, 43, 206, "轴向", 15, "#c0d2d1")
+    for x, tag, name, crop in [
+        (34, "XZ", "冠状", (310, 34, 620, 344)), (213, "YZ", "矢状", (620, 34, 930, 344))
+    ]:
+        d.rect(x, 409, 173, 102, "#16242b", r=3)
+        photo(d, "conefdk-walnut.png", x + 61, 411, 98, 98, crop)
+        t(d, x + 10, 437, tag, 17, "#a5c8bb", 600, cls="mono")
+        t(d, x + 10, 461, name, 15, "#c0d2d1")
     section(d, 406, 144, "b", "一个线程如何更新一列体素", GREEN)
+    # Annotate the fixed view and column, not the moving axial image.
+    t(d, 414, 181, "单个投影角 θ", 17, NAVY, 630)
+    t(d, 414, 205, "探测器列 u 不变，行 v 随 z 改变。", 15, SLATE)
     # Perspective projection: a source, a volume and a gridded detector.
     src = (443, 292)
     tl, tr, br, bl = (826, 184), (930, 210), (930, 393), (826, 367)
@@ -539,6 +546,8 @@ def ct():
     for j in range(1, 9):
         d.path(f"M654 {257 + 9.5 * j}l11 2", "#c2ddd2", 0.7)
     # Two sample rays from the same x/y column, at different heights.
+    # Both voxel heights land on the same detector column for this view.
+    d.path("M867 239v116", GREEN, 1.2, False, True)
     for vy in [268, 321]:
         uv = 867
         dy = 292 + (vy - 292) * (uv - 443) / (660 - 443)
@@ -547,11 +556,13 @@ def ct():
         d.circ(uv, dy, 3.2, AMBER)
     d.circ(*src, 5, AMBER)
     t(d, 418, 321, "射线源", 16, AMBER, 620)
-    t(d, 622, 379, "固定 (x, y)", 16, GREEN, 620)
+    d.path("M660 346v12h-40", GREEN, 1.2)
+    t(d, 550, 380, "固定 (x, y) · 共享几何权重", 16, GREEN, 620)
     t(d, 939, 346, "探测器平面", 16, GREEN, 620)
     # Detail of the four detector samples bracketing one projected point.
     d.path("M870 245h61l18-29h12", AMBER, 1, False, True)
     d.rect(961, 181, 76, 77, "#f7faf7", RULE, 2)
+    d.rect(970, 190, 29, 29, "#e6efe5")
     grid(d, 970, 190, 58, 58, 29, 29, "#b1c6be")
     for xx in (970, 999):
         for yy in (190, 219):
@@ -559,15 +570,35 @@ def ct():
     d.path("M970 208h29M988 190v29", AMBER, 0.9, False, True)
     d.circ(988, 208, 3.0, AMBER)
     center(d, 997, 281, "四邻点", 16, GREEN, 610)
-    center(d, 997, 301, "插值", 15, SLATE)
-    t(d, 411, 423, "逐行加权 → cuFFT / Ram-Lak → 按列反投影", 21, NAVY, 640)
-    t(d, 411, 453, "相邻 Z 层共享几何权重；每层从探测器四邻点插值。", 17, SLATE)
-    t(d, 411, 479, "每线程至多更新 16 个体素。", 17, GREEN, 610)
-    d.path("M34 501H1046", RULE)
-    section(d, 34, 541, "c", "CUDA / ASTRA", BLUE)
-    t(d, 34, 605, "0.02899%", 48, GREEN, 660, cls="serif")
-    t(d, 36, 643, "整卷重建强度的相对 L2 差异", 17, SLATE)
-    x0, x1, y0, y1 = 415, 1022, 558, 636
+    center(d, 997, 303, "双线性插值", 15, SLATE)
+    # Each glyph depicts an operation rather than a measured intensity profile.
+    # Left: a selected detector row and its padded tail. Middle: the ramp in
+    # frequency space. Right: one thread updating successive z positions.
+    d.rect(406, 407, 640, 104, DARK, r=4)
+    for x in (617, 835):
+        d.path(f"M{x} 421v75", "#51736e", 1)
+    for x, name, note in [
+        (420, "逐行加权", "几何加权，行尾补零"),
+        (632, "cuFFT 滤波", "频域乘 Ram-Lak，再逆变换"),
+        (850, "按列反投影", "每线程更新至多 16 个体素"),
+    ]:
+        t(d, x + 49, 447, name, 18, WHITE, 630)
+        t(d, x, 488, note, 15, "#d2e2d8")
+    for j in range(3):
+        for i in range(6):
+            d.rect(420 + i * 6, 429 + j * 6, 5, 5,
+                   (GOLD if i < 4 else "#82958e") if j == 1 else "#43645f")
+    d.path("M632 429v23h38", "#829e93", 1)
+    d.path("M634 431l15 18 18-18", GOLD, 2.2)
+    for j in range(4):
+        d.rect(852, 423 + j * 7, 14, 6, MINT if j in (0, 3) else "#74a997")
+    d.path("M874 423v27m-3-4 3 4 3-4", GOLD, 1.4)
+    d.path("M34 528H1046", RULE)
+    section(d, 34, 562, "c", "CUDA 与 ASTRA 的强度差", BLUE)
+    t(d, 34, 636, "0.02899%", 51, GREEN, 660, cls="serif")
+    t(d, 36, 670, "整卷相对 L2 差异", 19, NAVY, 610)
+    t(d, 36, 695, "同一组投影 · 全部 512³ 个体素", 16, SLATE)
+    x0, x1, y0, y1 = 443, 1023, 588, 659
     root = ET.parse(ASSETS / "conefdk-walnut-peak.svg")
     raw = next(n.get("points") for n in root.iter() if n.tag.endswith("polyline")).split()
     assert len(raw) == 512
@@ -575,8 +606,8 @@ def ct():
     for pair in raw:
         u, v = map(float, pair.split(","))
         points.append((x0 + (u - 54) / 450 * (x1 - x0), y1 - (130 - v) / 94 * (y1 - y0)))
-    t(d, 413, 537, "逐层最大绝对强度差", 19, NAVY, 630)
-    t(d, 1023, 537, "首个峰值：z = 256", 16, AMBER, 630, "end")
+    t(d, 443, 562, "逐层最大绝对强度差", 19, NAVY, 630)
+    t(d, 1023, 562, "首个峰值：z = 256", 16, AMBER, 630, "end")
     for yy in [y0, (y0 + y1) / 2, y1]:
         d.path(f"M{x0} {yy}H{x1}", RULE, 1, False, True)
     poly(d, [(x0, y1), *points, (x1, y1)], "#e7f0f3")
@@ -585,14 +616,10 @@ def ct():
     d.path(f"M{px} {py}V{y1}", AMBER, 1.1, False, True)
     d.circ(px, py, 4, AMBER)
     for xx, s in [(x0, "0"), (px, "256"), (x1, "511")]:
-        center(d, xx, 660, s, 14, SLATE, 550, "mono")
-    t(d, 404, y0 + 5, "4.74e−5", 14, SLATE, 500, "end", "mono")
-    t(d, 404, y1 + 4, "0", 14, SLATE, 500, "end", "mono")
-    footer(
-        d,
-        "数据：Alexander Meaney / University of Helsinki · CC BY 4.0",
-        "比较重建强度，不代表物理尺寸误差。",
-    )
+        center(d, xx, 681, s, 14, SLATE, 550, "mono")
+    t(d, 431, y0 + 5, "4.74e−5", 14, SLATE, 500, "end", "mono")
+    t(d, 431, y1 + 4, "0", 14, SLATE, 500, "end", "mono")
+    center(d, (x0 + x1) / 2, 704, "轴向层号 z", 14, SLATE)
     meta(
         d,
         "Source: Alexander Meaney, University of Helsinki, https://doi.org/10.5281/zenodo.6986012 ; CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ . Projections binned, normalized and reconstructed. The chart preserves all 512 measurements.",

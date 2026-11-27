@@ -48,8 +48,18 @@
 .sheet-title > .lissajous-intro,
 .sheet-title > .vision-intro,
 .sheet-title > .uavcount-intro,
+.sheet-title > .conefdk-intro,
 .sheet-title > .n60-intro {
   max-width: none;
+}
+.sheet-title > .conefdk-intro {
+  text-align: justify;
+}
+@media (min-width: 84em) {
+  .sheet-title > .conefdk-intro {
+    font-size: .9375rem;
+    letter-spacing: -.028em;
+  }
 }
 .sheet-title > .n60-intro {
   text-wrap: balance;

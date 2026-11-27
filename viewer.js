@@ -69,7 +69,12 @@ for (const button of document.querySelectorAll('[data-sweep-toggle]')) {
   const preference = matchMedia('(prefers-reduced-motion: no-preference)');
   function setMotion(on) {
     source.media = on ? 'all' : 'not all';
-    button.textContent = on ? (button.dataset.staticLabel || '显示静态图') : (button.dataset.playLabel || '播放扫层动图');
+    if (button.classList.contains('ct-motion')) {
+      button.dataset.playing = String(on);
+      button.setAttribute('aria-label', on ? '暂停切片动画' : '播放切片动画');
+    } else {
+      button.textContent = on ? '显示静态图' : '播放扫层动图';
+    }
     button.hidden = false;
   }
   setMotion(preference.matches);
