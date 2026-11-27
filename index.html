@@ -484,7 +484,7 @@
                   </div>
                 </div>
                 <div class="honor-line"><strong>本科毕设</strong></div>
-                <p class="project-summary"><span data-room="2">对齐相邻视频帧，</span><span data-room="5">用 YOLO11n 检测候选目标，</span><span data-room="3">用短轨迹抑制水面倒影误检，</span>新目标<strong>连续 3 帧确认</strong>后只计一次<span data-room="4">，短暂漏检后续接原轨迹</span>。测试集<span data-room="1">按三帧判读窗统计</span><span data-room="6">，每段视频先预热 10 帧</span>：<strong>167/184</strong> 个窗口计数正确<span data-room="2">（90.76%）</span>。</p>
+                <p class="project-summary">融合帧对齐与短轨迹过滤水面倒影，通过“3 帧确认计数”与“漏检轨迹重连”实现目标唯一计数。三帧滑窗评估下，测试集计数准确率达 <strong>90.76%</strong>。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en">
                   <li>YOLO11n</li>
                   <li>TensorRT FP16</li>

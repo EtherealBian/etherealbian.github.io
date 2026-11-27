@@ -47,6 +47,7 @@
 .sheet-title > .spectrum-intro,
 .sheet-title > .lissajous-intro,
 .sheet-title > .vision-intro,
+.sheet-title > .uavcount-intro,
 .sheet-title > .n60-intro {
   max-width: none;
 }
