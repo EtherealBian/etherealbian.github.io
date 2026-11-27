@@ -221,7 +221,9 @@
                     <h4 lang="en">HLS-based Atom Rearrangement</h4>
                     <p>用 <strong>HLS</strong> 开发原子重排核：根据检测生成的占据位图，生成填满阵列中心的搬运方案。</p>
                     <dl>
-                      <div><dt>规划</dt><dd><strong>采用 40 位掩码提取行列占据特征。路径规划引入自适应分支策略：优先单轴压紧，容量受限时降级为“分配-压紧”两步重排，有效化解阵列拥塞。在 250 MHz 主频下，单帧规划延迟仅 <span class="metric">13.57 μs</span>，仅消耗 5,077 LUT 与 4,388 FF。</strong></dd></div>
+                      <div><dt>规划</dt><dd>采用 40 位掩码提取行列占据特征。路径规划引入自适应分支策略：优先单轴压紧，容量受限时降级为“分配-压紧”两步重排，有效化解阵列拥塞。</dd></div>
+                      <div><dt>延迟</dt><dd>250 MHz 主频下，单帧规划耗时 <strong class="metric">13.57 μs</strong>。</dd></div>
+                      <div><dt>资源</dt><dd>仅消耗 5,077 LUT 与 4,388 FF；<strong class="metric">0 BRAM</strong>、<strong class="metric">0 DSP</strong>。</dd></div>
                     </dl>
                   </div>
                 </li>
