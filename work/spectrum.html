@@ -6,7 +6,7 @@
     <title>Vitis HLS 算子优化与 Zynq 实时频谱仪 — EtherealBian 工程图志</title>
     <meta
       name="description"
-      content="初赛分别优化消息认证、压缩和矩阵分解；决赛换到 Zynq，显示射频或音频输入的功率谱。"
+      content="初赛用 HLS 加速 SHA256、LZ4 和 Cholesky 三个算子；决赛在 PYNQ Z2 上开发实时频谱仪，显示射频或音频信号的功率谱。"
     />
     <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../style.css" />
@@ -36,7 +36,7 @@
         </div>
         <h1 lang="en">Vitis HLS<b>.</b></h1>
         <h2>三个算子，一台频谱仪</h2>
-        <p>初赛分别优化消息认证、压缩和矩阵分解；决赛换到 Zynq，显示射频或音频输入的功率谱。</p>
+        <p>初赛用 HLS 加速 SHA256、LZ4 和 Cholesky 三个算子；决赛在 PYNQ Z2 上开发实时频谱仪，显示射频或音频信号的功率谱。</p>
         <div class="honor-line">
           <strong>全国二等奖</strong><span>第九届 · FPGA 创新设计竞赛 · AMD 赛道</span>
           <a class="atlas-source" href="https://github.com/EtherealBian/vitis-hls-kernel-optimization"
@@ -251,62 +251,6 @@
               >查看接口与模式说明 ↗</a
             >
           </p>
-        </div>
-      </section>
-      <section class="appendix">
-        <div class="section-label">
-          04
-          <i>/</i>
-          ORIGINAL MATERIAL
-        </div>
-        <h2>原始材料</h2>
-        <div class="supplements">
-          <figure class="evidence" id="fig-2">
-            <div class="plate-head">
-              <span>档案 / 01</span>
-              <b>原始算子架构</b>
-            </div>
-            <a
-              class="exhibit"
-              data-plate
-              href="../assets/vitis-hls-kernel-optimization.png"
-              aria-label="查看原始算子架构原图"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src="../assets/plates/kernels.webp"
-                alt="原始算子架构：三项赛题归档图：从左到右读每个算子的重构方法和对应周期。"
-              />
-            </a>
-            <figcaption>
-              <span>三项赛题归档图：从左到右读每个算子的重构方法和对应周期。</span>
-              <a href="../assets/vitis-hls-kernel-optimization.png" data-plate>放大图版 ↗</a>
-            </figcaption>
-          </figure>
-          <figure class="evidence" id="fig-3">
-            <div class="plate-head">
-              <span>档案 / 02</span>
-              <b>竞赛应用界面</b>
-            </div>
-            <a
-              class="exhibit"
-              data-plate
-              href="../assets/plates/competition-app.jpg"
-              aria-label="查看竞赛应用界面原图"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src="../assets/plates/spectrum.webp"
-                alt="竞赛应用界面：竞赛期间的 PYNQ-Z2 应用截图。时域与频域视图是应用记录，不是初赛算子测试波形。"
-              />
-            </a>
-            <figcaption>
-              <span>竞赛期间的 PYNQ-Z2 应用截图。时域与频域视图是应用记录，不是初赛算子测试波形。</span>
-              <a href="../assets/plates/competition-app.jpg" data-plate>放大图版 ↗</a>
-            </figcaption>
-          </figure>
         </div>
       </section>
       <nav class="sheet-end" aria-label="相邻项目">
