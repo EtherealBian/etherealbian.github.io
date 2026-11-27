@@ -14,7 +14,7 @@
 </section></div>
 <div class="rocket-comparisons">
   <section><h2>限定修订范围有用吗？</h2><p class="rocket-stat">3/3 <small>对</small> 0/3</p><p>同一份首稿有两条错误转移。给 72B 相同证据、按三个种子配对：只改这两行，三次通过；重写全部八行，三次都没修好入队次序。三个补丁内容相同。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/reports/skid72-scope-v1/study.json">对照六份原答 ↗</a></section>
-  <section><h2>队列里还有 511 个字，为什么会断流？</h2><p class="rocket-stat">20,232 <small>拍独立回放</small></p><p>Coder-32B 写的 FIFO 在第 538 拍没有输出。工具在原稿上修正了计数、读指针、输出重填和同步复位。修复版通过四组独立回放和块 RAM 映射；六份未经编辑的模型输出都未通过。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/fifo32-local-repair.md">对照原稿、16 种编辑组合与复位波形判据 ↗</a></section>
+  <section><h2>队列里还有 511 个字，为什么会断流？</h2><p class="rocket-stat">20,232 <small>拍独立回放</small></p><p>Coder-32B 的 FIFO 首稿在第 538 拍断流。工具修正队列控制与同步复位后，四组独立回放全部通过。再把包尾和数据合存为 33 位字，综合网表保留 1 块 BRAM，省去 8 个分布式 RAM 原语；两种布局的 RTL 通过等价检查。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/fifo32-local-repair.md">核对 16 种修复组合、资源对比与等价证明 ↗</a></section>
 </div>
 <section class="rocket-boot" style="margin-top:clamp(28px,4vw,55px)"><h2>为什么 8,155 拍仿真仍会漏掉一个错字节？</h2><p>人工故障电路把 32 位字拆成四个字节，只在输入为 <code>0x5ABAD1EA</code> 时翻转最低位。它通过五组仿真和综合；形式工具却找到了这一输入：第 1 拍接收，第 2 拍应发 <strong>EA</strong>，实际为 <strong>EB</strong>。用相同输入重新运行 Icarus，错误再次出现。这是对检查器的校准，不计入模型成绩。</p><a class="rocket-source" href="https://github.com/EtherealBian/rtl-witness/blob/main/docs/unpack-proof.md">查看端口证明与反例重放 ↗</a></section>
 </main></body></html>
