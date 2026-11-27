@@ -210,7 +210,7 @@
                     <h4 lang="en">HLS-based Atom Detection</h4>
                     <p>用 <strong>HLS</strong> 开发原子占据检测核：对 <strong>40 × 40 阵列</strong>的各个位点做 31 × 31 模板匹配，生成占据位图。</p>
                     <dl class="detector-notes">
-                      <div><dt>流水线</dt><dd>图像按行分给四个并行处理单元。每路将像素交错存入三组 BRAM，使窗口提取与定点乘加流水执行。在 300 MHz 下，单帧延迟为 <strong class="metric">0.268 ms</strong>。</dd></div>
+                      <div><dt>流水线</dt><dd>采用行级并行架构，将图像分发至四路处理单元。各路将像素交错映射至三组 BRAM，化解访存冲突，支撑窗口提取与定点乘加的<strong>全流水</strong>执行。在 300 MHz 主频下，单帧检测延迟仅 <strong class="metric">0.268 ms</strong>。</dd></div>
                     </dl>
                   </div>
                 </li>
