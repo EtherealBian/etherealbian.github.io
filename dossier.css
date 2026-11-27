@@ -44,6 +44,9 @@
   margin-top: 7px;
   line-height: 1.8;
 }
+.sheet-title > .spectrum-intro {
+  max-width: none;
+}
 .exhibit-grid {
   display: grid;
   grid-template-columns: minmax(0, 2.25fr) minmax(225px, 0.78fr);
