@@ -342,8 +342,9 @@
                   <strong>全国一等奖</strong><strong>最佳工程奖提名</strong><span>第十届 · FPGA 创新设计竞赛 · 中科亿海微赛道</span>
                 </div>
                 <p class="project-summary">在 RTLIL 层重构 PMUX 选择网络，跨通道复用译码与运算逻辑，消除冗余组合逻辑。9 个用例中，组合逻辑单元数平均减少 <strong>60.55%</strong>，各例 DFF 数量均未增加，全部通过 <strong>EQY 等价验证</strong>。</p>
-                <ul class="tags" lang="en">
+                <ul class="tags" aria-label="Technology stack" lang="en">
                   <li>Yosys</li>
+                  <li>C++</li>
                   <li>RTLIL</li>
                   <li>EQY</li>
                 </ul>
@@ -379,10 +380,10 @@
                   <strong>全国二等奖</strong><span>第九届 · FPGA 创新设计竞赛 · AMD 赛道</span>
                 </div>
                 <p class="project-summary">利用 HLS 加速 SHA256、LZ4、Cholesky 算子，<strong>Co-simulation cycles</strong> 平均降低 59.4%。<br>基于 PYNQ Z2 开发频谱仪，实现 ADC 实时采样与 1K 至 16K 点 FFT 功率谱计算。</p>
-                <ul class="tags" lang="en">
+                <ul class="tags" aria-label="Technology stack" lang="en">
                   <li>Vitis HLS</li>
-                  <li>Zynq</li>
-                  <li>FFT</li>
+                  <li data-technology="Vivado">Vivado</li>
+                  <li>PYNQ Z2</li>
                 </ul>
               </div>
             </article>
@@ -416,9 +417,9 @@
                   <strong>省一等奖</strong><span>2026 · 全国大学生电子设计竞赛 · 李萨如图形显示控制装置</span>
                 </div>
                 <p class="project-summary">有线<span data-room="1">模式以数字</span>锁相<span data-room="1">环跟踪输入<span data-room="3">频率与相位</span>，</span>驱动 <strong>48 位 DDS</strong><span data-room="2"> 合成 Y 轴波形</span><span data-room="5">，与 X 轴输入形成李萨如图形</span>。<span data-room="2">视觉模式下，</span>Jetson Nano 从<span data-room="4">摄像头记录的多帧</span>轨迹<strong>估计频率与相位</strong><span data-room="3">，<span data-room="4">经 UART </span>更新 DDS 频率和相位</span>。</p>
-                <ul class="tags" lang="en">
-                  <li>DPLL</li>
-                  <li>DDS</li>
+                <ul class="tags" aria-label="Technology stack" lang="en">
+                  <li data-technology="SystemVerilog">SystemVerilog</li>
+                  <li>OpenCV</li>
                   <li>Jetson Nano</li>
                 </ul>
               </div>
@@ -454,10 +455,10 @@
                   ><span>第十届 · 全国大学生集成电路创新创业大赛 · 中科亿海微赛道</span>
                 </div>
                 <p class="project-summary">FPGA 实现 Sobel 边缘检测<span data-room="2">、形态学操作</span>、<strong>引导滤波</strong><span data-room="1">、暗光增强、HDR</span><span data-room="3">、仿射变换</span><span data-room="3">、色域空间转换</span><span data-room="2">、缩放</span><span data-room="3">、旋转</span><span data-room="4">、直方图均衡化</span><span data-room="4">、双边滤波</span>与<strong>CNN 数字识别</strong>。</p>
-                <ul class="tags" lang="en">
-                  <li>Sobel</li>
-                  <li>Morphology</li>
-                  <li>Guided filtering</li>
+                <ul class="tags" aria-label="Technology stack" lang="en">
+                  <li>Verilog</li>
+                  <li>eLinex FPGA</li>
+                  <li data-technology="PyQt6">PyQt6</li>
                 </ul>
               </div>
             </article>
@@ -489,10 +490,10 @@
                 </div>
                 <div class="honor-line"><strong>信号赛道第一名</strong><span>2026 · 利利普杯</span></div>
                 <p class="project-summary">上位机<span data-room="2">根据阵元到目标的路径差</span>计算<strong>阵元相位与幅度</strong><span data-room="3">，通过串口下发控制参数</span><span data-room="6">，支持在线计算或离线查表</span>。FPGA <span data-room="5">将音频与各通道的相位和幅度结合，</span>以 <strong>60 路<span data-room="1"> 40 kHz</span> PWM</strong> 驱动 5 个超声子阵<span data-room="1">定向传声</span><span data-room="4">，每个子阵由 12 个阵元组成</span>。</p>
-                <ul class="tags" lang="en">
-                  <li>Phased array</li>
-                  <li>FPGA</li>
-                  <li>PWM</li>
+                <ul class="tags" aria-label="Technology stack" lang="en">
+                  <li data-technology="SystemVerilog">SystemVerilog</li>
+                  <li data-technology="Vivado">Vivado</li>
+                  <li data-technology="PyQt6">PyQt6</li>
                 </ul>
               </div>
             </article>
@@ -524,10 +525,9 @@
                 </div>
                 <div class="honor-line"><strong>本科毕设</strong></div>
                 <p class="project-summary"><span data-room="2">对齐相邻视频帧，</span><span data-room="5">用 YOLO11n 检测候选目标，</span><span data-room="3">用短轨迹抑制水面倒影误检，</span>新目标<strong>连续 3 帧确认</strong>后只计一次<span data-room="4">，短暂漏检后续接原轨迹</span>。测试集<span data-room="1">按三帧判读窗统计</span><span data-room="6">，每段视频先预热 10 帧</span>：<strong>167/184</strong> 个窗口计数正确<span data-room="2">（90.76%）</span>。</p>
-                <ul class="tags" lang="en">
+                <ul class="tags" aria-label="Technology stack" lang="en">
                   <li>YOLO11n</li>
                   <li>TensorRT FP16</li>
-                  <li>Multi-object tracking</li>
                 </ul>
               </div>
             </article>
@@ -547,11 +547,10 @@
                   </div>
                 </div>
                 <p class="project-summary">在 <strong>NVIDIA DGX Spark</strong> 上完成的锥束 CT 重建项目。用 CUDA 将 720 幅 X 射线投影重建成一颗核桃的三维图像，逐层可见核桃壳、隔膜和核仁。</p>
-                <ul class="tags" lang="en">
-                  <li data-technology="CUDA">CUDA</li>
+                <ul class="tags" aria-label="Technology stack" lang="en">
+                  <li data-technology="CUDA">CUDA C++</li>
                   <li>cuFFT</li>
-                  <li>FDK</li>
-                  <li>DGX SPARK</li>
+                  <li data-technology="DGX SPARK">DGX SPARK</li>
                 </ul>
               </div>
             </article>
@@ -570,7 +569,11 @@
                   </div>
                 </div>
                 <p class="project-summary"><span data-room="2">在 DGX Spark 上</span><span data-room="4">将 PyTorch 子图编译成 CUDA C++</span><span data-room="2">，</span>四层 BERT 内核启动 <strong>233 → 64 次</strong>。<br><span data-room="2">Qwen<span data-room="3">2.5</span>-</span>32B <span data-room="2">长</span><span data-room="1">前缀</span>复用省时<span data-room="4">约</span> 19%；<span data-room="4">量化 </span><span data-room="2">GLM<span data-room="3">-4.5</span> </span>355B <span data-room="4">单机</span>请求<span data-room="4">耗时</span><span data-room="3">中位数</span> 2.588 秒。</p>
-                <ul class="tags" lang="en"><li data-technology="CUDA">CUDA C++</li><li>DGX SPARK</li></ul>
+                <ul class="tags" aria-label="Technology stack" lang="en">
+                  <li>torch.export</li>
+                  <li data-technology="CUDA">CUDA C++</li>
+                  <li data-technology="DGX SPARK">DGX SPARK</li>
+                </ul>
               </div>
             </article>
             <article class="project hardware" data-group="fpga" id="vcu118-rocket" aria-labelledby="vcu118-rocket-title">
@@ -584,7 +587,12 @@
                 <div class="project-links" lang="en"><a class="entry-link" href="work/vcu118-rocket.html" aria-label="Case study: VCU118 Rocket">Case study <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#east" /></svg></a>
                   <a class="source-link" href="https://github.com/EtherealBian/vcu118-rocket-soc" aria-label="GitHub: VCU118 Rocket Linux SoC">GitHub <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#out" /></svg></a></div>
               </div><p class="project-summary">一块 VCU118，两根 USB 线：<strong>100 MHz 五级 Rocket 已启动 Linux 6.6.65</strong>。同一固件从串口发送到 shell 回答，由 495.050 秒降到 194.469 秒。100 MHz 单核 CoreMark 实测中位数最高 254.232 次/秒；不用 Zba/Zbb 的通用程序本轮测得 228.241 次/秒。单核四路 BOOM 在同一程序的 RTL 对照中，比三路再少用 8.50% 周期。发射队列调整后，四路派发仍在原来那一拍给出许可。尚无四路板测，单核 1,000 次/秒仍是目标。</p>
-              <ul class="tags" lang="en"><li>RV64GC</li><li>FPGA</li><li>Linux bring-up</li></ul></div>
+              <ul class="tags" aria-label="Technology stack" lang="en">
+                <li>Chipyard</li>
+                <li>Verilator</li>
+                <li>OpenSBI</li>
+                <li>Linux</li>
+              </ul></div>
             </article>
           </div>
         </section>
