@@ -270,15 +270,13 @@ def finals_panels(d):
 def overview():
     d = Plate(
         1504,
-        1040,
+        1008,
         "Vitis HLS 算子微架构、验证结果与 Zynq 信号链",
         "a–c 分别给出 HMAC-SHA256、LZ4、Cholesky 的瓶颈、硬件数据流、固定用例协同仿真周期及验证边界。d 是决赛独立频谱仪的双输入、下变频、FFT 至 PYNQ 通路；e 为竞赛截图中的 80 Hz 与 150 Hz 双峰。",
     )
     d.text(26, 65, "Vitis HLS", 57, 650, INDIGO[0], cls="serif")
     d.path("M329 25v46", "#c0cdd5", 1.5)
     d.text(353, 62, "算子微架构与实时频谱分析", 34, 650, NAVY)
-    d.text(1478, 40, "全国二等奖", 24, 650, JADE[0], "end")
-    d.text(1478, 64, "2025 FPGA 创新设计赛  /  AMD 赛道", 16, 500, SLATE, "end")
     d.rect(26, 94, 1452, 54, "#edf3f7", "#c2d0d9", 3)
     d.text(42, 129, "01", 20, 600, INDIGO[0], cls="mono")
     d.text(96, 129, "初赛  /  三项独立算子", 23, 650, NAVY)
@@ -323,16 +321,6 @@ def overview():
                 draw(d)
     with d.group(0, 28):
         finals_panels(d)
-        d.path("M26 974H1478")
-        d.text(
-            26,
-            997,
-            "资料：项目算子设计记录、协同仿真报告、决赛 PL/PS 工程与 competition-app.jpg。",
-            15,
-            450,
-            SLATE,
-        )
-        d.text(1478, 997, "ENGINEERING RECORD   /   02", 15, 550, SLATE, "end", "mono")
     d.save("vitis-hls-architecture.svg")
 
 

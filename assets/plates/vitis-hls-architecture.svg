@@ -1,12 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1504" height="1040" viewBox="0 0 1504 1040" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1504" height="1008" viewBox="0 0 1504 1008" role="img" aria-labelledby="title desc">
 <title id="title">Vitis HLS 算子微架构、验证结果与 Zynq 信号链</title><desc id="desc">a–c 分别给出 HMAC-SHA256、LZ4、Cholesky 的瓶颈、硬件数据流、固定用例协同仿真周期及验证边界。d 是决赛独立频谱仪的双输入、下变频、FFT 至 PYNQ 通路；e 为竞赛截图中的 80 Hz 与 150 Hz 双峰。</desc>
 <defs><marker id="tip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 7 3.5 0 7z" fill="#496778"/></marker><pattern id="ruled" width="7" height="7" patternUnits="userSpaceOnUse"><path d="m-1 1 2-2m-1 8 7-7m-1 8 2-2" stroke="#c5d3d6" fill="none"/></pattern></defs><style>text{font-family:'Segoe UI','Microsoft YaHei',sans-serif}.serif{font-family:Georgia,'Times New Roman',serif}.mono{font-family:Consolas,'Microsoft YaHei',monospace}</style>
-<rect x="0" y="0" width="1504" height="1040" rx="0" fill="#ffffff" stroke="none"/>
+<rect x="0" y="0" width="1504" height="1008" rx="0" fill="#ffffff" stroke="none"/>
 <text x="26" y="65" font-size="57" font-weight="650" fill="#265b8b" text-anchor="start" class="serif">Vitis HLS</text>
 <path d="M329 25v46" fill="none" stroke="#c0cdd5" stroke-width="1.5" stroke-linejoin="round"/>
 <text x="353" y="62" font-size="34" font-weight="650" fill="#203f58" text-anchor="start" class="">算子微架构与实时频谱分析</text>
-<text x="1478" y="40" font-size="24" font-weight="650" fill="#21695a" text-anchor="end" class="">全国二等奖</text>
-<text x="1478" y="64" font-size="16" font-weight="500" fill="#475e6c" text-anchor="end" class="">2025 FPGA 创新设计赛  /  AMD 赛道</text>
 <rect x="26" y="94" width="1452" height="54" rx="3" fill="#edf3f7" stroke="#c2d0d9"/>
 <text x="42" y="129" font-size="20" font-weight="600" fill="#265b8b" text-anchor="start" class="mono">01</text>
 <text x="96" y="129" font-size="23" font-weight="650" fill="#203f58" text-anchor="start" class="">初赛  /  三项独立算子</text>
@@ -247,8 +245,5 @@
 <text x="1312" y="821" font-size="32" font-weight="650" fill="#21695a" text-anchor="start" class="serif">80 Hz</text>
 <text x="1312" y="861" font-size="32" font-weight="650" fill="#21695a" text-anchor="start" class="serif">150 Hz</text>
 <text x="1055" y="936" font-size="16" font-weight="450" fill="#475e6c" text-anchor="start" class="">截图另用 1 kHz / 1,024 点；曲线截自竞赛原图。</text>
-<path d="M26 974H1478" fill="none" stroke="#ccd8d8" stroke-width="1" stroke-linejoin="round"/>
-<text x="26" y="997" font-size="15" font-weight="450" fill="#475e6c" text-anchor="start" class="">资料：项目算子设计记录、协同仿真报告、决赛 PL/PS 工程与 competition-app.jpg。</text>
-<text x="1478" y="997" font-size="15" font-weight="550" fill="#475e6c" text-anchor="end" class="mono">ENGINEERING RECORD   /   02</text>
 </g>
 </svg>
