@@ -6,7 +6,7 @@
     <title>基于 FPGA 的 60 阵元超声定向传声系统 — EtherealBian 工程图志</title>
     <meta
       name="description"
-      content="上位机把目标方向与距离转换为阵元参数，FPGA 用 60 路 PWM 驱动五个子阵。"
+      content="上位机根据阵元到目标的路径差解算相位，按阵元朝向计算幅度权重，经串口下发至 FPGA。FPGA 输出 60 路 40 kHz PWM，驱动 5 组超声子阵（每组 12 个阵元），实现定向传声。"
     />
     <link rel="icon" href="../assets/orbit.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../style.css" />
@@ -36,7 +36,7 @@
         </div>
         <h1 lang="en">N60 Array<b>.</b></h1>
         <h2>五组阵元的定向传声原型</h2>
-        <p>上位机把目标方向与距离转换为阵元参数，FPGA 用 60 路 PWM 驱动五个子阵。</p>
+        <p class="n60-intro">上位机根据阵元到目标的路径差解算相位，按阵元朝向计算幅度权重，经串口下发至 FPGA。FPGA 输出 60 路 40 kHz PWM，驱动 5 组超声子阵（每组 12 个阵元），实现定向传声。</p>
         <div class="honor-line"><strong>信号赛道第一名</strong><span>2026 · 利利普杯</span></div>
       </header>
       <div class="exhibit-grid">
@@ -50,11 +50,11 @@
               fetchpriority="high"
               decoding="async"
               src="../assets/plates/array.webp"
-              alt="阵列与控制硬件：先在实物上辨认五组阵元，再与阵元分布图的分组对照。"
+              alt="阵列与控制硬件：五个子阵沿弧形支架排布，以排线连接后方控制板。"
             />
           </a>
           <figcaption>
-            <span>先在实物上辨认五组阵元，再与阵元分布图的分组对照。</span>
+            <span>五个子阵沿弧形支架排布，以排线连接后方控制板。</span>
             <a href="../assets/n60-hardware.jpg" data-plate>放大图版 ↗</a>
           </figcaption>
         </figure>
@@ -83,7 +83,7 @@
         <ol>
           <li>
             <b>从几何得到相位</b>
-            <p>上位机根据阵元与目标点之间的路径差计算相对相位，并得到各阵元的幅度权重。</p>
+            <p>上位机将阵元到目标的路径差换算为相位刻度，再根据阵元朝向与目标方向的夹角计算幅度权重。</p>
           </li>
           <li>
             <b>下发各通道参数</b>
@@ -103,14 +103,14 @@
             REFERENCE
           </div>
           <h2>原型参数</h2>
-          <p>阵元数量、信号通道数和载波频率描述的是不同层级，不能当作声场性能指标。</p>
+          <p>每个阵元对应一路 PWM，按子阵连续编号，从 CH 00 到 CH 59。</p>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th scope="col">环节</th>
-                <th scope="col">数量或频率</th>
+                <th scope="col">数量</th>
                 <th scope="col">对应对象</th>
               </tr>
             </thead>
@@ -125,46 +125,8 @@
                 <td>60 路</td>
                 <td>逐通道 PWM</td>
               </tr>
-              <tr>
-                <th scope="row">载波</th>
-                <td>40 kHz</td>
-                <td>超声驱动</td>
-              </tr>
             </tbody>
           </table>
-        </div>
-      </section>
-      <section class="appendix">
-        <div class="section-label">
-          03
-          <i>/</i>
-          ORIGINAL MATERIAL
-        </div>
-        <h2>原始材料</h2>
-        <div class="supplements">
-          <figure class="evidence" id="fig-2">
-            <div class="plate-head">
-              <span>FIG. 05B</span>
-              <b>阵元分布</b>
-            </div>
-            <a
-              class="exhibit"
-              data-plate
-              href="../assets/plates/fig_array_top.png"
-              aria-label="查看阵元分布原图"
-            >
-              <img
-                loading="lazy"
-                decoding="async"
-                src="../assets/plates/geometry.webp"
-                alt="阵元分布：位置和分组用于计算逐通道参数。此图是阵列几何，不是声场测量结果。"
-              />
-            </a>
-            <figcaption>
-              <span>位置和分组用于计算逐通道参数。此图是阵列几何，不是声场测量结果。</span>
-              <a href="../assets/plates/fig_array_top.png" data-plate>放大图版 ↗</a>
-            </figcaption>
-          </figure>
         </div>
       </section>
       <nav class="sheet-end" aria-label="相邻项目">

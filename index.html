@@ -447,8 +447,8 @@
                 <span class="catalog-number">05</span>
                 <span>Ultrasonic Beamforming</span>
               </div>
-              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-05-array.svg?v=2" aria-label="放大工程图：五个子阵，六十路输出">
-                <img loading="lazy" decoding="async" src="assets/plates/atlas-05-array.svg?v=2" width="1080" height="720" alt="实拍工作台；按工程标称坐标绘制的阵元斜视图，附控制、音频及 PWM 时序示意，非声场测量。">
+              <a class="plate diagram atlas-cover" data-plate href="assets/plates/atlas-05-array.svg?v=3" aria-label="放大工程图：五个子阵，六十路输出">
+                <img loading="lazy" decoding="async" src="assets/plates/atlas-05-array.svg?v=3" width="1080" height="720" alt="五个子阵的安装角与通道编号、上位机串口参数帧、FPGA 音频调制链及脉冲中心和宽度的对照。">
               </a>
               <div class="project-body">
                 <div class="project-heading">
@@ -459,7 +459,7 @@
                   </div>
                 </div>
                 <div class="honor-line"><strong>信号赛道第一名</strong><span>2026 · 利利普杯</span></div>
-                <p class="project-summary">上位机<span data-room="2">根据阵元到目标的路径差</span>计算<strong>阵元相位与幅度</strong><span data-room="3">，通过串口下发控制参数</span><span data-room="6">，支持在线计算或离线查表</span>。FPGA <span data-room="5">将音频与各通道的相位和幅度结合，</span>以 <strong>60 路<span data-room="1"> 40 kHz</span> PWM</strong> 驱动 5 个超声子阵<span data-room="1">定向传声</span><span data-room="4">，每个子阵由 12 个阵元组成</span>。</p>
+                <p class="project-summary">上位机根据阵元到目标的路径差解算<strong>相位</strong>，按阵元朝向计算<strong>幅度权重</strong>，经串口下发至 FPGA。FPGA 输出 <strong>60 路 40 kHz PWM</strong>，驱动 5 组超声子阵（每组 12 个阵元），实现定向传声。</p>
                 <ul class="tags" aria-label="Technology stack" lang="en">
                   <li data-technology="SystemVerilog">SystemVerilog</li>
                   <li data-technology="Vivado">Vivado</li>

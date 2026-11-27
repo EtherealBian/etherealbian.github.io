@@ -379,31 +379,34 @@ def n60():
         5,
         "N60 array",
         "五个子阵，六十路输出",
-        "按阵元坐标绘制五组换能器，并将音频通路与参数通路分开标出。",
-        "Ultrasonic audio",
-        "实拍工作台；按工程标称坐标绘制的阵元斜视图，附控制、音频及 PWM 时序示意，非声场测量。",
+        "上位机逐阵元计算相位与幅度，FPGA 将同一音频调制为 60 路 PWM。",
+        None,
+        "工作台实拍、子阵安装角和通道编号、串口参数帧与音频通路；三行示意波形对照相移与脉宽。",
     )
-    section(d, 34, 145, "a", "阵列实物", BLUE)
-    photo(d, "n60-hardware.jpg", 34, 169, 266, 181, (0, 0, 1600, 1090))
-    t(d, 34, 379, "换能器、支架与控制板", 17, SLATE)
-    t(d, 34, 412, "5 组 × 12 个阵元", 24, BLUE, 650)
-    d.rect(325, 127, 721, 303, "#f0f5f3", r=5)
-    t(d, 347, 159, "标称阵元坐标 · 斜视", 22, GREEN, 650)
-    t(d, 1023, 158, "U0 — U4", 17, SLATE, 550, "end", "mono")
+    section(d, 34, 143, "a", "阵列实物", BLUE)
+    photo(d, "n60-hardware.jpg", 34, 158, 250, 164, (0, 0, 1600, 1048))
+    d.rect(34, 329, 250, 51, PALE, r=3)
+    photo(d, "n60-hardware.jpg", 39, 333, 69, 43, (545, 25, 1005, 315))
+    t(d, 119, 351, "FPGA 控制板", 17, BLUE, 650)
+    t(d, 119, 371, "排线连接阵列驱动级", 15, SLATE)
+
+    d.rect(302, 125, 744, 255, "#f0f5f3", r=5)
+    t(d, 320, 155, "阵元布局与通道分组", 22, GREEN, 650)
+    t(d, 1027, 154, "5 个子阵 × 12 阵元", 17, GREEN, 600, "end")
+    accents = ["#44698a", "#4b7c87", "#2b7365", "#63794e", "#906a40"]
+    face = ["#dbe5ec", "#d9e6e8", "#d9e8e0", "#e2e8d8", "#eee3d6"]
 
     def pt(theta, lx, ly, depth=0):
         a = radians(theta)
         x = 176.445 * sin(a) + lx * cos(a) + depth * sin(a)
         z = -176.445 * cos(a) + lx * sin(a) - depth * cos(a)
-        return 685 + 1.85 * x, 270 - 1.38 * ly + 0.76 * (z + 176.445)
+        return 674 + 1.93 * x, 220 - 1.02 * ly + 0.59 * (z + 176.445)
 
-    line(d, [pt(a, 0, -40) for a in range(-51, 52)], "#c5d3cd", 3)
-    accents = ["#44698a", "#4b7c87", "#2b7365", "#64816b", "#96774b"]
+    line(d, [pt(a, 0, -40) for a in range(-51, 52)], "#b9c9c1", 3)
     for i in [2, 1, 3, 0, 4]:
         a = MODULES[i]
         col = accents[i]
 
-        # Project the circular mounting face and each of the 12 hollow cylinders.
         def disc(cx, cy, r, depth, theta=a):
             count = 56 if r > 8 else 18
             return [
@@ -411,52 +414,79 @@ def n60():
                 for th in range(count)
             ]
 
-        poly(d, disc(0, 0, 44, 7), "#a5b5b0", "#80958e")
-        poly(d, disc(0, 0, 44, 0), "#d9e2dd", "#92a69b")
+        poly(d, disc(0, 0, 44, 7), "#acbcb5", col)
+        poly(d, disc(0, 0, 44, 0), face[i], col)
         for lx, ly in sorted(N12, key=lambda v: -v[1]):
-            poly(d, disc(lx, ly, 6.2, 0), "#73847f")
-            poly(d, disc(lx, ly, 6.1, -5), "#e6ece7", "#7a8b85", 0.8)
-            poly(d, disc(lx, ly, 4.2, -5), "#385152")
-            poly(d, disc(lx, ly, 2.5, -5), "#657b75")
-        u, v = pt(a, 0, -46)
-        line(d, [(u, v), (u, 375)], col, 1.1)
-        d.circ(u, 375, 2.7, col)
-        center(d, u, 401, f"U{i}", 18, col, 660, "mono")
-        center(d, u, 420, f"{a:+g}°", 14, SLATE, 500)
-    d.path("M34 450H1046", RULE)
-    section(d, 34, 484, "b", "两路输入在 FPGA 汇合", BLUE)
-    for yy, title, sub, theme in [
-        (534, "上位机 / UART", "逐通道相位、幅度", INDIGO),
-        (610, "音频 / I²S", "WM8978 音频采样", OCHRE),
+            poly(d, disc(lx, ly, 6.2, 0), "#71857c")
+            poly(d, disc(lx, ly, 6.1, -5), "#f4f5ee", "#7e9388", 0.8)
+            poly(d, disc(lx, ly, 4.2, -5), "#344c49")
+            poly(d, disc(lx, ly, 2.5, -5), "#627772")
+        u, v = pt(a, 0, -45)
+        d.path(f"M{u} {v}V307", col, 1)
+        d.circ(u, 307, 2.9, col)
+        center(d, u, 332, f"U{i}  /  {a:g}°", 16, col, 650, "mono")
+        center(d, u, 355, f"CH {12 * i:02d}–{12 * i + 11:02d}", 15, SLATE, 530, "mono")
+
+    d.path("M34 396H1046", RULE)
+    section(d, 34, 427, "b", "上位机 · 逐通道参数下发", BLUE)
+    t(d, 603, 425, "UART  /  115200 baud", 15, SLATE, 570, "end", "mono")
+    t(d, 34, 457, "路径差 → 相位刻度", 18, BLUE, 640)
+    d.path("M238 442v18", RULE)
+    t(d, 257, 457, "阵元朝向与目标方向 → 幅度权重", 18, GREEN, 640)
+    fields = [
+        (34, 100, "帧头与指令", "AA BB 01", INDIGO),
+        (138, 115, "幅度", "60 × 1 B", JADE),
+        (257, 135, "相位 · 小端", "60 × 2 B", INDIGO),
+        (396, 91, "累加校验", "1 B", OCHRE),
+        (491, 112, "帧尾", "0D 0A", INDIGO),
+    ]
+    for x, w, title, value, pal in fields:
+        d.rect(x, 473, w, 55, pal[1], pal[2], 3)
+        center(d, x + w / 2, 494, title, 15, pal[0], 630)
+        center(d, x + w / 2, 516, value, 16, NAVY, 600, "mono")
+    t(d, 34, 555, "校验和与帧尾均正确后，FPGA 一次更新 60 组参数。", 16, SLATE)
+
+    d.path("M34 575H603", RULE)
+    section(d, 34, 606, "c", "音频 · 从采样到占空比", GREEN)
+    for x, w, head, note, pal in [
+        (34, 158, "WM8978 / I²S", "16 位左声道采样", OCHRE),
+        (213, 153, "音频预处理", "噪声门、增益、限幅", JADE),
+        (389, 214, "平方根 ROM 映射", "基础脉宽 × 通道幅度", INDIGO),
     ]:
-        d.rect(34, yy - 24, 190, 59, theme[1], theme[2], 3)
-        t(d, 46, yy, title, 18, theme[0], 630)
-        t(d, 46, yy + 24, sub, 15, SLATE)
-    d.wire("M225 538h28v24h30")
-    d.wire("M225 609h28v-21h30")
-    d.rect(289, 536, 191, 77, JADE[1], JADE[2], 3)
-    center(d, 384, 568, "FPGA 调制", 22, GREEN, 650)
-    center(d, 384, 596, "60 路 PWM 输出", 17, SLATE)
-    d.path("M505 472V651", RULE)
-    section(d, 530, 484, "c", "相移在载波时序中的位置", GREEN)
-    for i, (tag, off, col) in enumerate([("通道 A", 0, GREEN), ("通道 B", 26, BLUE)]):
-        yy = 553 + 62 * i
-        t(d, 530, yy + 3, tag, 16, SLATE)
-        xx = 641
-        pts = [(623, yy), (xx + off, yy)]
-        for k in range(3):
-            q = xx + off + 107 * k
-            pts.extend([(q, yy), (q, yy - 22), (q + 46, yy - 22), (q + 46, yy), (q + 106, yy)])
-        line(d, pts, col, 2.4)
-    d.path("M641 521v-8h107v8M641 557v67M667 590v34", "#91a39e", 1, False, True)
-    t(d, 763, 520, "25 μs / 周期", 17, GREEN, 620)
-    d.path("M641 629h26", AMBER, 2)
-    t(d, 684, 646, "相对延迟示意", 15, AMBER)
-    footer(
-        d,
-        "载波：40 kHz    ·    每个阵元对应一路输出",
-        "斜视图基于工程几何，而非实测声压图；波形不按幅值标定。",
-    )
+        d.rect(x, 627, w, 64, pal[1], pal[2], 3)
+        center(d, x + w / 2, 654, head, 18, pal[0], 640)
+        center(d, x + w / 2, 679, note, 15, SLATE)
+    d.wire("M194 659h15")
+    d.wire("M369 659h16")
+
+    # Shared time axis: B changes center relative to A; C changes only width relative to B.
+    d.rect(626, 412, 420, 279, DARK, r=5)
+    t(d, 645, 446, "PWM · 脉冲中心与宽度", 22, WHITE, 650)
+    t(d, 1027, 445, "时序示意", 15, MINT, 560, "end")
+    t(d, 645, 474, "40 kHz", 18, GOLD, 640, cls="mono")
+    t(d, 1026, 474, "100 MHz 时钟 / 每周期 2500 拍", 15, "#cfdfd9", 530, "end")
+    left, period = 745, 132
+    grid(d, left, 490, 2 * period, 141, 33, 24, "#365959")
+    for x in [left, left + period, left + 2 * period]:
+        d.path(f"M{x} 488V634", "#708d84", 1, False, True)
+    for y, offset, width, title, tone in [
+        (525, 40, 40, "A  参考", MINT),
+        (573, 74, 40, "B  移相", GOLD),
+        (621, 74, 20, "C  缩窄", "#a8c9e0"),
+    ]:
+        t(d, 645, y - 3, title, 17, tone, 570)
+        points = [(left, y)]
+        for k in range(2):
+            mid = left + k * period + offset
+            u, v = mid - width / 2, mid + width / 2
+            points.extend([(u, y), (u, y - 20), (v, y - 20), (v, y)])
+            d.circ(mid, y - 20, 2.6, tone)
+        points.append((left + 2 * period, y))
+        line(d, points, tone, 2)
+    for x in [left + 74, left + period + 74]:
+        d.path(f"M{x} 555v42", "#b0c9ba", 1, False, True)
+    d.path(f"M{left} 641v5h{period}v-5", "#91afa4", 1.2)
+    center(d, left + period / 2, 670, "一个周期 · 25 μs", 16, MINT, 580)
     d.save("atlas-05-array.svg")
 
 

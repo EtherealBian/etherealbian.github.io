@@ -46,8 +46,12 @@
 }
 .sheet-title > .spectrum-intro,
 .sheet-title > .lissajous-intro,
-.sheet-title > .vision-intro {
+.sheet-title > .vision-intro,
+.sheet-title > .n60-intro {
   max-width: none;
+}
+.sheet-title > .n60-intro {
+  text-wrap: balance;
 }
 .exhibit-grid {
   display: grid;
