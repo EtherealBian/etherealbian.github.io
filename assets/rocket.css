@@ -5,6 +5,7 @@
 .rocket-folio span { margin-inline:.4em; color:#789287; }
 .rocket-title h1 { margin:12px 0; font:400 clamp(44px,6vw,86px)/1.05 var(--serif); letter-spacing:-.05em; color:#223e32; }
 .rocket-deck { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px 24px; }
+.rtl-guide-links { display:flex; flex-wrap:wrap; align-items:baseline; gap:0 1.25rem; }
 .rocket-deck p,.rocket-boot dd,.rocket-comparisons section>p:not(.rocket-stat) { line-height:1.8; color:#44594d; }
 .rocket-spread { display:grid; grid-template-columns:minmax(0,2fr) minmax(245px,1fr); gap:clamp(22px,3.2vw,48px); align-items:start; }
 .rocket-figure { margin:0; min-width:0; }
